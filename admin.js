@@ -609,6 +609,44 @@
   var toastT = null;
   function toast(msg) { var t = $("#toast"); t.textContent = msg; t.classList.add("show"); if (toastT) clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove("show"); }, 1700); }
 
+  /* ---------- 저장 실패 경고 + 서버 자동 동기화 (data.js saveCars 훅) ---------- */
+  // 저장 실패 시 빨간 상단 배너 — "저장됨"으로 조용히 묻히던 유실 사고 방지
+  function saveFailBanner(show) {
+    var id = "saveFailBanner", el = document.getElementById(id);
+    if (!show) { if (el) el.remove(); return; }
+    if (el) return;
+    el = document.createElement("div");
+    el.id = id;
+    el.style.cssText = "position:fixed;left:0;right:0;top:0;z-index:99999;background:#C62828;color:#fff;font-weight:800;padding:12px 16px;text-align:center;font-size:14px;line-height:1.5;box-shadow:0 2px 10px rgba(0,0,0,.35)";
+    el.innerHTML = "⚠️ 저장 실패 — 변경분이 이 브라우저에 저장되지 않았습니다. <u>새로고침하지 마세요.</u> 저장 공간이 가득 찼을 수 있습니다 (reset.html로 정리하거나 관리자에게 문의).";
+    document.body.appendChild(el);
+  }
+  function setSyncStatus(msg) {
+    var el = document.getElementById("syncStatus");
+    if (!el) {
+      el = document.createElement("div"); el.id = "syncStatus";
+      el.style.cssText = "position:fixed;right:12px;bottom:12px;z-index:9998;background:#0E8A4F;color:#fff;font-size:12px;font-weight:700;padding:6px 10px;border-radius:8px;transition:opacity .4s";
+      document.body.appendChild(el);
+    }
+    el.textContent = msg; el.style.opacity = ".92";
+    clearTimeout(el._t); el._t = setTimeout(function () { el.style.opacity = "0"; }, 2500);
+  }
+  // 로그인 상태일 때만 변경분을 Supabase에도 자동 반영(디바운스) — 한 브라우저에 갇혀 유실되는 것 방지.
+  // (로그인 안 했으면 아무것도 안 함 = 비밀번호 묻지 않음. 공개 사이트는 draft·판매중지 차량을 숨기므로 임시저장분은 손님에게 안 보임)
+  var serverSyncTimer = null;
+  function scheduleServerSync() {
+    if (!(window.CARTREND_DB && CARTREND_DB.hasSession && CARTREND_DB.hasSession())) return;
+    clearTimeout(serverSyncTimer);
+    serverSyncTimer = setTimeout(function () {
+      CARTREND_DB.saveCatalog(CARS).then(function (res) {
+        if (res && res.ok) setSyncStatus("서버 동기화됨 ✓");
+        else if (res && res.status === 401) setSyncStatus("동기화 보류 (로그인 만료)");
+      }).catch(function () {});
+    }, 3000);
+  }
+  window.onCarsSaveFailed = function () { saveFailBanner(true); toast("저장 실패! 변경분이 저장되지 않았습니다"); };
+  window.onCarsSaved = function () { saveFailBanner(false); scheduleServerSync(); };
+
   /* ---------- 이벤트: 목록 ---------- */
   function selectedIds() { return [].map.call(document.querySelectorAll(".ccard__chk:checked"), function (x) { return +x.getAttribute("data-chk"); }); }
   function updateSelCount() {
@@ -859,7 +897,8 @@
         .then(function (url) { setVal("c-photo", url); syncThumb(); renderPreview(); toast("사진 업로드됨 ✓ (게시하면 손님에게 반영)"); })
         .catch(function (err) { toast("사진 업로드 실패: " + (err.message || err)); });
     } else {
-      readImage(f, function (u) { setVal("c-photo", u); syncThumb(); renderPreview(); });   // 폴백
+      // base64로 폼에 박아넣지 않음 — 카탈로그 용량 급증·저장 실패(데이터 유실)의 원인이었음.
+      toast("사진 업로드를 사용할 수 없습니다 (DB 연결 확인). 잠시 후 다시 시도하세요.");
     }
   });
   $("#photoRemove").addEventListener("click", function () { setVal("c-photo", ""); $("#c-photoFile").value = ""; syncThumb(); renderPreview(); });
