@@ -419,8 +419,9 @@
     if (selMile && mileOpts.indexOf(selMile) === -1 && selMile !== "직접입력") mileOpts.push(selMile);
     mileOpts.push("직접입력");
     selGroup("mileGroup", "sel-mile", mileOpts, selMile);
-    var selDep = "15%";   // 보증금 기본 15% 선택 (저장값과 무관, 변경 가능)
+    var selDep = isNew ? "15%" : (d.deposit || "15%");   // 저장된 보증금 표시(신규는 기본 15%)
     var depOpts = DEPOSIT_OPTS.slice();
+    if (selDep && depOpts.indexOf(selDep) === -1 && selDep !== "직접입력") depOpts.push(selDep);
     depOpts.push("직접입력");
     selGroup("depGroup", "sel-dep", depOpts, selDep);
     var selPre = isNew ? "0%" : (d.prepay || "");

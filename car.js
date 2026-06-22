@@ -321,7 +321,7 @@
   }
   // 관리자에서 지정한 기본 보증금/선납금 적용
   (function initDefaults() {
-    state.sel.deposit = DEPOSIT_OPTS.indexOf("15%");   // 보증금 기본 15% 선택 (고객이 변경 가능)
+    var di = DEPOSIT_OPTS.indexOf(D.deposit); state.sel.deposit = di >= 0 ? di : DEPOSIT_OPTS.indexOf("15%");   // 관리자 지정 보증금(없으면 15%) — 고객 변경 가능
     var pi = PREPAY_OPTS.indexOf(D.prepay); if (pi >= 0) state.sel.prepay = pi;
     var mi = MILEAGE_OPTS.indexOf(D.mileage); if (mi >= 0) state.sel.mileage = mi; else if (D.mileage) state.custom.mileage = D.mileage;
     var ai = AGE_OPTS.indexOf(D.driverAge); if (ai >= 0) state.sel.age = ai;
