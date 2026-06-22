@@ -903,13 +903,18 @@
 
   /* ---------- Supabase: 게시된 카탈로그 불러오기 + 게시(공개 반영) ---------- */
   if (window.CARTREND_DB) {
-    // 시작 시 DB(게시본)를 불러와 관리자에 표시 (어느 기기에서 열어도 동일)
+    // 시작 시: 로컬 작업본이 "없을 때만" DB(게시본)로 채움.
+    //   로컬에 작업 중인 데이터가 있으면 절대 덮어쓰지 않음 → 게시 전 변경분 보존(데이터 유실 방지)
     CARTREND_DB.fetchCatalog().then(function (remote) {
-      if (remote && remote.length) {
+      if (!remote || !remote.length) return;
+      var hasLocal = false;
+      try { var raw = localStorage.getItem(CARS_KEY); hasLocal = !!(raw && JSON.parse(raw).length); } catch (e) {}
+      if (!hasLocal) {
         CARS.length = 0; [].push.apply(CARS, remote);
-        saveCars();        // 로컬 작업본 동기화
+        saveCars();
         renderList();
       }
+      // 로컬 작업본이 있으면 그대로 유지 (필요 시 reset.html로 게시본을 다시 불러올 수 있음)
     });
     var pubBtn = $("#publishBtn");
     if (pubBtn) pubBtn.addEventListener("click", function () {
