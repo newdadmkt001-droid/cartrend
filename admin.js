@@ -893,8 +893,8 @@
       }
     });
     function ensureLogin() {
-      if (CARTREND_DB.token()) return Promise.resolve();
-      var email = prompt("관리자 이메일을 입력하세요:");
+      if (CARTREND_DB.hasSession()) return Promise.resolve();
+      var email = prompt("관리자 이메일을 입력하세요 (처음 한 번만):");
       if (!email) return Promise.reject(new Error("취소됨"));
       var pw = prompt("비밀번호를 입력하세요:");
       if (!pw) return Promise.reject(new Error("취소됨"));
