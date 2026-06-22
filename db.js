@@ -58,8 +58,26 @@
         .catch(function () { return { ok: false, status: 401 }; });
     });
   }
+  // 사진을 Storage에 업로드하고 공개 URL 반환 (로그인 필요)
+  function uploadPhoto(file) {
+    var s = getSession();
+    if (!s || !s.access_token) return Promise.reject(new Error("로그인 필요"));
+    var ext = (file.name && file.name.indexOf(".") >= 0 ? file.name.split(".").pop() : "png").toLowerCase().replace(/[^a-z0-9]/g, "") || "png";
+    var path = "p" + Date.now() + "_" + Math.random().toString(36).slice(2, 8) + "." + ext;
+    function put(tok) {
+      return fetch(URL + "/storage/v1/object/photos/" + path, {
+        method: "POST", body: file,
+        headers: { apikey: KEY, Authorization: "Bearer " + tok, "Content-Type": file.type || "image/" + ext, "x-upsert": "true" }
+      });
+    }
+    return put(s.access_token).then(function (r) {
+      if (r.ok) return URL + "/storage/v1/object/public/photos/" + path;
+      if (r.status === 401) return refresh().then(function (tok) { return put(tok).then(function (r2) { if (r2.ok) return URL + "/storage/v1/object/public/photos/" + path; throw new Error("업로드 실패 " + r2.status); }); });
+      return r.text().then(function (t) { throw new Error("업로드 실패 " + r.status); });
+    });
+  }
   w.CARTREND_DB = {
-    fetchCatalog: fetchCatalog, login: login, refresh: refresh,
+    fetchCatalog: fetchCatalog, login: login, refresh: refresh, uploadPhoto: uploadPhoto,
     hasSession: hasSession, logout: clearSession, saveCatalog: saveCatalog, URL: URL
   };
 })(window);

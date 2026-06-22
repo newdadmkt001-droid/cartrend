@@ -842,7 +842,26 @@
   });
   $("#addVtype").addEventListener("click", function () { $("#vtypeBlocks").insertAdjacentHTML("beforeend", vtypeBlockHTML({ name: "", trims: [{}] })); renderPreview(); });
   $("#pasteVtype").addEventListener("click", pasteVtype);
-  $("#c-photoFile").addEventListener("change", function (e) { var f = e.target.files && e.target.files[0]; if (!f) { e.target.value = ""; return; } readImage(f, function (u) { setVal("c-photo", u); syncThumb(); renderPreview(); }); e.target.value = ""; /* 같은 파일 다시 선택해도 등록되도록 초기화 */ });
+  function ensureLogin() {
+    if (!window.CARTREND_DB) return Promise.reject(new Error("DB 미연결"));
+    if (CARTREND_DB.hasSession()) return Promise.resolve();
+    var email = prompt("관리자 이메일 (처음 한 번만):"); if (!email) return Promise.reject(new Error("취소됨"));
+    var pw = prompt("비밀번호:"); if (!pw) return Promise.reject(new Error("취소됨"));
+    return CARTREND_DB.login(email.trim(), pw);
+  }
+  $("#c-photoFile").addEventListener("change", function (e) {
+    var f = e.target.files && e.target.files[0]; e.target.value = "";  // 같은 파일 재선택 가능
+    if (!f) return;
+    if (window.CARTREND_DB && CARTREND_DB.uploadPhoto) {
+      toast("사진 업로드 중…");
+      ensureLogin()
+        .then(function () { return CARTREND_DB.uploadPhoto(f); })
+        .then(function (url) { setVal("c-photo", url); syncThumb(); renderPreview(); toast("사진 업로드됨 ✓ (게시하면 손님에게 반영)"); })
+        .catch(function (err) { toast("사진 업로드 실패: " + (err.message || err)); });
+    } else {
+      readImage(f, function (u) { setVal("c-photo", u); syncThumb(); renderPreview(); });   // 폴백
+    }
+  });
   $("#photoRemove").addEventListener("click", function () { setVal("c-photo", ""); $("#c-photoFile").value = ""; syncThumb(); renderPreview(); });
   $("#homeLink").addEventListener("click", backToList);
   $("#saveTempBtn").addEventListener("click", function () { saveData(true); toast("임시저장되었습니다 (메인 미노출)"); });
@@ -892,14 +911,6 @@
         renderList();
       }
     });
-    function ensureLogin() {
-      if (CARTREND_DB.hasSession()) return Promise.resolve();
-      var email = prompt("관리자 이메일을 입력하세요 (처음 한 번만):");
-      if (!email) return Promise.reject(new Error("취소됨"));
-      var pw = prompt("비밀번호를 입력하세요:");
-      if (!pw) return Promise.reject(new Error("취소됨"));
-      return CARTREND_DB.login(email.trim(), pw);
-    }
     var pubBtn = $("#publishBtn");
     if (pubBtn) pubBtn.addEventListener("click", function () {
       pubBtn.disabled = true; var orig = pubBtn.textContent; pubBtn.textContent = "게시 중…";
