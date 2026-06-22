@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 동기화(게시본 불러오기)</title>
+<style>
+ body{font-family:"Pretendard",system-ui,sans-serif;background:#F7F8FA;color:#1A2332;max-width:640px;margin:0 auto;padding:48px 20px;line-height:1.7;text-align:center}
+ .box{background:#fff;border:1px solid #E6E9EE;border-radius:16px;padding:28px;margin:18px 0}
+ .btn{border:none;border-radius:10px;padding:15px 26px;font-size:16px;font-weight:800;cursor:pointer;background:#0E8A4F;color:#fff;text-decoration:none;display:inline-block}
+ .muted{color:#5B6573;font-size:13.5px}.ok{color:#0E8A4F;font-weight:800}
+</style></head>
+<body>
+ <h1>🔄 관리자 동기화</h1>
+ <p class="muted">이 브라우저에 남아있는 <b>예전 데이터를 비우고</b>, 현재 <b>게시된 카탈로그</b>를 불러옵니다.<br>(현재 게시본 = 사장님이 등록한 149대)</p>
+ <div class="box">
+   <div id="info" class="muted">현재 이 브라우저 저장 차량: 확인 중…</div>
+ </div>
+ <button id="go" class="btn">예전 데이터 비우고 게시본 불러오기</button>
+ <div id="status" style="margin-top:16px;font-weight:700"></div>
+ <p class="muted" style="margin-top:24px"><a href="admin.html">→ 관리자페이지로</a></p>
+<script>
+ function cnt(){ try{var a=JSON.parse(localStorage.getItem("cartrend:cars")||"null");return a?a.length:0;}catch(e){return 0;} }
+ document.getElementById("info").textContent="현재 이 브라우저 저장 차량: "+cnt()+"대";
+ document.getElementById("go").addEventListener("click",function(){
+   try{
+     localStorage.removeItem("cartrend:cars");
+     localStorage.removeItem("cartrend:seeded");
+     Object.keys(localStorage).filter(function(k){return k.indexOf("cartrend:cars_backup_")===0;}).forEach(function(k){localStorage.removeItem(k);});
+     document.getElementById("status").innerHTML='<span class="ok">✓ 비웠습니다. 잠시 후 관리자페이지로 이동합니다…</span>';
+     setTimeout(function(){ location.href="admin.html"; },1200);
+   }catch(e){ document.getElementById("status").textContent="오류: "+e; }
+ });
+</script>
+</body></html>
