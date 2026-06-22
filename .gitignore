@@ -4,3 +4,5 @@ node_modules/
 amazoncar_scraper_spec.md
 recovered-cars.json
 *cars_backup*
+
+data/quotes.amazoncar.backup.json
