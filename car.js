@@ -320,7 +320,7 @@
     renderVtypes(); renderHero(); renderTrims(); renderTrimFeat(); renderSpecs(); renderMaint(); renderConds(); renderAddOpt(); renderTerms();
   }
   // 관리자에서 지정한 기본 보증금/선납금 적용
-  (function initDefaults() {
+  function initDefaults() {
     var di = DEPOSIT_OPTS.indexOf(D.deposit); state.sel.deposit = di >= 0 ? di : DEPOSIT_OPTS.indexOf("15%");   // 관리자 지정 보증금(없으면 15%) — 고객 변경 가능
     var pi = PREPAY_OPTS.indexOf(D.prepay); if (pi >= 0) state.sel.prepay = pi;
     var mi = MILEAGE_OPTS.indexOf(D.mileage); if (mi >= 0) state.sel.mileage = mi; else if (D.mileage) state.custom.mileage = D.mileage;
@@ -328,9 +328,23 @@
     var li = LIAB_OPTS.indexOf(D.liability); if (li >= 0) state.sel.liab = li;
     var ei = DED_OPTS.indexOf(D.deductible); if (ei >= 0) state.sel.ded = ei;
     var ri = REGION_OPTS.indexOf(D.region); if (ri >= 0) state.sel.region = ri;
-  })();
+  }
+  initDefaults();
   clampTerm();
   renderAll();
+
+  /* Supabase 최신본 반영 — 메인과 동일한 게시 카탈로그로 상세도 갱신 */
+  if (window.CARTREND_DB && params.get("preview") !== "1") {
+    CARTREND_DB.fetchCatalog().then(function (remote) {
+      if (!remote || !remote.length) return;
+      CARS.length = 0; [].push.apply(CARS, remote);
+      var id2 = parseInt(params.get("id"), 10); if (isNaN(id2) || !CARS[id2]) id2 = 0;
+      car = CARS[id2]; D = getCarDetail(id2);
+      defTerm = 0; D.rentTable.forEach(function (r, i) { if (r.months === 72) defTerm = i; });
+      state = { vtype: 0, trim: 0, term: defTerm, specTab: 0, sel: {}, custom: {}, addsel: {} };
+      initDefaults(); clampTerm(); renderAll();
+    });
+  }
 
   /* ---------- 이벤트 ---------- */
   $("#variantList").addEventListener("click", function (e) {

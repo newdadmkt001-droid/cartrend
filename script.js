@@ -448,4 +448,14 @@
     });
   }
 
+  /* Supabase 최신 카탈로그 자동 반영 — 관리자가 등록/수정하면 손님 메인에 자동 노출 */
+  if (window.CARTREND_DB) {
+    window.CARTREND_DB.fetchCatalog().then(function (remote) {
+      if (remote && remote.length) {
+        CARS.length = 0; [].push.apply(CARS, remote);
+        renderBest();
+      }
+    });
+  }
+
 })();

@@ -881,4 +881,37 @@
 
   history.replaceState({ mode: "list" }, "", location.pathname + location.search);
   renderList();
+
+  /* ---------- Supabase: 게시된 카탈로그 불러오기 + 게시(공개 반영) ---------- */
+  if (window.CARTREND_DB) {
+    // 시작 시 DB(게시본)를 불러와 관리자에 표시 (어느 기기에서 열어도 동일)
+    CARTREND_DB.fetchCatalog().then(function (remote) {
+      if (remote && remote.length) {
+        CARS.length = 0; [].push.apply(CARS, remote);
+        saveCars();        // 로컬 작업본 동기화
+        renderList();
+      }
+    });
+    function ensureLogin() {
+      if (CARTREND_DB.token()) return Promise.resolve();
+      var email = prompt("관리자 이메일을 입력하세요:");
+      if (!email) return Promise.reject(new Error("취소됨"));
+      var pw = prompt("비밀번호를 입력하세요:");
+      if (!pw) return Promise.reject(new Error("취소됨"));
+      return CARTREND_DB.login(email.trim(), pw);
+    }
+    var pubBtn = $("#publishBtn");
+    if (pubBtn) pubBtn.addEventListener("click", function () {
+      pubBtn.disabled = true; var orig = pubBtn.textContent; pubBtn.textContent = "게시 중…";
+      ensureLogin()
+        .then(function () { return CARTREND_DB.saveCatalog(CARS); })
+        .then(function (res) {
+          if (res.ok) { toast("공개 사이트에 게시됐습니다 ✓ (손님에게 바로 반영)"); }
+          else if (res.status === 401) { CARTREND_DB.logout(); toast("로그인 만료 — 게시 버튼을 다시 눌러 로그인하세요"); }
+          else { toast("게시 실패 (코드 " + res.status + ")"); }
+        })
+        .catch(function (e) { toast(e && e.message ? e.message : "게시 취소"); })
+        .then(function () { pubBtn.disabled = false; pubBtn.textContent = orig; });
+    });
+  }
 })();
