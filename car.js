@@ -317,6 +317,7 @@
     $("#trimFeat").innerHTML = f.map(function (x) { return "<li>" + x + "</li>"; }).join("");
   }
   function renderAll() {
+    $("#dImg").innerHTML = photoCell(car);   // 차량 사진 — DB 갱신 시에도 다시 그림
     renderVtypes(); renderHero(); renderTrims(); renderTrimFeat(); renderSpecs(); renderMaint(); renderConds(); renderAddOpt(); renderTerms();
   }
   // 관리자에서 지정한 기본 보증금/선납금 적용

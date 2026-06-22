@@ -842,7 +842,7 @@
   });
   $("#addVtype").addEventListener("click", function () { $("#vtypeBlocks").insertAdjacentHTML("beforeend", vtypeBlockHTML({ name: "", trims: [{}] })); renderPreview(); });
   $("#pasteVtype").addEventListener("click", pasteVtype);
-  $("#c-photoFile").addEventListener("change", function (e) { var f = e.target.files && e.target.files[0]; if (!f) return; readImage(f, function (u) { setVal("c-photo", u); syncThumb(); renderPreview(); }); });
+  $("#c-photoFile").addEventListener("change", function (e) { var f = e.target.files && e.target.files[0]; if (!f) { e.target.value = ""; return; } readImage(f, function (u) { setVal("c-photo", u); syncThumb(); renderPreview(); }); e.target.value = ""; /* 같은 파일 다시 선택해도 등록되도록 초기화 */ });
   $("#photoRemove").addEventListener("click", function () { setVal("c-photo", ""); $("#c-photoFile").value = ""; syncThumb(); renderPreview(); });
   $("#homeLink").addEventListener("click", backToList);
   $("#saveTempBtn").addEventListener("click", function () { saveData(true); toast("임시저장되었습니다 (메인 미노출)"); });
