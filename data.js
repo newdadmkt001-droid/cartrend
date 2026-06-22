@@ -181,9 +181,39 @@ function loadCars() {
 
 var CARS = loadCars();
 
+var CARS_BACKUP_PREFIX = "cartrend:cars_backup_";
+// 자동 백업 스냅샷 정리 — 최근 keep개만 남기고 오래된 것부터 삭제
+function _pruneCarBackups(keep) {
+  try {
+    var keys = Object.keys(localStorage).filter(function (k) { return k.indexOf(CARS_BACKUP_PREFIX) === 0; }).sort();
+    while (keys.length > keep) { localStorage.removeItem(keys.shift()); }
+  } catch (e) {}
+}
 function saveCars() {
-  try { localStorage.setItem(CARS_KEY, JSON.stringify(CARS)); return true; }
-  catch (e) { return false; }
+  var json;
+  try { json = JSON.stringify(CARS); } catch (e) { return false; }
+  // 덮어쓰기 전 직전 상태를 자동 백업(최근 5개 유지) — 사고 시 되돌리기용
+  try {
+    var prev = localStorage.getItem(CARS_KEY);
+    if (prev && prev !== json && prev.length > 2) {
+      localStorage.setItem(CARS_BACKUP_PREFIX + Date.now(), prev);
+      _pruneCarBackups(5);
+    }
+  } catch (e) {}
+  var ok = false;
+  try { localStorage.setItem(CARS_KEY, json); ok = true; }
+  catch (e) {
+    // 용량 초과 등 저장 실패 → 오래된 백업부터 비우고 1회 재시도
+    try { _pruneCarBackups(1); localStorage.setItem(CARS_KEY, json); ok = true; } catch (e2) { ok = false; }
+  }
+  // 저장 성공/실패를 화면(admin.js)에 알림 — 실패가 조용히 묻히지 않도록
+  if (typeof window !== "undefined") {
+    try {
+      if (!ok && typeof window.onCarsSaveFailed === "function") window.onCarsSaveFailed();
+      else if (ok && typeof window.onCarsSaved === "function") window.onCarsSaved();
+    } catch (e) {}
+  }
+  return ok;
 }
 function resetCars() {
   try { localStorage.removeItem(CARS_KEY); } catch (e) {}
