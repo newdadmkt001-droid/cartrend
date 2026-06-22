@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cartrend 관리자 · 차량 관리</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root{--orange:#F57C00;--navy:#1A2332;--line:#E6E9EE;--gray:#5B6573;--bg:#F7F8FA}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Pretendard",system-ui,sans-serif;background:var(--bg);color:var(--navy);line-height:1.6;-webkit-font-smoothing:antialiased;letter-spacing:-.01em}
+    .wrap{max-width:1080px;margin:0 auto;padding:28px 20px 90px}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+    .top h1{font-size:21px;font-weight:800;letter-spacing:-.03em}.top h1 b{color:var(--orange)}
+    .top .muted{font-size:13px;color:var(--gray);font-weight:500}
+    .btn{border:none;cursor:pointer;font-weight:700;border-radius:10px;padding:11px 16px;font-size:14px;transition:.15s;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+    .btn--p{background:var(--orange);color:#fff}
+    .btn--g{background:#fff;border:1.5px solid var(--line);color:var(--navy)}
+    .btn--d{background:#fff;border:1.5px solid #f0c9c9;color:#c0392b}
+    .bulkbtns .btn{width:108px;justify-content:center;padding-left:0;padding-right:0;gap:2px}
+
+    /* 가격 정책 모달 */
+    .pmodal{position:fixed;inset:0;background:rgba(16,22,34,.5);display:flex;align-items:center;justify-content:center;z-index:200}
+    .pmodal.hidden{display:none}
+    .pmodal__box{background:#fff;border-radius:16px;padding:24px;width:min(520px,92vw);max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+    .pmodal__foot{align-items:center}
+    .pmodal__box--wide{width:min(820px,95vw)}
+    .imp-step{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px;color:var(--ink,#11151F);margin:18px 0 8px}
+    .imp-step__n{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--navy,#1A2332);color:#fff;font-size:12px}
+    .imp-text{width:100%;min-height:130px;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font-size:13.5px;line-height:1.6;box-sizing:border-box;resize:vertical}
+    .imp-actions{display:flex;gap:8px;margin-top:8px}
+    .imp-src{flex:1;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:13px}
+    .imp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .imp-grid label,.imp-optlabel{display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:700;color:var(--gray)}
+    .imp-grid input{padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:13.5px;font-weight:600;color:#11151F}
+    .imp-optlabel{margin-top:10px}
+    .imp-opts{min-height:84px;padding:10px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:13px;line-height:1.6;box-sizing:border-box;resize:vertical}
+    .imp-fmt{display:flex;gap:6px;margin-bottom:8px}
+    .imp-fmt__b{padding:6px 14px}
+    .imp-fmt__b.is-on{background:var(--navy,#1A2332);color:#fff;border-color:var(--navy,#1A2332)}
+    .imp-export{width:100%;min-height:120px;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font-size:12.5px;line-height:1.55;box-sizing:border-box;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#f7f8fa}
+    .imp-status{flex:1;font-size:13px;font-weight:700;color:var(--gray)}
+    .imp-status.ok{color:#0E8A4F}.imp-status.bad{color:#c0392b}
+    .pmodal__head{display:flex;justify-content:space-between;align-items:center;font-size:17px}
+    .pmodal__x{border:none;background:none;font-size:24px;cursor:pointer;color:var(--gray);line-height:1}
+    .pmodal__desc{font-size:12.5px;color:var(--gray);margin:8px 0 16px;line-height:1.5}
+    .pmodal__sec{margin-bottom:16px}
+    .pmodal__sec>b{display:block;font-size:13px;margin-bottom:10px}
+    .pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .pgrid label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:700;color:var(--gray)}
+    .pmodal__row{display:flex;gap:14px}
+    .pmodal__row label{flex:1;display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:700}
+    .pmodal input{padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:14px;font-weight:600;color:var(--navy);font-family:inherit}
+    .pmodal__foot{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+
+    .brandfilter{display:flex;gap:8px;flex-wrap:wrap;padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid var(--line)}
+    .bchip{padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:#fff;font-size:13.5px;font-weight:700;color:var(--gray);cursor:pointer;transition:.15s}
+
+    .bchip.on{background:var(--orange);border-color:var(--orange);color:#fff}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+    .toolbar .cnt{font-size:14px;font-weight:700;color:var(--gray)}
+    .sortmini{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:8px 12px;font-size:13.5px;font-weight:700;color:var(--navy);font-family:inherit;cursor:pointer}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .ccard{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;cursor:pointer}
+    .ccard__img{height:175px;display:flex;align-items:center;justify-content:center;background:#FFFFFF;border-radius:12px;margin-bottom:12px;overflow:hidden}
+    .ph-img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+    .ccard__img .ph-img{width:100%;height:100%;object-fit:contain;transition:transform .15s}
+    /* 차종 크기별 스케일(경차 작게 → 대형 크게) */
+    .ccard__img .ph-img--compact{transform:scale(.85)}
+    .ccard__img .ph-img--sedan{transform:scale(.97)}
+    .ccard__img .ph-img--sport{transform:scale(.98)}
+    .ccard__img .ph-img--van,.ccard__img .ph-img--suv{transform:scale(1)}
+    .ph-txt{font-size:12.5px;font-weight:700;color:#9AA3B0}
+    .ccard__brand{font-size:12.5px;font-weight:700;color:var(--gray);display:flex;align-items:center;gap:6px}
+    .ccard__st{font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:999px}
+    .ccard__st--on{background:#E6F7EE;color:#0E8A4F}
+    .ccard__st--stop{background:#fdecec;color:#c0392b}
+    .ccard__st--off{background:#EEF0F3;color:#5B6573}
+    .ccard__name{font-size:14.5px;font-weight:800;line-height:1.3;margin-top:2px;min-height:38px}
+    .ccard__price{font-size:14px;font-weight:800;color:var(--navy);margin-top:6px}
+    .ccard__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .ccard__del{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:#fff;color:#c0392b;font-size:15px;cursor:pointer;line-height:1}
+    .ccard__chk{width:18px;height:18px;cursor:pointer;accent-color:var(--orange)}
+    .ccard__grip{cursor:grab;color:#aab2bd;font-size:17px;line-height:1;user-select:none;padding:0 4px}
+    .ccard__grip:active{cursor:grabbing}
+    .ccard.dragging{opacity:.4;pointer-events:none;box-shadow:0 8px 24px rgba(26,35,50,.18)}
+    .ccard.sel{border-color:var(--orange);box-shadow:0 0 0 2px rgba(245,124,0,.2)}
+    .ccard.is-hidden{opacity:.6}
+    .ccard__tag{position:absolute;left:8px;top:8px;z-index:1;font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px;background:#5B6573;color:#fff}
+    .addcard{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:16px;color:var(--gray);font-weight:700;font-size:15px;cursor:pointer;background:#fff;min-height:180px}
+.addcard span{font-size:30px;line-height:1}
+
+    .editbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+    .editwrap{display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start}
+    .editmain{min-width:0}
+    .editside{position:sticky;top:18px}
+    .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 22px 24px;margin-bottom:16px;box-shadow:0 1px 3px rgba(26,35,50,.04)}
+    .card h2{font-size:15px;font-weight:800;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px}
+    .card h2 .step{width:24px;height:24px;border-radius:8px;background:var(--orange);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+    .card h2 .muted{font-weight:600;color:var(--gray);font-size:12px}
+    .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
+    .field{display:flex;flex-direction:column;gap:6px}.field--full{grid-column:1/-1}
+    .field label{font-size:12px;font-weight:700;color:var(--gray)}
+    .field input,.field select{padding:11px 13px;border:1.5px solid var(--line);border-radius:10px;font-size:14px;font-weight:600;color:var(--navy);font-family:inherit;background:#fff;transition:border-color .15s,box-shadow .15s}
+    .field input:focus,.field select:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(245,124,0,.12)}
+    .sub{font-size:12.5px;font-weight:800;color:var(--navy);margin:18px 0 10px}
+    .row{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+    .row input{flex:1;padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:14px;font-weight:600;font-family:inherit}
+    .row .w{flex:0 0 150px}
+    .r-monthly{flex:0 0 auto;min-width:130px;text-align:right;font-size:13.5px;font-weight:800;color:var(--orange-dark);white-space:nowrap}
+    .rm{flex:0 0 auto;width:40px;height:40px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:#c0392b;cursor:pointer;font-size:17px;transition:.15s}
+
+    .ao-vis{flex:0 0 auto;width:44px;height:40px;padding:0;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:#1A2332;cursor:pointer;transition:.15s}
+
+    .ao-vis.is-off{background:#f1f3f5;border-color:var(--line);color:#98a2b3}
+    .ao-vis svg{display:block;width:16px;height:16px;pointer-events:none}
+    .add{margin-top:6px;font-size:13px;color:var(--orange);font-weight:700;background:none;border:none;cursor:pointer}
+    .dragh{cursor:grab;color:#aab2bd;font-size:16px;line-height:1;padding:0 2px;user-select:none;flex:0 0 auto;align-self:center}
+    .dragh:active{cursor:grabbing}
+    .dragging{opacity:.45}
+    .tmcollect{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+    .tm-amzurl{flex:1;padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:13px;font-family:inherit}
+    .tm-collect{flex:0 0 auto;margin-top:0;background:var(--navy);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer}
+
+    .tm-collect-status{display:block;margin-top:6px;font-size:12px;font-weight:700;color:var(--gray)}
+    .tm-collect-status.ok{color:#0E8A4F}
+    .tm-collect-status.bad{color:#c0392b}
+    .tm-collect-preview{margin-top:8px;font-size:12.5px}
+    .tm-collect-preview:not(:empty){padding:10px 12px;background:#fafbfc;border:1px solid var(--line);border-radius:9px}
+    .amzbox{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+    .amzRow{align-items:center}
+    .amzlbl{flex:0 0 64px;font-size:13px;font-weight:700;color:var(--navy)}
+    .amz-fit{margin-top:10px;padding:10px 12px;background:#fafbfc;border:1px solid var(--line);border-radius:9px;font-size:12.5px;color:var(--gray)}
+    .amz-params{font-weight:800;color:var(--navy);margin-bottom:6px}
+    .amz-vrow{display:flex;justify-content:space-between;gap:10px;padding:2px 0}
+    .amz-vrow .ok{color:#0E8A4F;font-weight:700}
+    .amz-vrow .bad{color:#c0392b;font-weight:700}
+    .tmdisc{display:flex;gap:10px;margin-bottom:8px}
+    .tmfield{flex:1;display:flex;flex-direction:column;gap:5px}
+    .tmfield>span{font-size:11.5px;font-weight:700;color:var(--gray)}
+    .tmfield .pricew{flex:1;width:100%}
+    .tm-taxcut-disp{padding:9px 11px;border:1.5px dashed var(--line);border-radius:9px;font-size:14px;font-weight:700;color:var(--gray);background:#fafbfc}
+    .tmbase{margin:2px 0 8px;font-size:12.5px;color:var(--gray)}
+    .tmbase b{color:var(--navy);font-size:13.5px}
+    .tmrate{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+    .tmrate .tr-m{flex:0 0 100px}
+    .vao{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+    .vao__label{font-size:12.5px;font-weight:800;color:var(--navy);margin-bottom:10px}
+    .vao__label span{color:var(--gray);font-weight:600}
+    .tmsec__head{cursor:pointer;display:flex;align-items:center;gap:6px;padding-right:15.5px}
+    .tmsec__arr{font-style:normal;color:var(--gray);transition:transform .2s;flex:0 0 auto;margin-left:auto;font-size:11px}
+    .tmsec.collapsed .tmsec__arr{transform:rotate(-90deg)}
+    .tmsec.collapsed .tmsec__body{display:none}
+    .tmsec.collapsed .tmsec__head{margin-bottom:0}
+    .aoGroup{border:1.5px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;background:#fff}
+    .aoGhead{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+    .ao-gtitle{flex:1;padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:14px;font-weight:700;font-family:inherit}
+    .ao-grm{flex:0 0 auto;border:1.5px solid #f0c9c9;background:#fff;color:#c0392b;border-radius:9px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer}
+    .vblock{border:1.5px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;background:#fbfbfc}
+    .vhead{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+    .vhead .vt-name{flex:1;padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:14px;font-weight:700;font-family:inherit}
+    .vrm{flex:0 0 auto;border:1.5px solid #f0c9c9;background:#fff;color:#c0392b;border-radius:9px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer}
+    .vmeta{display:flex;gap:10px;margin-bottom:10px}
+    .vfield{flex:1;display:flex;flex-direction:column;gap:5px}
+    .vfield span{font-size:11.5px;font-weight:700;color:var(--gray)}
+    .vmeta input{padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:13.5px;font-weight:600;font-family:inherit}
+    .vmeta input:focus{outline:none;border-color:var(--orange)}
+    .tmini{border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px;background:#fff}
+    .tm-toggle{flex:0 0 auto;width:40px;height:40px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--gray);cursor:pointer;font-size:13px;transition:transform .2s}
+    .tmini.collapsed .tm-toggle{transform:rotate(-90deg)}
+    .tmini.collapsed .tmbody{display:none}
+    .tmbody{margin-top:8px}
+    .trow{display:flex;gap:10px;margin-bottom:8px;align-items:center}
+    .tm-toggle{align-self:center}
+    .tm-copy{flex:0 0 auto;padding:7px 11px;border:1.5px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
+
+    .vtrim-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px}
+    .vtpaste-btn{padding:7px 12px;border:1.5px dashed var(--line);border-radius:8px;background:#fff;color:var(--gray);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+
+    .vt-copy{flex:0 0 auto;padding:7px 11px;border:1.5px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
+
+    .vtype-actions{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .cfixed{display:inline-flex;align-items:center;padding:9px 16px;border:1.5px solid var(--line);border-radius:10px;background:#F1F3F6;color:var(--navy);font-size:13.5px;font-weight:700}
+    .tm-name{flex:1;height:40px;box-sizing:border-box;padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:14px;font-weight:600;font-family:inherit}
+    .tm-price{flex:0 0 160px;padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:14px;font-weight:600;font-family:inherit}
+    .pricew{position:relative;flex:0 0 160px;display:flex;align-items:center}
+    .row .pricew.w{flex:0 0 150px}
+    .pricew{height:40px}
+    .pricew input{width:100%;height:40px;box-sizing:border-box;padding:9px 44px 9px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:14px;font-weight:600;font-family:inherit;-moz-appearance:textfield;appearance:textfield}
+    .pricew input::-webkit-outer-spin-button,.pricew input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+    .pricew input:focus{outline:none;border-color:var(--orange)}
+    .wonsuf{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--gray);font-size:13px;font-weight:600;pointer-events:none}
+    .tm-seatdd{margin-top:2px}
+    .tm-feat{width:100%;min-height:60px;padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:13px;font-family:inherit;line-height:1.5;resize:vertical}
+    .tm-feat:focus,.tm-name:focus,.tm-price:focus{outline:none;border-color:var(--orange)}
+    .tmrent{margin-top:8px;border-top:1px dashed var(--line);padding-top:8px}
+    .tmrent__lbl{font-size:11.5px;font-weight:700;color:var(--gray);margin-bottom:6px}
+    .tmrentRow .w2{flex:0 0 80px}
+    .tmrentRow input{padding:8px 10px;border:1.5px solid var(--line);border-radius:8px;font-size:13px;font-family:inherit}
+    textarea{width:100%;min-height:96px;padding:12px;border:1.5px solid var(--line);border-radius:10px;font-size:13.5px;font-family:inherit;line-height:1.6;resize:vertical}
+    textarea:focus{outline:none;border-color:var(--orange)}
+    .cgroup{display:flex;gap:8px;flex-wrap:wrap}
+    .cbox{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border:1.5px solid var(--line);border-radius:10px;font-size:13.5px;font-weight:700;color:var(--navy);cursor:pointer;background:#fff;transition:.15s}
+
+    .cbox:has(input:checked){background:#F1F3F6;border-color:#DDE2E8;color:var(--navy)}
+    .cbox input{display:none}
+    .dd{position:relative;width:100%}
+    .dd__btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-size:14px;font-weight:600;color:var(--navy);cursor:pointer;font-family:inherit}
+    .dd__btn i{font-style:normal;color:var(--gray);font-size:11px;transition:transform .2s}
+    .dd.open .dd__btn{border-color:#cfd5dd}
+    .dd.open .dd__btn i{transform:rotate(180deg)}
+    .dd__menu{display:none;margin-top:6px;border:1.5px solid var(--line);border-radius:10px;background:#fff;box-shadow:0 8px 22px rgba(26,35,50,.10);overflow:hidden;max-height:260px;overflow-y:auto}
+    .dd.open .dd__menu{display:block}
+    .ao-titledd{flex:1}
+    .dd--abs .dd__menu{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30}
+    .dd__opt{display:block;width:100%;text-align:left;padding:11px 14px;font-size:14px;font-weight:600;color:var(--navy);background:#fff;cursor:pointer;border:none;border-bottom:1px solid var(--line)}
+    .dd__opt:last-child{border-bottom:none}
+
+    .dd__opt.on{background:#F1F3F6;color:var(--navy);font-weight:700}
+    .conddef{display:flex;align-items:center;gap:8px;margin-top:8px}
+    .conddef span{font-size:12px;font-weight:700;color:var(--gray)}
+    .conddef select{padding:7px 10px;border:1.5px solid var(--line);border-radius:8px;font-size:13px;font-weight:700;color:var(--navy);font-family:inherit}
+    .radio{display:flex;gap:8px;flex-wrap:wrap}
+    .radio label{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border:1.5px solid var(--line);border-radius:10px;font-size:13.5px;font-weight:700;color:var(--navy);cursor:pointer;background:#fff;transition:.15s}
+
+    .radio label:has(input:checked){background:#F1F3F6;border-color:#DDE2E8;color:var(--navy)}
+    .radio input{display:none}
+    .photobox{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+    .filebtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:42px;min-width:120px;padding:0 16px;box-sizing:border-box;border:1.5px dashed var(--line);border-radius:10px;font-size:13.5px;font-weight:700;color:var(--gray);cursor:pointer}
+
+    .photothumb{display:flex;align-items:center;gap:10px}
+    .photothumb img{width:96px;height:64px;object-fit:cover;background:#FFFFFF;border-radius:8px;border:1px solid var(--line)}
+    .photobtns{display:flex;align-items:center;gap:10px;margin-left:auto}
+    .photormv{display:inline-flex;align-items:center;justify-content:center;height:42px;min-width:120px;padding:0 16px;box-sizing:border-box;border:1.5px solid #f0c9c9;background:#fff;color:#c0392b;border-radius:10px;font-size:13.5px;font-weight:700;cursor:pointer}
+    .save-row .btn{padding:14px 22px;font-size:15px}
+    .hint{font-size:12px;color:var(--gray);margin-top:8px}
+
+    /* 미리보기 */
+    .prevphone{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 14px 34px rgba(26,35,50,.12)}
+    .prevphone__bar{padding:10px 14px;font-size:12px;font-weight:700;color:var(--gray);border-bottom:1px solid var(--line);background:#fafbfc}
+    .prevframe{width:100%;height:78vh;border:none;display:block;background:#fff}
+    .prev__img{height:150px;background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .prev__img .ph-img{width:100%;height:100%;object-fit:contain}
+    .prev__img .ph-img--compact{transform:scale(.85)}
+    .prev__img .ph-img--sedan{transform:scale(.97)}
+    .prev__head{padding:15px 16px}
+    .prev__badges{display:flex;gap:5px;margin-bottom:7px;min-height:2px}
+    .pb{font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px}
+    .pb-hot{background:#FFF3E6;color:#E65100}.pb-rec{background:#EAF2FF;color:#2A5BD7}
+    .prev__name{font-size:16px;font-weight:800;line-height:1.3}
+    .prev__name em{font-size:13px;color:var(--gray);font-weight:700;font-style:normal}
+    .prev__msrp{font-size:13px;color:var(--gray);font-weight:700;margin-top:5px}
+    .prev__sec{padding:13px 16px;border-top:1px solid var(--line)}
+    .prev__sec>b{display:block;font-size:12.5px;font-weight:800;margin-bottom:9px}
+    .prev__trims{display:flex;gap:6px;flex-wrap:wrap}
+    .prev__trim{border:1.5px solid var(--line);border-radius:9px;padding:7px 10px;font-size:11.5px;font-weight:700;color:var(--gray);text-align:center;line-height:1.35}
+    .prev__trim.on{border-color:var(--orange);color:#E65100}
+    .prev__trim small{display:block;color:var(--navy);font-size:11.5px}
+    .prev__row{display:flex;justify-content:space-between;font-size:12.5px;padding:6px 0;color:var(--gray);font-weight:600;gap:8px}
+    .prev__row b{color:var(--navy);font-weight:700;text-align:right}
+    .prev__li{font-size:11.5px;color:var(--gray);padding:3px 0 3px 13px;position:relative;line-height:1.5}
+    .prev__li::before{content:"✓";position:absolute;left:0;color:var(--orange);font-weight:800}
+    .prev__term{display:flex;justify-content:space-between;align-items:center;border:1.5px solid var(--line);border-radius:10px;padding:10px 13px;margin-bottom:6px;font-size:13px;font-weight:800;cursor:pointer}
+    .prev__term.on{border-color:var(--orange);color:#E65100}
+    .prev__trim[data-pv]{cursor:pointer}
+    .prev__best{background:var(--orange);color:#fff;font-size:9px;padding:2px 6px;border-radius:999px;margin-left:6px}
+    .prev__pay{position:sticky;bottom:0;background:#fff;border-top:1.5px solid var(--line);padding:13px 16px;display:flex;justify-content:space-between;align-items:center}
+    .prev__pay span{font-size:12px;font-weight:700;color:var(--gray)}.prev__pay b{font-size:21px;color:var(--orange);font-weight:800}
+    .prev__pctsec{padding:8px 0}
+    .prev__pctsec>span{font-size:12.5px;font-weight:700;color:var(--navy)}
+    .prev__pcts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+    .prev__pct{border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;text-align:center;line-height:1.3}
+    .prev__pct.on{border-color:var(--orange)}
+    .prev__pct b{display:block;font-size:13px;font-weight:800;color:var(--navy)}
+    .prev__pct.on b{color:#E65100}
+    .prev__pct span{font-size:11.5px;font-weight:700;color:var(--gray)}
+    .prev__pct[data-pv]{cursor:pointer}
+    .prev__row--click{cursor:pointer}
+    .prev__row--click b i{font-style:normal;color:var(--gray);font-weight:700;margin-left:2px}
+    .ie{outline:none;border-bottom:1px dashed rgba(245,124,0,.55);cursor:text;min-width:10px;display:inline-block}
+    .ie:focus{border-bottom-color:var(--orange);background:#FFF7EE}
+    .ie:empty::before{content:attr(data-ph);color:#c2c8d0}
+
+    .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:13px 22px;border-radius:999px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:.3s;z-index:50}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .hidden{display:none}
+    @media(max-width:980px){.grid{grid-template-columns:repeat(3,1fr)}.editwrap{grid-template-columns:1fr}.editside{position:static}}
+    @media(max-width:620px){.grid{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1 id="homeLink" style="cursor:pointer"><b>Cartrend</b> 관리자</h1>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn--g" id="policyBtn">가격 정책 ⚙</button>
+        <a class="btn btn--g" href="index.html" target="_blank">사이트 보기 ↗</a>
+      </div>
+    </div>
+
+    <!-- 가격 정책 설정 모달 -->
+    <div id="policyModal" class="pmodal hidden">
+      <div class="pmodal__box">
+        <div class="pmodal__head"><b>가격 정책 설정</b><button type="button" id="policyClose" class="pmodal__x">×</button></div>
+        <p class="pmodal__desc">차량가만 입력하면 아래 정책으로 모든 트림·기간·옵션 견적이 자동 계산됩니다. cartrend가 직접 결정하는 값입니다.</p>
+        <div class="pmodal__sec"><b>기간별 잔가율 (%)</b>
+          <div class="pgrid" id="policyResidual"></div>
+        </div>
+        <div class="pmodal__sec pmodal__row">
+          <label>연 요율 (%)<input type="number" step="0.1" id="policyRate"></label>
+          <label>마진율 (%)<input type="number" step="0.1" id="policyMargin"></label>
+        </div>
+        <div class="pmodal__foot">
+          <button type="button" class="btn btn--g" id="policyReset">기본값 복원</button>
+          <button type="button" class="btn btn--p" id="policySave">정책 저장</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 목록 -->
+    <div id="listView">
+      <div class="brandfilter" id="brandFilter"></div>
+      <div class="toolbar">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span class="cnt" id="carCount"></span>
+          <select id="sortSel" class="sortmini">
+            <option value="manual">내 순서(드래그)</option>
+            <option value="latest">최신 등록순</option>
+            <option value="priceAsc">낮은 가격순</option>
+            <option value="priceDesc">높은 가격순</option>
+          </select>
+        </div>
+        <div class="bulkbtns" style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn--g" id="selectAllBtn">전체 선택</button>
+          <button class="btn btn--d" id="bulkDelBtn">선택 삭제<span id="selCount"></span></button>
+          <button class="btn btn--d" id="deleteAllBtn">전체 삭제</button>
+        </div>
+      </div>
+      <div class="grid" id="carGrid"></div>
+    </div>
+
+    <!-- 편집 -->
+    <div id="editView" class="hidden">
+      <div class="editbar">
+        <span></span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn--g" id="saveTempBtn">임시저장</button>
+          <button class="btn btn--p" id="saveBtn">저장</button>
+          <button class="btn btn--g" id="previewBtn">상세페이지 열기 ↗</button>
+        </div>
+      </div>
+
+      <div class="editwrap">
+        <div class="editmain">
+
+          <div class="card">
+            <h2><span class="step">1</span> 차량 기본정보</h2>
+            <div class="field field--full" style="margin-bottom:13px">
+              <label>차량 대표이미지</label>
+              <div class="photobox">
+                <div class="photothumb hidden" id="photoThumb"><img id="photoThumbImg" alt="" /></div>
+                <div class="photobtns">
+                  <label class="filebtn">📷 사진 선택<input type="file" id="c-photoFile" accept="image/*" hidden /></label>
+                  <button type="button" class="photormv hidden" id="photoRemove">사진 제거</button>
+                </div>
+              </div>
+              <input type="hidden" id="c-photo" />
+            </div>
+            <div class="grid2">
+              <div class="field"><label>제조사</label><div id="brandGroup"></div></div>
+              <div class="field"><label>차량명</label><input id="c-name" placeholder="예: 카니발 KA4" /></div>
+              <div class="field"><label>연료</label><div id="fuelGroup"></div></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2><span class="step">2</span> 차량 유형 · 트림 <span class="muted">유형마다 트림·가격·추가옵션</span></h2>
+            <div id="vtypeBlocks"></div>
+            <div class="vtype-actions">
+              <button class="add" id="addVtype">+ 차량 유형 추가</button>
+              <button class="vtpaste-btn" id="pasteVtype" type="button">📋 차량유형 붙여넣기</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2><span class="step">3</span> 정비 서비스</h2>
+            <textarea id="f-maintenance" placeholder="한 줄에 하나씩"></textarea>
+          </div>
+
+          <div class="card">
+            <h2><span class="step">4</span> 매입 옵션</h2>
+            <div class="radio" id="buyOption">
+              <label><input type="radio" name="buyopt" value="있음" checked /> 있음</label>
+              <label><input type="radio" name="buyopt" value="없음" /> 없음</label>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2><span class="step">5</span> 계약 조건</h2>
+            <p class="sub">연간 약정거리 <span style="color:#9AA3B0;font-weight:600">(하나만 선택 · 기본 표시값)</span></p>
+            <div class="cgroup" id="mileGroup"></div>
+            <p class="sub">보증금 <span style="color:#9AA3B0;font-weight:600">(기본 15% 선택 · 변경 가능)</span></p><div class="cgroup" id="depGroup"></div>
+            <p class="sub">선납금 <span style="color:#9AA3B0;font-weight:600">(하나만 선택 · 기본 표시값)</span></p><div class="cgroup" id="prepayGroup"></div>
+            <p class="sub">운전자 연령</p><div class="cgroup" id="ageGroup"></div>
+            <p class="sub">대물배상</p><div class="cgroup" id="liabGroup"></div>
+            <p class="sub">자차 면책금</p><div class="cgroup" id="dedGroup"></div>
+            <p class="sub">차량용품</p><textarea id="f-accessories" placeholder="예: 전면/후면 썬팅 포함&#10;2채널 블랙박스 포함"></textarea>
+            <p class="sub">차량 인도지역</p><div class="cgroup" id="regionGroup"></div>
+          </div>
+
+          <div class="card">
+            <h2><span class="step">6</span> 노출 설정</h2>
+            <p class="sub">판매 상태</p>
+            <div class="radio" id="statusGroup">
+              <label><input type="radio" name="status" value="판매중" checked /> 판매중</label>
+              <label><input type="radio" name="status" value="판매중지" /> 판매중지</label>
+            </div>
+            <p class="sub">표시</p>
+            <div class="cgroup">
+              <label class="cbox"><input type="checkbox" id="c-popular" /> 🔥 인기차량</label>
+              <label class="cbox"><input type="checkbox" id="c-recommend" /> 추천차량</label>
+            </div>
+          </div>
+
+          <p class="hint">※ ‘판매중’ 상태로 저장하면 메인 페이지에 노출됩니다. (‘판매중지’만 숨김)</p>
+        </div>
+
+        <aside class="editside">
+          <div class="prevphone">
+            <div class="prevphone__bar">실시간 미리보기 · 실제 상세페이지</div>
+            <iframe id="previewFrame" class="prevframe" title="미리보기"></iframe>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="lib/quote-engine.js"></script>
+  <script src="data.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cartrend 데이터 복구</title>
+<style>
+  body{font-family:"Pretendard",system-ui,sans-serif;background:#F7F8FA;color:#1A2332;max-width:680px;margin:0 auto;padding:40px 20px;line-height:1.6}
+  h1{font-size:22px}
+  .box{background:#fff;border:1px solid #E6E9EE;border-radius:14px;padding:22px;margin:16px 0}
+  .car{padding:7px 0;border-bottom:1px solid #f0f2f5;font-size:14px}
+  .car:last-child{border:none}
+  .btn{display:inline-block;border:none;border-radius:10px;padding:14px 22px;font-size:15px;font-weight:800;cursor:pointer}
+  .btn--go{background:#0E8A4F;color:#fff}
+  .btn--go:disabled{background:#9aa3b0}
+  .muted{color:#5B6573;font-size:13px}
+  .ok{color:#0E8A4F;font-weight:800}
+  .warn{color:#c0392b}
+  #status{margin-top:14px;font-size:15px;font-weight:700}
+</style>
+</head>
+<body>
+  <h1>🛟 Cartrend 차량 데이터 복구</h1>
+  <p class="muted">아래는 브라우저 저장소(leveldb)에서 복구한 <b>사장님의 차량 카탈로그</b>입니다. 사진·옵션·비노출 설정·정비/용품 문구가 포함되어 있습니다. 확인 후 <b>복구 실행</b>을 누르면 현재 데이터를 이걸로 되돌립니다. (현재 데이터는 자동 백업됨)</p>
+  <div class="box">
+    <div id="summary" class="muted">불러오는 중…</div>
+    <div id="list"></div>
+  </div>
+  <button id="go" class="btn btn--go" disabled>복구 실행</button>
+  <a class="btn" href="admin.html" style="background:#fff;border:1.5px solid #E6E9EE;color:#1A2332;text-decoration:none">관리자로</a>
+  <div id="status"></div>
+
+<script>
+var RAW = null;
+fetch("recovered-cars.json?n=" + Date.now())
+  .then(function (r) { return r.text(); })
+  .then(function (txt) {
+    RAW = txt;
+    var arr = JSON.parse(txt);
+    document.getElementById("summary").innerHTML = "복구 대상: <b>" + arr.length + "대</b>";
+    document.getElementById("list").innerHTML = arr.map(function (c) {
+      var det = c.detail || {}; var vts = det.vehicleTypes || [];
+      var trims = 0, opts = 0, hid = 0;
+      vts.forEach(function (v) { (v.trims || []).forEach(function (t) {
+        trims++; (t.addOptions || []).forEach(function (g) { (g.items || []).forEach(function (it) { opts++; if (it.hidden) hid++; }); });
+      }); });
+      return '<div class="car"><b>' + c.name + '</b> <span class="muted">· ' + (c.photo ? "사진O " : "") + "트림" + trims + " · 옵션" + opts + (hid ? " · 비노출" + hid : "") + "</span></div>";
+    }).join("");
+    document.getElementById("go").disabled = false;
+  })
+  .catch(function (e) { document.getElementById("summary").innerHTML = '<span class="warn">복구 파일을 불러오지 못했습니다: ' + e + "</span>"; });
+
+document.getElementById("go").addEventListener("click", function () {
+  if (!RAW) return;
+  if (!confirm("현재 차량 데이터를 복구본(14대)으로 되돌립니다. 진행할까요?\n(현재 데이터는 백업됩니다)")) return;
+  try {
+    var cur = localStorage.getItem("cartrend:cars");
+    Object.keys(localStorage).filter(function (k) { return k.indexOf("cartrend:cars_backup_") === 0; }).forEach(function (k) { localStorage.removeItem(k); });
+    try { if (cur) localStorage.setItem("cartrend:cars_backup_" + Date.now(), cur); } catch (e) {}  // 현재 상태 백업(실패해도 진행)
+    JSON.parse(RAW);                                  // 유효성 확인
+    localStorage.setItem("cartrend:cars", RAW);       // 복구
+    localStorage.setItem("cartrend:seeded", "10");    // 시드 자동추가 방지(요청 안 한 차 안 생김)
+    document.getElementById("status").innerHTML = '<span class="ok">✓ 복구 완료! 14대가 복원되었습니다. 관리자로 이동해 확인하세요.</span>';
+  } catch (e) {
+    document.getElementById("status").innerHTML = '<span class="warn">복구 실패: ' + e + "</span>";
+  }
+});
+</script>
+</body>
+</html>

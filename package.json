@@ -1,0 +1,14 @@
+{
+  "name": "cartrend",
+  "version": "1.0.0",
+  "description": "신뢰감 있고 프리미엄한 **신차장기렌트** 전문 브랜드 **cartrend**의 원페이지 랜딩 사이트입니다. 초기비용 0원·월 렌트료 중심으로, 토스·카카오모빌리티 수준의 깔끔한 SaaS 스타일 UI, 모바일 우선 반응형, 빠른 견적 전환에 초점을 맞췄습니다.",
+  "main": "admin.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {}
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cartrend 전체 차량 불러오기</title>
+<style>
+  body{font-family:"Pretendard",system-ui,sans-serif;background:#F7F8FA;color:#1A2332;max-width:760px;margin:0 auto;padding:36px 20px;line-height:1.6}
+  h1{font-size:22px}
+  .box{background:#fff;border:1px solid #E6E9EE;border-radius:14px;padding:20px;margin:16px 0}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px 18px;font-size:13px;max-height:340px;overflow:auto}
+  .row{padding:4px 0;border-bottom:1px solid #f4f5f7;display:flex;gap:8px}
+  .n{color:#9aa3b0;min-width:30px;text-align:right}
+  .b{color:#5B6573;font-size:11px}
+  .btn{display:inline-block;border:none;border-radius:10px;padding:14px 22px;font-size:15px;font-weight:800;cursor:pointer}
+  .btn--go{background:#0E8A4F;color:#fff}.btn--go:disabled{background:#9aa3b0}
+  .muted{color:#5B6573;font-size:13px}.ok{color:#0E8A4F;font-weight:800}.warn{color:#c0392b}
+  #status{margin-top:14px;font-size:15px;font-weight:700}
+</style>
+</head>
+<body>
+  <h1>📥 전체 차량 불러오기</h1>
+  <p class="muted">아래 목록을 <b>적으신 순서 그대로</b> 관리자에 등록합니다. 트림·가격·옵션은 각 차량 편집에서 채우시면 됩니다. <b>현재 데이터는 자동 백업</b>됩니다.</p>
+  <div class="box">
+    <div id="summary" class="muted">불러오는 중…</div>
+    <div id="list" class="grid"></div>
+  </div>
+  <button id="go" class="btn btn--go" disabled>불러오기 실행</button>
+  <a class="btn" href="admin.html" style="background:#fff;border:1.5px solid #E6E9EE;color:#1A2332;text-decoration:none">관리자로</a>
+  <div id="status"></div>
+<script>
+var RAW=null;
+fetch("catalog-all.json?n="+Date.now()).then(r=>r.text()).then(function(txt){
+  RAW=txt; var arr=JSON.parse(txt);
+  document.getElementById("summary").innerHTML="등록 대상: <b>"+arr.length+"대</b> (순서 보존)";
+  document.getElementById("list").innerHTML=arr.map(function(c,i){
+    return '<div class="row"><span class="n">'+(i+1)+'</span><span>'+c.name+' <span class="b">'+c.brand+'·'+c.fuel+'</span></span></div>';
+  }).join("");
+  document.getElementById("go").disabled=false;
+}).catch(function(e){document.getElementById("summary").innerHTML='<span class="warn">목록 로드 실패: '+e+'</span>';});
+
+document.getElementById("go").addEventListener("click",function(){
+  if(!RAW)return;
+  if(!confirm("적으신 순서대로 차량을 관리자에 불러옵니다. 현재 데이터는 백업됩니다. 진행할까요?"))return;
+  try{
+    var cur=localStorage.getItem("cartrend:cars");
+    Object.keys(localStorage).filter(function(k){return k.indexOf("cartrend:cars_backup_")===0;}).forEach(function(k){localStorage.removeItem(k);});
+    if(cur){try{localStorage.setItem("cartrend:cars_backup_"+Date.now(),cur);}catch(e){}}
+    JSON.parse(RAW);
+    localStorage.setItem("cartrend:cars",RAW);     // 순서 그대로 저장
+    localStorage.setItem("cartrend:seeded","999"); // 시드 자동추가/복구 완전 차단
+    var n=JSON.parse(RAW).length;
+    document.getElementById("status").innerHTML='<span class="ok">✓ '+n+'대 불러오기 완료! 관리자로 이동해 확인하세요.</span>';
+  }catch(e){document.getElementById("status").innerHTML='<span class="warn">실패: '+e+'</span>';}
+});
+</script>
+</body>
+</html>
