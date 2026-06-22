@@ -157,7 +157,18 @@ function carDetailDefaults(car) {
    ============================================================ */
 var CARS_KEY = "cartrend:cars";
 
+function _cloneDefault() {
+  return CARS_DEFAULT.map(function (c) {
+    var o = {}; for (var k in c) o[k] = c[k];
+    o.badges = (c.badges || []).slice();
+    return o;
+  });
+}
 function loadCars() {
+  // 공개 페이지(메인·상세)는 항상 배포된 카탈로그를 보여준다 — 방문자 브라우저 저장소(localStorage) 영향 없음.
+  // 관리자 페이지(admin.html)에서만 localStorage(내 편집본)를 우선 사용.
+  var isAdmin = (typeof location !== "undefined") && /admin\.html/i.test(location.pathname || location.href || "");
+  if (!isAdmin) return _cloneDefault();
   try {
     var raw = localStorage.getItem(CARS_KEY);
     if (raw !== null) {
@@ -165,12 +176,7 @@ function loadCars() {
       if (Array.isArray(a)) return a; // 빈 배열([])도 그대로 유지 — 전체 삭제 반영
     }
   } catch (e) {}
-  // 기본 카탈로그 복제
-  return CARS_DEFAULT.map(function (c) {
-    var o = {}; for (var k in c) o[k] = c[k];
-    o.badges = (c.badges || []).slice();
-    return o;
-  });
+  return _cloneDefault();
 }
 
 var CARS = loadCars();
