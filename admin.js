@@ -103,7 +103,7 @@
   function seatDropdownHTML(seats) {
     var cur = (seats != null && seats !== "") ? String(seats) : "";
     var opts = "";
-    for (var n = 1; n <= 10; n++) opts += '<button type="button" class="dd__opt' + (String(n) === cur ? " on" : "") + '" data-v="' + n + '">' + n + "인승</button>";
+    for (var n = 1; n <= 15; n++) opts += '<button type="button" class="dd__opt' + (String(n) === cur ? " on" : "") + '" data-v="' + n + '">' + n + "인승</button>";
     return '<div class="dd tm-seatdd"><input type="hidden" class="tm-seats" value="' + cur + '">' +
       '<button type="button" class="dd__btn">' + (cur ? cur + "인승" : "승차정원 선택") + "<i>▾</i></button>" +
       '<div class="dd__menu">' + opts + "</div></div>";
