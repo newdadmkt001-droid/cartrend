@@ -31,8 +31,32 @@
     rec: '<span class="card__badge card__badge--rec">추천</span>'
   };
 
-  function curType() { return D.vehicleTypes[state.vtype] || D.vehicleTypes[0] || { name: "", trims: D.trims }; }
-  function curTrims() { var t = curType().trims; return (t && t.length) ? t : D.trims; }
+  // 이름 있는 차종이 2개 이상일 때만 차종(유형) 선택을 노출.
+  // 그 외(유형명 비어있음·1개)에는 유형 버튼을 숨기고 모든 트림을 하나로 합쳐 보여준다.
+  function namedTypes() { return (D.vehicleTypes || []).filter(function (v) { return v && (v.name || "").trim(); }); }
+  function useTypeSelect() { return namedTypes().length >= 2; }
+  function mergedTrims() {
+    var out = [];
+    (D.vehicleTypes || []).forEach(function (v) {
+      (v.trims || []).forEach(function (t) {
+        if (t && v) {   // 트림에 차종 배기량/인승/조정율 정보 주입(트림 자체 값 우선)
+          if (t.displacement == null && v.displacement != null) t.displacement = v.displacement;
+          if ((t.seats == null || t.seats === "") && v.seats != null) t.seats = v.seats;
+          if (t.adjRate == null && v.adjRate != null) t.adjRate = v.adjRate;
+        }
+        out.push(t);
+      });
+    });
+    return out.length ? out : (D.trims || []);
+  }
+  function curType() {
+    if (useTypeSelect()) return D.vehicleTypes[state.vtype] || D.vehicleTypes[0] || { name: "", trims: D.trims };
+    return (D.vehicleTypes && D.vehicleTypes[0]) || { name: "", trims: D.trims };
+  }
+  function curTrims() {
+    if (useTypeSelect()) { var t = curType().trims; return (t && t.length) ? t : D.trims; }
+    return mergedTrims();
+  }
   function curTrim() { return curTrims()[state.trim] || curTrims()[0] || { name: "", price: 0, features: [] }; }
   // cartrend 자체 견적 엔진 + 가격 정책 (관리자 설정 또는 기본값)
   var QE = window.QuoteEngine;
@@ -59,7 +83,7 @@
   function monthlyByMonths(m) {
     // 보증금·선납금 반영(선택 시 월렌트료 변동) + 옵션 증가분
     var base = QE.quoteMonthly(trimWon(), addOptPrice(), m, POLICY, depositAmt(), prepayAmt());
-    var adj = curType().adjRate || 0;   // 차량유형별 조정율(하이루프 등)
+    var adj = (curTrim().adjRate != null ? curTrim().adjRate : curType().adjRate) || 0;   // 차량유형별 조정율(하이루프 등)
     if (adj) base = Math.round(base * (1 + adj) / 10) * 10;
     return base + maintFee();
   }
@@ -114,8 +138,8 @@
   function renderVtypes() {
     var box = $("#variantList");
     var head = $("#vtypeHead");
-    // 차량유형이 1개뿐이면(또는 없으면) 차종 선택 숨김 — 트림만 있는 차량
-    if (D.vehicleTypes.length <= 1) { box.innerHTML = ""; if (head) head.style.display = "none"; return; }
+    // 유형명이 있는 차종이 2개 미만이면 차종 선택 숨김 (유형명 비어있으면 안 뜸 · 트림만 합쳐 노출)
+    if (!useTypeSelect()) { box.innerHTML = ""; if (head) head.style.display = "none"; return; }
     if (head) head.style.display = "";
     box.innerHTML = D.vehicleTypes.map(function (v, i) {
       return '<button class="vpill' + (i === state.vtype ? " is-active" : "") + '" data-v="' + i + '">' + (v.name || "유형") + "</button>";
@@ -144,7 +168,7 @@
     });
     var html;
     if (state.specTab === 0) {
-      var disp = curType().displacement != null ? curType().displacement : D.displacement;
+      var disp = curTrim().displacement != null ? curTrim().displacement : (curType().displacement != null ? curType().displacement : D.displacement);
       var seats = (curTrim().seats != null && curTrim().seats !== "") ? curTrim().seats : D.seats;
       html = specRow("제조사", car.brand) +
         (effSub() ? specRow("세부모델", effSub()) : "") +
