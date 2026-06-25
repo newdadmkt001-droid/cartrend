@@ -413,7 +413,7 @@
     if (!isNew && c.brand && brands.indexOf(c.brand) === -1) brands.unshift(c.brand);
     selGroup("brandGroup", "c-brand", brands, isNew ? "" : (c.brand || ""));
     setVal("c-name", isNew ? "" : c.name);
-    selGroup("fuelGroup", "c-fuel", ["가솔린", "하이브리드", "LPG", "전기", "디젤"], isNew ? "가솔린" : (c.fuel || "가솔린"));
+    selGroup("fuelGroup", "c-fuel", ["가솔린", "하이브리드", "플러그인 하이브리드", "LPG", "전기", "디젤"], isNew ? "가솔린" : (c.fuel || "가솔린"));
     renderVtypeBlocks(isNew ? [{ name: "", trims: [{}] }] : d.vehicleTypes);
     $("#f-maintenance").value = (!isNew && d.maintenance && d.maintenance.length) ? d.maintenance.join("\n") : DEFAULT_MAINT;
     setRadio("buyOption", isNew ? "있음" : (d.buyOption || "있음"));
