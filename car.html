@@ -147,9 +147,17 @@
     </div>
   </div>
 
-  <script src="lib/quote-engine.js"></script>
-  <script src="db.js"></script>
-  <script src="data.js"></script>
-  <script src="car.js"></script>
+  <script>
+    // 미리보기(preview=1)에서는 admin이 넘긴 캐시버스터(n)를 스크립트에도 붙여 항상 최신 코드 로드.
+    // (안 그러면 iframe의 car.js/data.js가 캐시되어 미리보기가 옛 화면으로 보임)
+    (function () {
+      var p = new URLSearchParams(location.search);
+      var v = (p.get("preview") === "1") ? (p.get("n") || "1") : "";
+      var q = v ? ("?v=" + encodeURIComponent(v)) : "";
+      ["lib/quote-engine.js", "db.js", "data.js", "car.js"].forEach(function (s) {
+        document.write('<script src="' + s + q + '"><\/script>');
+      });
+    })();
+  </script>
 </body>
 </html>
