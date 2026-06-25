@@ -441,9 +441,15 @@
   </div>
 
   <div class="toast" id="toast"></div>
-  <script src="lib/quote-engine.js"></script>
-  <script src="db.js"></script>
-  <script src="data.js"></script>
-  <script src="admin.js"></script>
+  <script>
+    // 스크립트에 버전(BUILD)을 붙여 캐시 무효화 — 배포로 코드가 바뀌면 BUILD만 올리면 관리자도 최신 코드 로드.
+    (function () {
+      var BUILD = "20260625-2";   // ← 코드 변경 배포 시 이 값을 바꾸면 캐시가 갱신됨
+      var q = "?v=" + encodeURIComponent(BUILD);
+      ["lib/quote-engine.js", "db.js", "data.js", "admin.js"].forEach(function (s) {
+        document.write('<script src="' + s + q + '"><\/script>');
+      });
+    })();
+  </script>
 </body>
 </html>
