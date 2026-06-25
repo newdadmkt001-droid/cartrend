@@ -110,6 +110,18 @@
       '<button type="button" class="dd__btn">' + (cur ? cur + "인승" : "승차정원 선택") + "<i>▾</i></button>" +
       '<div class="dd__menu">' + opts + "</div></div>";
   }
+  // 트림별 연료 드롭다운 (비워두면 차량 기본 연료 사용 — 트림마다 연료가 다른 차량용)
+  function fuelDropdownHTML(fuel) {
+    var cur = fuel || "";
+    var FUELS = ["가솔린", "하이브리드", "플러그인 하이브리드", "LPG", "전기", "디젤"];
+    var opts = '<button type="button" class="dd__opt' + (cur === "" ? " on" : "") + '" data-v="">차량 기본 연료</button>';
+    FUELS.forEach(function (f) {
+      opts += '<button type="button" class="dd__opt' + (f === cur ? " on" : "") + '" data-v="' + f + '">' + f + "</button>";
+    });
+    return '<div class="dd tm-fueldd"><input type="hidden" class="tm-fuel" value="' + cur + '">' +
+      '<button type="button" class="dd__btn">' + (cur || "연료(차량 기본)") + "<i>▾</i></button>" +
+      '<div class="dd__menu">' + opts + "</div></div>";
+  }
   var RATE_PERIODS = [82, 72, 60, 48, 36, 24];
   var QE = window.QuoteEngine;   // cartrend 자체 견적 엔진
   function genTid() { return "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
@@ -121,6 +133,7 @@
       price: num($(".tm-price", tm).value) * 10000,
       makerDC: num($(".tm-makerdc", tm).value) * 10000,
       seats: num($(".tm-seats", tm).value),
+      fuel: ($(".tm-fuel", tm) && $(".tm-fuel", tm).value) || "",
       features: [],
       addOptions: collectAddOptions(tm)
     };
@@ -201,6 +214,7 @@
       '<div class="tmbody">' +
       '<input type="hidden" class="tm-id" value="' + (t.id || genTid()) + '">' +
       seatDropdownHTML(t.seats) +
+      fuelDropdownHTML(t.fuel) +
       '<div class="tmsec collapsed">' +
       '<div class="tmsec__head vao__label" style="margin-top:6px">월렌트료 미리보기 <span>(현재 가격정책 기준 · 차량가만 입력하면 자동 계산)</span><i class="tmsec__arr">▾</i></div>' +
       '<div class="tmsec__body"><div class="tm-preview">' + trimPreviewHTML(t.price || 0, t.makerDC || 0) + "</div></div></div>" +
@@ -253,6 +267,7 @@
           price: priceWon,   // 입력 만원 → 원으로 저장
           makerDC: num($(".tm-makerdc", tm).value) * 10000,   // 입력 만원 → 원
           seats: num($(".tm-seats", tm).value),
+          fuel: ($(".tm-fuel", tm) && $(".tm-fuel", tm).value) || "",   // 트림별 연료(비우면 차량 기본)
           features: [],
           addOptions: collectAddOptions(tm)
         };

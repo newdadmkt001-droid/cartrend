@@ -58,6 +58,8 @@
     return mergedTrims();
   }
   function curTrim() { return curTrims()[state.trim] || curTrims()[0] || { name: "", price: 0, features: [] }; }
+  // 선택 트림의 연료(트림에 지정 없으면 차량 기본 연료) — 트림마다 연료가 다른 차량 대응
+  function effFuel() { return (curTrim().fuel || car.fuel); }
   // cartrend 자체 견적 엔진 + 가격 정책 (관리자 설정 또는 기본값)
   var QE = window.QuoteEngine;
   var POLICY = QE.loadPricingPolicy();
@@ -112,7 +114,7 @@
     var sub = effSub();
     var tn = curTrim().name || "";
     // 차량명 + 연료 + 차량유형 + 트림
-    $("#dTitle").textContent = car.name + (car.fuel ? " " + car.fuel : "") + (sub ? " " + sub : "") + (tn ? " " + tn : "");
+    $("#dTitle").textContent = car.name + (effFuel() ? " " + effFuel() : "") + (sub ? " " + sub : "") + (tn ? " " + tn : "");
     var ml = state.custom.mileage != null ? state.custom.mileage : (MILEAGE_OPTS[state.sel.mileage != null ? state.sel.mileage : 0] || D.mileage || "10,000km");
     var depLabel = state.custom.deposit != null ? "직접입력" : (DEPOSIT_OPTS[state.sel.deposit != null ? state.sel.deposit : 0] || "15%");
     var spec = currentMonths() + "개월 · 연간 " + ml + " · 보증금 " + depLabel + " 기준";
@@ -172,9 +174,9 @@
       var seats = (curTrim().seats != null && curTrim().seats !== "") ? curTrim().seats : D.seats;
       html = specRow("제조사", car.brand) +
         (effSub() ? specRow("세부모델", effSub()) : "") +
-        specRow("배기량", won(disp || 0) + "cc") +
+        specRow("배기량", effFuel() === "전기" ? "전기" : (won(disp || 0) + "cc")) +
         specRow("승차정원", (seats || 5) + "인승") +
-        specRow("연료", car.fuel);
+        specRow("연료", effFuel());
     } else {
       html = specRow("차급", car.seg) +
         specRow("차량용품", (D.accessories || "-").replace(/\n/g, ", "));
