@@ -565,7 +565,7 @@ function buildSeedCar(s) {
 }
 // 시드: 공식 가격표 기준으로 차량 갱신 (비시드 차량 보존, 중복 제거, 사진·상태 유지)
 (function seedCatalog() {
-  var SEED_VERSION = 10, SEED_FLAG = "cartrend:seeded";
+  var SEED_VERSION = 11, SEED_FLAG = "cartrend:seeded";
   var done = 0; try { done = +(localStorage.getItem(SEED_FLAG) || 0); } catch (e) {}
   if (done >= SEED_VERSION) return;
   // v1→v2 이름 정정 (구 이름으로 시드된 경우)
@@ -590,6 +590,15 @@ function buildSeedCar(s) {
   SEED_CARS.forEach(function (s) {
     if (ADD_NAMES.indexOf(s.name) !== -1 && !existing[s.name]) { CARS.push(buildSeedCar(s)); existing[s.name] = true; }
   });
+  // v11: 보증금 미설정/0% 차량을 제조사 기본값으로 1회 보정 (국산 15%·외제 20%) — 그 외 값은 유지
+  if (done < 11) {
+    CARS.forEach(function (c) {
+      var d = c.detail || (c.detail = {});
+      if (typeof d.deposit !== "string" || d.deposit === "" || d.deposit === "0%") {
+        d.deposit = defaultDepForBrand(c.brand);
+      }
+    });
+  }
   saveCars();
   try { localStorage.setItem(SEED_FLAG, String(SEED_VERSION)); } catch (e) {}
 })();
