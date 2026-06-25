@@ -148,12 +148,13 @@
   </div>
 
   <script>
-    // 미리보기(preview=1)에서는 admin이 넘긴 캐시버스터(n)를 스크립트에도 붙여 항상 최신 코드 로드.
-    // (안 그러면 iframe의 car.js/data.js가 캐시되어 미리보기가 옛 화면으로 보임)
+    // 스크립트에 버전(BUILD)을 붙여 캐시 무효화. 배포로 코드가 바뀌면 BUILD만 올리면 방문자도 최신 코드 로드.
+    // 미리보기(preview=1)에서는 admin이 넘긴 n을 써서 매 렌더마다 항상 최신.
     (function () {
+      var BUILD = "20260625-2";   // ← 코드 변경 배포 시 이 값을 바꾸면 방문자 캐시가 갱신됨
       var p = new URLSearchParams(location.search);
-      var v = (p.get("preview") === "1") ? (p.get("n") || "1") : "";
-      var q = v ? ("?v=" + encodeURIComponent(v)) : "";
+      var v = (p.get("preview") === "1") ? (p.get("n") || BUILD) : BUILD;
+      var q = "?v=" + encodeURIComponent(v);
       ["lib/quote-engine.js", "db.js", "data.js", "car.js"].forEach(function (s) {
         document.write('<script src="' + s + q + '"><\/script>');
       });
