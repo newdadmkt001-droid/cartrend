@@ -11,10 +11,13 @@
   var cur = -1;
   var creating = false; // 신규 차량(아직 저장 안 됨)
   var depTouched = false; // 사용자가 보증금을 직접 선택했는지(직접 선택 시 자동 기본값 덮어쓰지 않음)
-  // 국산 제조사(그 외 = 외제/수입). 외제차 기본 보증금 20%, 국산차 15%
-  var DOMESTIC_BRANDS = ["현대", "기아", "제네시스", "쉐보레", "KGM", "르노코리아"];
+  // 국산 제조사(그 외 = 외제/수입). 국산차 기본 보증금 15%, 외제차 20%
+  var DOMESTIC_BRANDS = ["현대", "기아", "제네시스", "쉐보레", "한국지엠", "KGM", "르노코리아"];
   function defaultDepForBrand(brand) {
-    return (brand && DOMESTIC_BRANDS.indexOf(brand) === -1) ? "20%" : "15%";
+    if (!brand) return "15%";
+    var b = String(brand).trim().toLowerCase();
+    var isDomestic = DOMESTIC_BRANDS.some(function (d) { return d.toLowerCase() === b; });
+    return isDomestic ? "15%" : "20%";
   }
   // 정비 서비스 기본 문구 (신규/빈 값일 때 자동 채움 — 수정·삭제 가능)
   var DEFAULT_MAINT = [
