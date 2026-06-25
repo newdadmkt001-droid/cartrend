@@ -118,6 +118,15 @@ function defaultSeats(car) {
   return 5;
 }
 
+/* 보증금 기본값: 국산차 15%, 외제차 20% (제조사 기준 · 명시값 없을 때만 적용) */
+var DEPOSIT_DOMESTIC_BRANDS = ["현대", "기아", "제네시스", "쉐보레", "한국지엠", "KGM", "KG모빌리티", "르노코리아"];
+function defaultDepForBrand(brand) {
+  if (!brand) return "15%";
+  var b = String(brand).trim().toLowerCase();
+  var isDomestic = DEPOSIT_DOMESTIC_BRANDS.some(function (d) { return d.toLowerCase() === b; });
+  return isDomestic ? "15%" : "20%";
+}
+
 /* 차량별 상세 기본값 (관리자 미입력 시 사용) */
 function carDetailDefaults(car) {
   var baseVehicle = Math.round(car.price * 85 / 10000) * 10000; // 차량가(원) 근사
@@ -135,7 +144,7 @@ function carDetailDefaults(car) {
     maintenanceFee: 0,                              // 정비 추가요금(월)
     buyOption: "있음",                              // 있음 / 없음
     mileage: "10,000km",                            // 연간 약정거리 (단일 선택, 기본값)
-    deposit: "0%",                                   // 보증금 (관리자 단일 선택, 기본값)
+    deposit: defaultDepForBrand(car && car.brand),   // 보증금 기본값 (국산 15% · 외제 20%, 변경 가능)
     prepay: "0%",                                    // 선납금 (관리자 단일 선택, 기본값)
     driverAge: "만 26세 이상",                       // 운전자 연령 (기본값)
     liability: "1억원",                              // 대물배상 (기본값)
@@ -273,7 +282,7 @@ function carDetailOf(car) {
     if (!Array.isArray(d[k])) d[k] = [];
   });
   // 단일 값(문자열) 항목. 레거시(배열) 호환
-  if (typeof d.deposit !== "string" || d.deposit === "") d.deposit = (Array.isArray(d.deposits) && d.deposits[0]) || "0%";
+  if (typeof d.deposit !== "string" || d.deposit === "") d.deposit = (Array.isArray(d.deposits) && d.deposits[0]) || defaultDepForBrand(car && car.brand);
   if (typeof d.prepay !== "string" || d.prepay === "") d.prepay = (Array.isArray(d.prepays) && d.prepays[0]) || "0%";
   if (typeof d.mileage !== "string" || d.mileage === "") d.mileage = (Array.isArray(d.mileages) && d.mileages[0]) || "10,000km";
   if (typeof d.driverAge !== "string" || d.driverAge === "") d.driverAge = (Array.isArray(d.driverAges) && d.driverAges[0]) || "만 26세 이상";
