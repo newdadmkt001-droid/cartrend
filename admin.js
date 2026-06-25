@@ -10,6 +10,12 @@
   var manStr = function (won) { return won ? Number(Math.round(won / 10000)).toLocaleString("ko-KR") : ""; };   // 원 → 만원 표시
   var cur = -1;
   var creating = false; // 신규 차량(아직 저장 안 됨)
+  var depTouched = false; // 사용자가 보증금을 직접 선택했는지(직접 선택 시 자동 기본값 덮어쓰지 않음)
+  // 국산 제조사(그 외 = 외제/수입). 외제차 기본 보증금 20%, 국산차 15%
+  var DOMESTIC_BRANDS = ["현대", "기아", "제네시스", "쉐보레", "KGM", "르노코리아"];
+  function defaultDepForBrand(brand) {
+    return (brand && DOMESTIC_BRANDS.indexOf(brand) === -1) ? "20%" : "15%";
+  }
   // 정비 서비스 기본 문구 (신규/빈 값일 때 자동 채움 — 수정·삭제 가능)
   var DEFAULT_MAINT = [
     "교통사고 발생 시 사고처리 업무 대행",
@@ -400,6 +406,7 @@
   /* ---------- 편집 진입 ---------- */
   function applyEditView(id, isNew, override) {
     creating = !!isNew;
+    depTouched = false;
     cur = isNew ? -1 : id;
     pv = { vtype: 0, trim: 0, term: null, open: null, deposit: null, prepay: null, mileage: null, age: null, liab: null, ded: null, region: null, addopt: null };
     var c = override ? override.car : (isNew ? blankCar() : CARS[id]);
@@ -419,7 +426,7 @@
     if (selMile && mileOpts.indexOf(selMile) === -1 && selMile !== "직접입력") mileOpts.push(selMile);
     mileOpts.push("직접입력");
     selGroup("mileGroup", "sel-mile", mileOpts, selMile);
-    var selDep = isNew ? "15%" : (d.deposit || "15%");   // 저장된 보증금 표시(신규는 기본 15%)
+    var selDep = isNew ? defaultDepForBrand(c.brand) : (d.deposit || "15%");   // 저장된 보증금 표시(신규는 제조사별 기본: 외제 20%·국산 15%)
     var depOpts = DEPOSIT_OPTS.slice();
     if (selDep && depOpts.indexOf(selDep) === -1 && selDep !== "직접입력") depOpts.push(selDep);
     depOpts.push("직접입력");
@@ -760,6 +767,25 @@
       // 연료=전기 → 모든 차량유형 배기량 0으로 자동 설정
       if (hid.id === "c-fuel" && hid.value === "전기") {
         [].forEach.call(document.querySelectorAll(".vt-disp"), function (x) { x.value = "0"; });
+      }
+      // 보증금을 직접 선택하면 자동 기본값으로 덮어쓰지 않음
+      if (hid.id === "sel-dep") depTouched = true;
+      // 신규 등록 시 제조사 선택하면 보증금 기본값 자동 설정(외제 20%·국산 15%) — 사용자가 직접 고르기 전까지만
+      if (hid.id === "c-brand" && creating && !depTouched) {
+        var depDd = $("#sel-dep") ? $("#sel-dep").closest(".dd") : null;
+        if (depDd) {
+          var defDep = defaultDepForBrand(hid.value);
+          var hd = depDd.querySelector("input[type=hidden]");
+          hd.value = defDep;
+          var hit = false;
+          [].forEach.call(depDd.querySelectorAll(".dd__opt"), function (x) {
+            var m = x.getAttribute("data-v") === defDep;
+            x.classList.toggle("on", m);
+            if (m) hit = true;
+          });
+          depDd.querySelector(".dd__btn").innerHTML = defDep + '<i>▾</i>';
+          if (!hit) hd.value = defDep; // 옵션 목록에 없을 경우에도 값은 유지
+        }
       }
       renderPreview();
       return;
