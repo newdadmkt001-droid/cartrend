@@ -215,6 +215,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .gotop{display:none}                      /* TOP 버튼: 모바일 숨김(모바일은 하단 탭바 사용) */
 .cars__tools{display:inline-flex;align-items:center;gap:12px}
 .viewtoggle{display:none}                 /* 보기 방식 토글: 모바일 숨김 */
+.quoteform{display:none}                   /* 견적문의 폼: PC 히어로 전용(모바일 숨김) */
 
 @media (min-width:1025px){
   /* 홈 전체 가로 폭 확대 (PC 전용) */
@@ -228,28 +229,41 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .ticker__item b{color:var(--orange-light);margin-right:5px}
   @keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-  /* ---------- 메인 슬라이더: PC에서는 숨김 (모바일만 노출) ---------- */
-  .promo{display:none}
-  /* 아래 컨테이너(1180 - 좌우 24) 콘텐츠 폭과 정렬 */
-  .promo__viewport{width:calc(100% - 48px);max-width:calc(var(--maxw) - 48px);margin:0 auto}
-  .pslide{flex:0 0 100%;aspect-ratio:2.6/1;transform:none;opacity:1;box-shadow:var(--shadow-lg)}
+  /* ---------- 메인 히어로: 좌 배너 슬라이더 + 우 견적문의 폼 ---------- */
+  .promo{display:block;position:relative;padding:16px 0 10px}
+  .promo__hero{max-width:calc(var(--maxw) - 48px);margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 372px;gap:22px;align-items:stretch}
+  .promo__main{position:relative;display:flex;flex-direction:column;min-width:0}
+  .promo__viewport{width:100%;max-width:none;height:100%;margin:0}
+  .promo__track{height:100%}
+  .pslide{flex:0 0 100%;height:100%;aspect-ratio:auto;transform:none;opacity:1;box-shadow:var(--shadow-lg)}
   .pslide.is-active{transform:none;opacity:1}
-  .pslide__title{max-width:56%;font-size:34px}
-  .pslide__kicker{font-size:15px}
-  .promo__pager{display:none}                    /* 하단 숫자 페이저 숨김 */
-  .promo__nav--over{
-    display:flex;position:absolute;top:50%;transform:translateY(-50%);z-index:5;
-    width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.9);color:var(--navy);
-    font-size:26px;line-height:1;box-shadow:0 6px 20px rgba(26,35,50,.18);
-    align-items:center;justify-content:center;transition:.18s var(--ease);
-  }
-  .promo__nav--over:hover{background:#fff;color:var(--orange);transform:translateY(-50%) scale(1.06)}
-  .promo__nav--prev{left:18px}
-  .promo__nav--next{right:18px}
-  .promo__dots{display:flex;gap:9px;position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:5}
-  .promo__dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.55);transition:.18s var(--ease)}
+  .pslide__title{max-width:64%;font-size:30px}
+  .pslide__kicker{font-size:14px}
+  .promo__pager,.promo__nav--over{display:none}
+  .promo__dots{display:flex;gap:8px;position:absolute;left:24px;bottom:16px;z-index:5}
+  .promo__dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.5);transition:.18s var(--ease)}
   .promo__dot:hover{background:rgba(255,255,255,.85)}
-  .promo__dot.is-on{background:#fff;width:26px;border-radius:3px}
+  .promo__dot.is-on{background:#fff;width:24px;border-radius:3px}
+
+  /* 우측 견적문의 폼 */
+  .quoteform{display:flex;flex-direction:column;height:100%;background:#fff;border:1px solid var(--gray-200);border-radius:6px;box-shadow:var(--shadow);padding:24px 24px 22px}
+  .quoteform__title{text-align:center;font-size:20px;font-weight:800;color:var(--navy);letter-spacing:-.02em;margin-bottom:18px}
+  .quoteform__body{display:flex;flex-direction:column;gap:11px;flex:1}
+  .qf__row{display:flex;align-items:center;gap:12px}
+  .qf__label{flex:0 0 52px;font-size:14px;font-weight:700;color:var(--navy)}
+  .qf__label b{color:var(--orange);font-weight:800}
+  .qf__row input{flex:1;min-width:0;border:1px solid var(--gray-200);border-radius:4px;padding:11px 13px;font-size:14px;font-family:inherit;color:var(--navy)}
+  .qf__row input::placeholder{color:var(--gray-400)}
+  .qf__row input:focus{outline:none;border-color:var(--orange)}
+  .qf__agree{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--gray-600);cursor:pointer}
+  .qf__agree input{width:16px;height:16px;accent-color:var(--orange);flex:0 0 auto}
+  .qf__agree b{color:var(--navy);font-weight:700}
+  .qf__agree a{color:var(--gray-400);text-decoration:underline}
+  .qf__submit{margin-top:8px;padding:14px;border-radius:5px;background:var(--orange);color:#fff;font-size:15px;font-weight:800;transition:.2s var(--ease)}
+  .qf__submit:hover{background:var(--orange-dark)}
+  .qf__call{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:9px;padding:13px;border-radius:5px;background:var(--orange-soft);color:var(--orange-dark);font-size:15px;font-weight:800;transition:.2s var(--ease)}
+  .qf__call:hover{background:#ffe8cf}
+  .qf__call svg{width:18px;height:18px}
 
   /* ---------- 2단 레이아웃 ---------- */
   .carspage{display:grid;grid-template-columns:248px minmax(0,1fr);gap:34px;align-items:start}

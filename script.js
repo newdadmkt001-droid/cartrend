@@ -354,6 +354,14 @@
     });
   });
 
+  /* 견적문의 폼 (PC 히어로) — 백엔드 미연동, 접수 확인만 */
+  var quoteForm = document.getElementById("quoteForm");
+  if (quoteForm) quoteForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    alert("상담 신청이 접수되었습니다. 빠르게 연락드리겠습니다.");
+    quoteForm.reset();
+  });
+
   /* 차량 더 보기 */
   var moreBtn = $("#moreBtn");
   if (moreBtn) moreBtn.addEventListener("click", function () {

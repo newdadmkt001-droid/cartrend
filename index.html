@@ -65,19 +65,37 @@
       </div>
     </div>
 
-    <!-- ===================== [2] 메인 프로모션 슬라이더 ===================== -->
+    <!-- ===================== [2] 메인 히어로: 배너 슬라이더 + 견적문의 폼 ===================== -->
     <section class="promo">
-      <div class="promo__viewport">
-        <div class="promo__track" id="heroTrack"></div>
-        <!-- PC 전폭 배너: 오버레이 화살표 + 점 인디케이터 -->
-        <button class="promo__nav promo__nav--over promo__nav--prev" id="heroPrevOver" aria-label="이전">‹</button>
-        <button class="promo__nav promo__nav--over promo__nav--next" id="heroNextOver" aria-label="다음">›</button>
-        <div class="promo__dots" id="heroDots" aria-hidden="true"></div>
-      </div>
-      <div class="promo__pager">
-        <button class="promo__nav" id="heroPrev" aria-label="이전">‹</button>
-        <span class="promo__count"><b id="heroCur">1</b> / <span id="heroTotal">0</span></span>
-        <button class="promo__nav" id="heroNext" aria-label="다음">›</button>
+      <div class="promo__hero">
+        <div class="promo__main">
+          <div class="promo__viewport">
+            <div class="promo__track" id="heroTrack"></div>
+            <!-- PC 배너: 오버레이 화살표 + 점 인디케이터 -->
+            <button class="promo__nav promo__nav--over promo__nav--prev" id="heroPrevOver" aria-label="이전">‹</button>
+            <button class="promo__nav promo__nav--over promo__nav--next" id="heroNextOver" aria-label="다음">›</button>
+            <div class="promo__dots" id="heroDots" aria-hidden="true"></div>
+          </div>
+          <div class="promo__pager">
+            <button class="promo__nav" id="heroPrev" aria-label="이전">‹</button>
+            <span class="promo__count"><b id="heroCur">1</b> / <span id="heroTotal">0</span></span>
+            <button class="promo__nav" id="heroNext" aria-label="다음">›</button>
+          </div>
+        </div>
+
+        <!-- 우측 견적문의 폼 (PC 전용) -->
+        <aside class="quoteform">
+          <h3 class="quoteform__title">최저가 견적문의</h3>
+          <form class="quoteform__body" id="quoteForm">
+            <label class="qf__row"><span class="qf__label">이름 <b>*</b></span><input type="text" name="name" placeholder="이름을 입력하세요" required></label>
+            <label class="qf__row"><span class="qf__label">연락처 <b>*</b></span><input type="tel" name="phone" placeholder="휴대폰번호(-제외)" required></label>
+            <label class="qf__row"><span class="qf__label">차종</span><input type="text" name="car" placeholder="차종을 입력하세요"></label>
+            <label class="qf__agree"><input type="checkbox" required><span><b>(필수)</b> 개인정보 수집·이용·제공 동의 <a href="#" onclick="return false">[보기]</a></span></label>
+            <label class="qf__agree"><input type="checkbox" required><span><b>(필수)</b> 개인정보 제3자 제공 동의 <a href="#" onclick="return false">[보기]</a></span></label>
+            <button type="submit" class="qf__submit">간편 상담 신청</button>
+            <a href="tel:15880000" class="qf__call"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5c0 8 7 15 15 15l2.6-3.3-4.4-2.2-1.7 1.7c-2.9-1.4-5-3.5-6.3-6.3l1.7-1.7L8.3 4.4 5 5z"/></svg> 전화문의 1588-0000</a>
+          </form>
+        </aside>
       </div>
     </section>
 
