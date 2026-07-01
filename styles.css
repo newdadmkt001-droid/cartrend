@@ -119,7 +119,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
    [2] Main promotion slider (peek carousel)
    ============================================================ */
 .promo{padding:6px 0 4px;background:#fff;overflow:hidden}
-.promo__viewport{overflow:hidden;max-width:920px;margin:0 auto}
+.promo__viewport{position:relative;overflow:hidden;max-width:920px;margin:0 auto}
+.promo__nav--over,.promo__dots{display:none}   /* 전폭 배너 컨트롤: 모바일 숨김 */
 .promo__track{display:flex;gap:14px;transition:transform .5s var(--ease);will-change:transform;cursor:grab}
 .promo__track.is-grabbing{cursor:grabbing}
 .pslide{
@@ -221,6 +222,29 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .ticker__item b{color:var(--orange-light);margin-right:5px}
   @keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
+  /* ---------- 메인 슬라이더 → 전폭 배너 ---------- */
+  .promo{position:relative;padding:14px 0 6px}
+  /* 아래 컨테이너(1180 - 좌우 24) 콘텐츠 폭과 정렬 */
+  .promo__viewport{width:calc(100% - 48px);max-width:calc(var(--maxw) - 48px);margin:0 auto}
+  .pslide{flex:0 0 100%;aspect-ratio:2.6/1;transform:none;opacity:1;box-shadow:var(--shadow-lg)}
+  .pslide.is-active{transform:none;opacity:1}
+  .pslide__title{max-width:56%;font-size:34px}
+  .pslide__kicker{font-size:15px}
+  .promo__pager{display:none}                    /* 하단 숫자 페이저 숨김 */
+  .promo__nav--over{
+    display:flex;position:absolute;top:50%;transform:translateY(-50%);z-index:5;
+    width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.9);color:var(--navy);
+    font-size:26px;line-height:1;box-shadow:0 6px 20px rgba(26,35,50,.18);
+    align-items:center;justify-content:center;transition:.18s var(--ease);
+  }
+  .promo__nav--over:hover{background:#fff;color:var(--orange);transform:translateY(-50%) scale(1.06)}
+  .promo__nav--prev{left:18px}
+  .promo__nav--next{right:18px}
+  .promo__dots{display:flex;gap:9px;position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:5}
+  .promo__dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.55);transition:.18s var(--ease)}
+  .promo__dot:hover{background:rgba(255,255,255,.85)}
+  .promo__dot.is-on{background:#fff;width:26px;border-radius:6px}
+
   /* ---------- 2단 레이아웃 ---------- */
   .carspage{display:grid;grid-template-columns:248px minmax(0,1fr);gap:34px;align-items:start}
   .carsaside{display:flex;flex-direction:column;gap:16px;position:sticky;top:84px}
@@ -248,14 +272,16 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .carsaside .brand{width:100%;flex:none;flex-direction:row;align-items:center;gap:12px;padding:9px 12px;border-radius:12px;transition:background .18s var(--ease)}
   .carsaside .brand:hover .brand__logo{border-color:var(--gray-200)}
   .carsaside .brand:hover{background:var(--gray-100)}
-  .carsaside .brand.is-active{background:var(--orange-soft)}
+  /* 선택(활성) 시 주황색 대신 중립 회색 강조 */
+  .carsaside .brand.is-active{background:var(--gray-100)}
+  .carsaside .brand.is-active .brand__logo{border-color:var(--gray-200);box-shadow:none;color:var(--navy)}
   .carsaside .brand__logo{width:38px;height:38px;padding:6px}
   .carsaside .brand__logo svg{max-width:24px;max-height:18px}
   .carsaside .brand__logo img.brand__img{width:26px;height:20px}
   .carsaside .brand__name{font-size:15px;font-weight:700;color:var(--navy)}
-  .carsaside .brand.is-active .brand__name{color:var(--orange-dark)}
+  .carsaside .brand.is-active .brand__name{color:var(--navy)}
   .carsaside .brand__cnt{display:block;margin-left:auto;font-size:13px;font-weight:700;color:var(--gray-400)}
-  .carsaside .brand.is-active .brand__cnt{color:var(--orange-dark)}
+  .carsaside .brand.is-active .brand__cnt{color:var(--gray-600)}
 
   /* 사이드 하단 보증 카드 */
   .asideguar{display:flex;flex-direction:column;gap:5px;margin-top:2px;padding:16px 18px;border-radius:16px;background:var(--gray-100)}

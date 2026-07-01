@@ -84,6 +84,14 @@
     var curEl = $("#heroCur");
     var GAP = 14;
 
+    // PC 전폭 배너용 — 점 인디케이터 생성
+    var dotsWrap = $("#heroDots");
+    if (dotsWrap) {
+      dotsWrap.innerHTML = Array.prototype.map.call(pslides, function (_, i) {
+        return '<button class="promo__dot" data-i="' + i + '" aria-label="' + (i + 1) + '번 슬라이드"></button>';
+      }).join("");
+    }
+
     // center the active card exactly, measured in pixels
     function center() {
       var vw = heroTrack.parentElement.clientWidth;   // .promo__viewport width
@@ -95,12 +103,26 @@
       cur = (n + total) % total;
       pslides.forEach(function (s, i) { s.classList.toggle("is-active", i === cur); });
       curEl.textContent = cur + 1;
+      if (dotsWrap) {
+        var dots = dotsWrap.children;
+        for (var di = 0; di < dots.length; di++) dots[di].classList.toggle("is-on", di === cur);
+      }
       center();
     }
     go(0);
     window.addEventListener("resize", center, { passive: true });
     $("#heroNext").addEventListener("click", function () { go(cur + 1); resetAuto(); });
     $("#heroPrev").addEventListener("click", function () { go(cur - 1); resetAuto(); });
+
+    // PC 전폭 배너 — 오버레이 화살표 + 점 클릭
+    var overNext = $("#heroNextOver"), overPrev = $("#heroPrevOver");
+    if (overNext) overNext.addEventListener("click", function () { go(cur + 1); resetAuto(); });
+    if (overPrev) overPrev.addEventListener("click", function () { go(cur - 1); resetAuto(); });
+    if (dotsWrap) dotsWrap.addEventListener("click", function (e) {
+      var d = e.target.closest(".promo__dot");
+      if (!d) return;
+      go(parseInt(d.getAttribute("data-i"), 10)); resetAuto();
+    });
 
     var timer = null;
     function startAuto() { timer = setInterval(function () { go(cur + 1); }, 5500); }
