@@ -147,6 +147,17 @@
   /* ---------- [3] 제조사 별 차량 (brand row + list) ---------- */
   var bestTabs = $("#bestTabs");
   var bestCards = $("#bestCards");
+
+  // 찜(하트) 토글 — 카드는 <a>라 기본 이동을 막고 상태만 전환
+  if (bestCards) {
+    bestCards.addEventListener("click", function (e) {
+      var like = e.target.closest(".lrow__like");
+      if (!like) return;
+      e.preventDefault();
+      e.stopPropagation();
+      like.classList.toggle("is-liked");
+    });
+  }
   var BADGE = { hot: '<span class="card__badge card__badge--hot">🔥 인기</span>', "new": '<span class="card__badge card__badge--new">NEW</span>', rec: '<span class="card__badge card__badge--rec">추천</span>' };
   // 브랜드별 로고 마크 (currentColor 사용 → 활성 시 오렌지)
   var LOGO = {
@@ -198,6 +209,7 @@
           '<span class="lrow__price">월 ' + won(c.price) + "원</span>" +
         "</div>" +
         '<div class="lrow__side">' + badges + "</div>" +
+        '<span class="lrow__like" role="button" aria-label="찜하기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20.3l-1.45-1.32C5.4 14.36 2 11.28 2 7.5 2 4.42 4.42 2 7.5 2c1.74 0 3.41.81 4.5 2.09C13.09 2.81 14.76 2 16.5 2 19.58 2 22 4.42 22 7.5c0 3.78-3.4 6.86-8.55 11.54z"/></svg></span>' +
       "</a>"
     );
   }
@@ -233,6 +245,13 @@
   }
 
   if (bestTabs) {
+    // 브랜드별 노출 대수 (메인 미노출 차량 제외) — PC 사이드바에 표시
+    function brandCount(b) {
+      return CARS.filter(function (c) {
+        if (c.draft || c.status === "판매중지") return false;
+        return b === "전체" || c.brand === b;
+      }).length;
+    }
     bestTabs.innerHTML = BRANDS.map(function (b) {
       var mark = b === "전체"
         ? LOGO["전체"]
@@ -241,6 +260,7 @@
         '<button class="brand' + (b === "전체" ? " is-active" : "") + '" data-brand="' + b + '">' +
           '<span class="brand__logo">' + mark + "</span>" +
           '<span class="brand__name">' + b + "</span>" +
+          '<span class="brand__cnt">' + brandCount(b) + "</span>" +
         "</button>"
       );
     }).join("");

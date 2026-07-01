@@ -12,6 +12,25 @@
 </head>
 <body>
 
+  <!-- ===================== 상단 혜택 티커 (PC) ===================== -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+      <span class="ticker__item"><b>초기비용 0원</b>신차 즉시 출고</span>
+      <span class="ticker__item">보험 · 정비 · 자동차세 <b> </b>월 렌트료 포함</span>
+      <span class="ticker__item"><b>전국 무료 탁송</b>집 앞까지 배송</span>
+      <span class="ticker__item">만기 시 <b> </b>인수 · 반납 · 재계약 자유 선택</span>
+      <span class="ticker__item">개인 · 개인사업자 · <b> </b>법인 비용처리 유리</span>
+      <span class="ticker__item">경차부터 <b> </b>수입차까지</span>
+      <!-- seamless loop 복제 -->
+      <span class="ticker__item"><b>초기비용 0원</b>신차 즉시 출고</span>
+      <span class="ticker__item">보험 · 정비 · 자동차세 <b> </b>월 렌트료 포함</span>
+      <span class="ticker__item"><b>전국 무료 탁송</b>집 앞까지 배송</span>
+      <span class="ticker__item">만기 시 <b> </b>인수 · 반납 · 재계약 자유 선택</span>
+      <span class="ticker__item">개인 · 개인사업자 · <b> </b>법인 비용처리 유리</span>
+      <span class="ticker__item">경차부터 <b> </b>수입차까지</span>
+    </div>
+  </div>
+
   <!-- ===================== HEADER ===================== -->
   <header class="header" id="header">
     <div class="container header__inner">
@@ -62,34 +81,52 @@
     <!-- ===================== [3] 제조사 별 차량 → 차 ===================== -->
     <section class="section" id="cars">
       <div class="container">
-        <div class="cars__head reveal">
-          <h2 class="cars__title">브랜드 · 모델</h2>
-          <button class="cars__all" id="brandAll">전체보기</button>
-        </div>
+        <div class="carspage">
 
-        <!-- 제조사 로고 행 -->
-        <div class="brandrow reveal" id="bestTabs"></div>
+          <!-- ===== 좌측 사이드바 (PC) ===== -->
+          <aside class="carsaside">
+            <a class="asidepromo" href="#hero">
+              <span class="asidepromo__tag">신차장기렌트 전문</span>
+              <strong class="asidepromo__title">초기비용 0원으로<br>신차를 월 렌트료로</strong>
+              <span class="asidepromo__go">차량 검색하기 ›</span>
+            </a>
 
-        <!-- 정렬 -->
-        <div class="cars__sort">
-          <span class="cars__cnt" id="carsCount"></span>
-          <label class="sortsel">
-            <select id="sortSel">
-              <option value="recommend">추천순</option>
-              <option value="latest">최신 등록순</option>
-              <option value="priceAsc">낮은 가격순</option>
-              <option value="priceDesc">높은 가격순</option>
-              <option value="popular">인기순</option>
-            </select>
-          </label>
-        </div>
+            <div class="cars__head reveal">
+              <h2 class="cars__title">브랜드 · 모델</h2>
+              <button class="cars__all" id="brandAll">전체보기</button>
+            </div>
 
-        <!-- 차량 리스트 -->
-        <div class="llist" id="bestCards"></div>
+            <!-- 제조사 목록 (PC: 세로 / 모바일: 가로 스크롤) -->
+            <div class="brandrow reveal" id="bestTabs"></div>
 
-        <!-- 더 보기 CTA -->
-        <div class="cars__more" id="moreWrap">
-          <button class="btn btn--line btn--lg" id="moreBtn">Cartrend 차량 더 보기</button>
+            <div class="asideguar">
+              <strong class="asideguar__t">모든 신차 초기비용 0원</strong>
+              <span class="asideguar__s">보험 · 정비 · 자동차세 포함 · 전국 무료 탁송</span>
+            </div>
+          </aside>
+
+          <!-- ===== 우측 메인 (정렬 + 차량 그리드) ===== -->
+          <div class="carsmain">
+            <div class="cars__sort">
+              <span class="cars__cnt" id="carsCount"></span>
+              <label class="sortsel">
+                <select id="sortSel">
+                  <option value="recommend">추천순</option>
+                  <option value="latest">최신 등록순</option>
+                  <option value="priceAsc">낮은 가격순</option>
+                  <option value="priceDesc">높은 가격순</option>
+                  <option value="popular">인기순</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="llist" id="bestCards"></div>
+
+            <div class="cars__more" id="moreWrap">
+              <button class="btn btn--line btn--lg" id="moreBtn">Cartrend 차량 더 보기</button>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
