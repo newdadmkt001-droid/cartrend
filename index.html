@@ -110,18 +110,31 @@
           </aside>
 
           <!-- ===== 우측 메인 (정렬 + 차량 그리드) ===== -->
-          <div class="carsmain">
+          <div class="carsmain" data-view="grid3">
             <div class="cars__sort">
               <span class="cars__cnt" id="carsCount"></span>
-              <label class="sortsel">
-                <select id="sortSel">
-                  <option value="recommend">추천순</option>
-                  <option value="latest">최신 등록순</option>
-                  <option value="priceAsc">낮은 가격순</option>
-                  <option value="priceDesc">높은 가격순</option>
-                  <option value="popular">인기순</option>
-                </select>
-              </label>
+              <div class="cars__tools">
+                <label class="sortsel">
+                  <select id="sortSel">
+                    <option value="recommend">추천 순</option>
+                    <option value="latest">최신 등록순</option>
+                    <option value="priceAsc">낮은 가격순</option>
+                    <option value="priceDesc">높은 가격순</option>
+                    <option value="popular">인기 순</option>
+                  </select>
+                </label>
+                <div class="viewtoggle" id="viewToggle" role="group" aria-label="보기 방식">
+                  <button class="viewtoggle__btn" data-view="grid2" aria-label="2열 보기">
+                    <svg viewBox="0 0 20 20"><rect x="2" y="2" width="7" height="7" rx="1.2"/><rect x="11" y="2" width="7" height="7" rx="1.2"/><rect x="2" y="11" width="7" height="7" rx="1.2"/><rect x="11" y="11" width="7" height="7" rx="1.2"/></svg>
+                  </button>
+                  <button class="viewtoggle__btn is-on" data-view="grid3" aria-label="3열 보기">
+                    <svg viewBox="0 0 20 20"><rect x="2" y="3" width="4" height="14" rx="1.2"/><rect x="8" y="3" width="4" height="14" rx="1.2"/><rect x="14" y="3" width="4" height="14" rx="1.2"/></svg>
+                  </button>
+                  <button class="viewtoggle__btn" data-view="list" aria-label="리스트 보기">
+                    <svg viewBox="0 0 20 20"><rect x="2" y="3" width="16" height="3" rx="1.2"/><rect x="2" y="8.5" width="16" height="3" rx="1.2"/><rect x="2" y="14" width="16" height="3" rx="1.2"/></svg>
+                  </button>
+                </div>
+              </div>
             </div>
 
             <div class="llist" id="bestCards"></div>

@@ -342,6 +342,18 @@
     state.sort = sortSel.value; state.shown = STEP; renderBest();
   });
 
+  /* 보기 방식 토글 (2열 / 3열 / 리스트) — CSS만 전환, 재렌더 불필요 */
+  var viewToggle = $("#viewToggle");
+  var carsMain = document.querySelector(".carsmain");
+  if (viewToggle && carsMain) viewToggle.addEventListener("click", function (e) {
+    var btn = e.target.closest(".viewtoggle__btn");
+    if (!btn) return;
+    carsMain.setAttribute("data-view", btn.getAttribute("data-view"));
+    viewToggle.querySelectorAll(".viewtoggle__btn").forEach(function (b) {
+      b.classList.toggle("is-on", b === btn);
+    });
+  });
+
   /* 차량 더 보기 */
   var moreBtn = $("#moreBtn");
   if (moreBtn) moreBtn.addEventListener("click", function () {
