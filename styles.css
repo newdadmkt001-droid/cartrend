@@ -232,7 +232,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   @keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
   /* ---------- 메인 히어로: 좌 배너 슬라이더 + 우 견적문의 폼 ---------- */
-  .promo{display:block;position:relative;padding:16px 0 10px}
+  .promo{display:block;position:relative;padding:16px 0 20px;overflow:visible}  /* overflow 해제: 폼 그림자 안 잘리게 */
   .promo__hero{max-width:calc(var(--maxw) - 48px);margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 372px;gap:22px;align-items:stretch}
   .promo__main{position:relative;display:flex;flex-direction:column;min-width:0}
   .promo__viewport{width:100%;max-width:none;height:100%;margin:0;border-radius:12px}
