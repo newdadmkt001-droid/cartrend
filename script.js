@@ -276,14 +276,19 @@
         return b === "전체" || c.brand === b;
       }).length;
     }
+    // 브랜드 표기·로고파일 보정 (DB 브랜드값 → 표시명/파일명)
+    var BRAND_ALIAS = { "KG모빌리티": { name: "KGM", file: "kgm" } };
     bestTabs.innerHTML = BRANDS.map(function (b) {
+      var alias = BRAND_ALIAS[b] || {};
+      var disp = alias.name || b;                       // 화면 표시 이름
+      var file = (alias.file || b).toLowerCase();        // 로고 파일명(대소문자 보정: BMW→bmw 등)
       var mark = b === "전체"
         ? LOGO["전체"]
-        : '<img class="brand__img" src="logo/' + encodeURIComponent(b) + '.png" alt="' + b + '">';
+        : '<img class="brand__img" src="logo/' + encodeURIComponent(file) + '.png" alt="' + disp + '">';
       return (
         '<button class="brand' + (b === "전체" ? " is-active" : "") + '" data-brand="' + b + '">' +
           '<span class="brand__logo">' + mark + "</span>" +
-          '<span class="brand__name">' + b + "</span>" +
+          '<span class="brand__name">' + disp + "</span>" +
           '<span class="brand__cnt">' + brandCount(b) + "</span>" +
         "</button>"
       );
