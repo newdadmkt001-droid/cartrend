@@ -388,15 +388,19 @@
   }
 
   /* ---------- Top search bar ---------- */
-  var searchBar = $("#searchBar");
-  if (searchBar) {
-    searchBar.addEventListener("submit", function (e) {
+  // 검색: 최상단(모바일) + 목록 상단(PC) 두 폼 공용
+  function bindSearch(form) {
+    if (!form) return;
+    form.addEventListener("submit", function (e) {
       e.preventDefault();
-      state.kw = ($("#searchInput").value || "").trim();
+      var inp = form.querySelector("input");
+      state.kw = ((inp && inp.value) || "").trim();
       state.brand = "전체"; state.chip = 0; state.shown = STEP;
       setBrandActive(); renderBest(); scrollToCars();
     });
   }
+  bindSearch($("#searchBar"));
+  bindSearch($("#searchBar2"));
 
   /* ---------- Render: recommend slider ---------- */
   var slider = $("#recSlider");

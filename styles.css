@@ -216,6 +216,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .cars__tools{display:inline-flex;align-items:center;gap:12px}
 .viewtoggle{display:none}                 /* 보기 방식 토글: 모바일 숨김 */
 .quoteform{display:none}                   /* 견적문의 폼: PC 히어로 전용(모바일 숨김) */
+.carssearch{display:none}                  /* 목록 상단 검색: PC 전용(모바일은 최상단 검색 사용) */
 
 @media (min-width:1025px){
   /* 홈 전체 가로 폭 확대 (PC 전용) */
@@ -309,6 +310,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .asideguar__s{font-size:12px;font-weight:600;color:var(--gray-600);line-height:1.5}
 
   /* ---------- 메인: 정렬바 + 2열 카드 그리드 ---------- */
+  /* 상단 검색은 목록 위로 이동: 최상단 검색 숨기고, 메인 상단 검색 노출 */
+  .msearch{display:none}
+  .carsmain .carssearch{display:flex;margin:0 0 16px}
+
   .carsmain .cars__sort{max-width:none;margin:0 0 18px;padding-bottom:14px;border-bottom:1px solid var(--gray-200)}
   .carsmain .cars__cnt{font-size:15px;color:var(--navy)}
 
