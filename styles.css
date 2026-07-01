@@ -288,21 +288,19 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .carsaside .cars__head{margin:6px 2px 0}
   .carsaside .cars__title{font-size:16px}
 
-  /* 브랜드 목록 → 세로 리스트 */
-  /* 브랜드 목록 → 로고 2열 그리드 (세로 길이 절반) */
-  .carsaside .brandrow{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;overflow:visible;padding:0;cursor:default;scroll-snap-type:none;user-select:auto}
-  .carsaside .brand{width:auto;flex:none;flex-direction:column;align-items:center;gap:6px;padding:12px 6px 10px;border:1px solid var(--gray-200);border-radius:8px;text-align:center;transition:.15s var(--ease)}
+  /* 브랜드 목록 → 로고 4열 그리드 (대수 숨김) */
+  .carsaside .brandrow{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;overflow:visible;padding:0;cursor:default;scroll-snap-type:none;user-select:auto}
+  .carsaside .brand{width:auto;flex:none;flex-direction:column;align-items:center;gap:5px;padding:8px 2px;border:none;border-radius:8px;text-align:center;transition:.15s var(--ease)}
   .carsaside .brand:hover{background:var(--gray-100)}
-  /* 선택(활성): 파란 외곽선 강조 */
-  .carsaside .brand.is-active{background:#fff;border-color:var(--orange);box-shadow:0 0 0 2px rgba(57,110,255,.14)}
-  .carsaside .brand.is-active .brand__logo{border-color:var(--gray-200);box-shadow:none;color:var(--navy)}
-  .carsaside .brand__logo{width:40px;height:40px;padding:7px}
-  .carsaside .brand__logo svg{max-width:26px;max-height:18px}
-  .carsaside .brand__logo img.brand__img{width:28px;height:20px}
-  .carsaside .brand__name{font-size:13px;font-weight:700;color:var(--navy);line-height:1.2}
+  /* 선택(활성): 연한 파랑 + 로고 파란 테두리 */
+  .carsaside .brand.is-active{background:var(--orange-soft)}
+  .carsaside .brand.is-active .brand__logo{border-color:var(--orange);box-shadow:none;color:var(--navy)}
+  .carsaside .brand__logo{width:34px;height:34px;padding:5px}
+  .carsaside .brand__logo svg{max-width:22px;max-height:16px}
+  .carsaside .brand__logo img.brand__img{width:23px;height:17px}
+  .carsaside .brand__name{font-size:11px;font-weight:700;color:var(--navy);line-height:1.15}
   .carsaside .brand.is-active .brand__name{color:var(--orange-dark)}
-  .carsaside .brand__cnt{display:block;margin:0;font-size:11.5px;font-weight:700;color:var(--gray-400)}
-  .carsaside .brand.is-active .brand__cnt{color:var(--orange)}
+  .carsaside .brand__cnt{display:none}                /* 대수(개수) 숨김 */
 
   /* 사이드 하단 보증 카드 */
   .asideguar{display:flex;flex-direction:column;gap:5px;margin-top:2px;padding:16px 18px;border-radius:4px;background:var(--gray-100)}
