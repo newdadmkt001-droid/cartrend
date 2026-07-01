@@ -129,7 +129,9 @@
 
           <!-- ===== 우측 메인 (검색 + 정렬 + 차량 그리드) ===== -->
           <div class="carsmain" data-view="grid3">
-            <!-- PC 전용: 목록 상단 검색 (총 N대 위) -->
+            <!-- PC: 검색 + 정렬/보기 토글을 한 줄 툴바로 -->
+            <div class="carsbar">
+            <!-- PC 전용: 목록 상단 검색 -->
             <form class="msearch__bar carssearch" id="searchBar2" role="search">
               <input type="text" id="searchInput2" autocomplete="off"
                      placeholder="차량명, 브랜드를 입력하세요." aria-label="차량 검색" />
@@ -162,6 +164,7 @@
                 </div>
               </div>
             </div>
+            </div><!-- /.carsbar -->
 
             <div class="llist" id="bestCards"></div>
 

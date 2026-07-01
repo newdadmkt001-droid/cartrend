@@ -310,12 +310,15 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .asideguar__s{font-size:12px;font-weight:600;color:var(--gray-600);line-height:1.5}
 
   /* ---------- 메인: 정렬바 + 2열 카드 그리드 ---------- */
-  /* 상단 검색은 목록 위로 이동: 최상단 검색 숨기고, 메인 상단 검색 노출 */
+  /* 최상단 검색 숨김 → 목록 상단 툴바로 이동 */
   .msearch{display:none}
-  .carsmain .carssearch{display:flex;margin:0 0 16px}
-
-  .carsmain .cars__sort{max-width:none;margin:0 0 18px;padding-bottom:14px;border-bottom:1px solid var(--gray-200)}
-  .carsmain .cars__cnt{font-size:15px;color:var(--navy)}
+  /* 검색 + 정렬 + 보기 토글을 한 줄 툴바로 */
+  .carsmain .carsbar{display:flex;align-items:center;gap:14px;margin:0 0 18px;padding-bottom:14px;border-bottom:1px solid var(--gray-200)}
+  .carsmain .carssearch{display:flex;flex:1;margin:0;border:1.5px solid var(--gray-200);box-shadow:none}  /* 검색창 색(주황) 제거 */
+  .carsmain .carssearch input{font-size:15px;padding:9px 0}
+  .carsmain .carssearch .msearch__btn{width:40px;height:40px}
+  .carsmain .cars__sort{flex:0 0 auto;max-width:none;margin:0;padding:0;border:none}
+  .carsmain .cars__cnt{display:none}                  /* '총 N대' 숨김 (PC) */
 
   /* 정렬 드롭다운: 헤이딜러식 텍스트형 (테두리 없이 굵은 글씨 + 화살표) */
   .carsmain .sortsel::after{right:6px;font-size:11px;color:var(--navy)}
