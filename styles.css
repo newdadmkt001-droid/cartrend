@@ -170,7 +170,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .cars__title{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.03em;color:var(--navy)}
 .cars__all{font-size:14px;font-weight:700;color:var(--navy);background:none;cursor:pointer}
 .cars__all:hover{text-decoration:underline}
-.brandrow{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;padding:4px 2px 22px;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;cursor:grab;user-select:none}
+.brandrow{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;cursor:grab;user-select:none}
 .brandrow.is-grabbing{cursor:grabbing;scroll-snap-type:none}
 .brandrow::-webkit-scrollbar{display:none}
 .brand{flex:0 0 auto;width:88px;display:flex;flex-direction:column;align-items:center;gap:9px;background:none;cursor:pointer;scroll-snap-align:center}
@@ -186,7 +186,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 /* ============================================================
    차량 리스트 (list rows)
    ============================================================ */
-.llist{display:flex;flex-direction:column;max-width:880px;margin:20px auto 0}
+.llist{display:flex;flex-direction:column;max-width:880px;margin:8px auto 0}
 .cars__more{max-width:880px;margin:24px auto 0}
 .cars__more .btn{width:100%;background:var(--orange);border:none;color:#fff;font-weight:800;border-radius:8px}
 .cars__more .btn:hover{background:var(--orange-dark)}
