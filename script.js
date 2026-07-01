@@ -21,12 +21,12 @@
   ];
 
   var RECOMMEND = [
-    { label: "패밀리 SUV", body: "suv", color: "#F57C00", name: "더 뉴 쏘렌토 MQ4 HEV", desc: "온 가족이 넉넉한 하이브리드 SUV", price: 444510 },
-    { label: "패밀리카", body: "van", color: "#FFB74D", name: "더 뉴 카니발 KA4 HEV", desc: "짐도 사람도 여유로운 9인승", price: 479820 },
-    { label: "전기차 추천", body: "suv", color: "#FFB74D", name: "테슬라 모델Y RWD", desc: "충전비 절감, 미래형 드라이빙", price: 689000 },
-    { label: "사회초년생", body: "compact", color: "#F57C00", name: "캐스퍼 일렉트릭", desc: "초기비용 0원으로 시작하는 첫 차", price: 339000 },
-    { label: "출퇴근 추천", body: "sedan", color: "#FFB74D", name: "아반떼 CN7 가솔린", desc: "유지비 걱정 없는 베스트셀러", price: 312400 },
-    { label: "법인·비즈니스", body: "sedan", color: "#F57C00", name: "더 뉴 그랜저 GN7 HEV", desc: "비용처리에 유리한 법인 추천", price: 566280 }
+    { label: "패밀리 SUV", body: "suv", color: "#396EFF", name: "더 뉴 쏘렌토 MQ4 HEV", desc: "온 가족이 넉넉한 하이브리드 SUV", price: 444510 },
+    { label: "패밀리카", body: "van", color: "#8FB0FF", name: "더 뉴 카니발 KA4 HEV", desc: "짐도 사람도 여유로운 9인승", price: 479820 },
+    { label: "전기차 추천", body: "suv", color: "#8FB0FF", name: "테슬라 모델Y RWD", desc: "충전비 절감, 미래형 드라이빙", price: 689000 },
+    { label: "사회초년생", body: "compact", color: "#396EFF", name: "캐스퍼 일렉트릭", desc: "초기비용 0원으로 시작하는 첫 차", price: 339000 },
+    { label: "출퇴근 추천", body: "sedan", color: "#8FB0FF", name: "아반떼 CN7 가솔린", desc: "유지비 걱정 없는 베스트셀러", price: 312400 },
+    { label: "법인·비즈니스", body: "sedan", color: "#396EFF", name: "더 뉴 그랜저 GN7 HEV", desc: "비용처리에 유리한 법인 추천", price: 566280 }
   ];
 
   var REVIEWS = [
@@ -53,8 +53,8 @@
 
   /* ---------- [1] Main promotion slider (peek carousel) ---------- */
   var SLIDES = [
-    { kicker: "테슬라 전기 SUV 특가", title: "모델Y 충전비 절감 월 렌트", body: "suv", color: "#FFB74D", grad: "linear-gradient(135deg,#11151F,#2A3650)", img: "main/main1.jpg" },
-    { kicker: "기아 패밀리 패키지", title: "카니발 9인승 초기비용 0원", body: "van", color: "#FFE0BF", grad: "linear-gradient(135deg,#E65100,#F57C00)", img: "main/main2.jpg" },
+    { kicker: "테슬라 전기 SUV 특가", title: "모델Y 충전비 절감 월 렌트", body: "suv", color: "#8FB0FF", grad: "linear-gradient(135deg,#11151F,#2A3650)", img: "main/main1.jpg" },
+    { kicker: "기아 패밀리 패키지", title: "카니발 9인승 초기비용 0원", body: "van", color: "#D6E2FF", grad: "linear-gradient(135deg,#2555DB,#396EFF)", img: "main/main2.jpg" },
     { kicker: "수입 프리미엄 전기차", title: "BMW i4 M60 합리적인 월 렌트", body: "sport", color: "#BFF0D6", grad: "linear-gradient(135deg,#0E2A22,#14503A)", img: "main/main3.jpg" }
   ];
 
