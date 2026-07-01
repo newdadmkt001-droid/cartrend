@@ -167,7 +167,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
    ============================================================ */
 .cars__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
 .cars__title{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.03em;color:var(--navy)}
-.cars__all{font-size:14px;font-weight:700;color:var(--orange-dark);background:none;cursor:pointer}
+.cars__all{font-size:14px;font-weight:700;color:var(--navy);background:none;cursor:pointer}
 .cars__all:hover{text-decoration:underline}
 .brandrow{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;padding:4px 2px 22px;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;cursor:grab;user-select:none}
 .brandrow.is-grabbing{cursor:grabbing;scroll-snap-type:none}
