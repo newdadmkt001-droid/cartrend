@@ -139,7 +139,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .pslide__foot{position:absolute;left:0;right:0;bottom:0;z-index:4;background:rgba(8,12,20,.32);backdrop-filter:blur(3px);padding:13px 20px;display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:14px}
 .promo__pager{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:12px}
 .promo__nav{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--gray-200);background:#fff;color:var(--navy);font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;transition:.2s var(--ease)}
-.promo__nav:hover{border-color:var(--orange);color:var(--orange)}
+@media (hover:hover){.promo__nav:hover{border-color:var(--orange);color:var(--orange)}}
 .promo__count{font-size:16px;font-weight:700;color:var(--gray-400)}
 .promo__count b{color:var(--navy);font-size:18px}
 
