@@ -289,17 +289,17 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .carsaside .cars__head{margin:6px 2px 0}
   .carsaside .cars__title{font-size:16px}
 
-  /* 브랜드 목록 → 로고 4열 그리드 (대수 숨김) */
-  .carsaside .brandrow{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;overflow:visible;padding:0;cursor:default;scroll-snap-type:none;user-select:auto}
-  .carsaside .brand{width:auto;flex:none;flex-direction:column;align-items:center;gap:5px;padding:8px 2px;border:none;border-radius:8px;text-align:center;transition:.15s var(--ease)}
+  /* 브랜드 목록 → 로고 3열 그리드 (대수 숨김) */
+  .carsaside .brandrow{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;overflow:visible;padding:0;cursor:default;scroll-snap-type:none;user-select:auto}
+  .carsaside .brand{width:auto;flex:none;flex-direction:column;align-items:center;gap:6px;padding:11px 3px;border:none;border-radius:8px;text-align:center;transition:.15s var(--ease)}
   .carsaside .brand:hover{background:var(--gray-100)}
   /* 선택(활성): 연한 파랑 + 로고 파란 테두리 */
   .carsaside .brand.is-active{background:var(--orange-soft)}
   .carsaside .brand.is-active .brand__logo{border-color:var(--orange);box-shadow:none;color:var(--navy)}
-  .carsaside .brand__logo{width:34px;height:34px;padding:5px}
-  .carsaside .brand__logo svg{max-width:22px;max-height:16px}
-  .carsaside .brand__logo img.brand__img{width:23px;height:17px}
-  .carsaside .brand__name{font-size:11px;font-weight:700;color:var(--navy);line-height:1.15}
+  .carsaside .brand__logo{width:40px;height:40px;padding:6px}
+  .carsaside .brand__logo svg{max-width:25px;max-height:18px}
+  .carsaside .brand__logo img.brand__img{width:27px;height:19px}
+  .carsaside .brand__name{font-size:12px;font-weight:700;color:var(--navy);line-height:1.15}
   .carsaside .brand.is-active .brand__name{color:var(--orange-dark)}
   .carsaside .brand__cnt{display:none}                /* 대수(개수) 숨김 */
 
