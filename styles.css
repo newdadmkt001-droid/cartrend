@@ -200,6 +200,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .lrow__name{font-size:21px;font-weight:800;color:var(--navy);line-height:1.28}
 .lrow__meta{font-size:13px;color:var(--gray-400);font-weight:600;margin-top:2px}
 .lrow__price{margin-top:9px;white-space:nowrap;font-size:22px;font-weight:800;color:var(--orange)}
+.lrow__metarow{display:flex;flex-direction:column}   /* 모바일: 메타→가격 세로(기존 유지) */
 .lrow__side{flex:0 0 auto;align-self:flex-start;display:flex;gap:5px;padding-top:2px}
 
 /* ============================================================
@@ -364,6 +365,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .carsmain .lrow__name{font-size:19px}
   .carsmain .lrow__meta{font-size:12.5px}
   .carsmain .lrow__price{margin-top:12px;font-size:22px}
+  /* 카드: 메타 왼쪽 · 가격 오른쪽 한 줄 */
+  .carsmain .lrow__metarow{flex-direction:row;align-items:baseline;justify-content:space-between;gap:8px;margin-top:10px}
+  .carsmain .lrow__metarow .lrow__meta{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .carsmain .lrow__metarow .lrow__price{margin:0;font-size:19px;white-space:nowrap}
   .carsmain .lrow__side{position:absolute;top:12px;left:12px;align-self:auto;padding-top:0;z-index:2}
 
   /* 찜(하트) 버튼 */
