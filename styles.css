@@ -228,8 +228,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .ticker__item b{color:var(--orange-light);margin-right:5px}
   @keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-  /* ---------- 메인 슬라이더 → 전폭 배너 ---------- */
-  .promo{position:relative;padding:14px 0 6px}
+  /* ---------- 메인 슬라이더: PC에서는 숨김 (모바일만 노출) ---------- */
+  .promo{display:none}
   /* 아래 컨테이너(1180 - 좌우 24) 콘텐츠 폭과 정렬 */
   .promo__viewport{width:calc(100% - 48px);max-width:calc(var(--maxw) - 48px);margin:0 auto}
   .pslide{flex:0 0 100%;aspect-ratio:2.6/1;transform:none;opacity:1;box-shadow:var(--shadow-lg)}
