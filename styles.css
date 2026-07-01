@@ -628,7 +628,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .lrow__thumb{flex-basis:140px;width:140px;height:96px}
   .lrow__name{font-size:17px}
   .lrow__price{font-size:16px}
-  .pslide{flex-basis:82%}
+  .pslide{flex-basis:100%}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;scroll-behavior:auto}
