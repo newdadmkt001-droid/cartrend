@@ -235,7 +235,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .promo{display:block;position:relative;padding:16px 0 10px}
   .promo__hero{max-width:calc(var(--maxw) - 48px);margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 372px;gap:22px;align-items:stretch}
   .promo__main{position:relative;display:flex;flex-direction:column;min-width:0}
-  .promo__viewport{width:100%;max-width:none;height:100%;margin:0;border-radius:12px;box-shadow:0 14px 38px rgba(26,35,50,.09)}
+  .promo__viewport{width:100%;max-width:none;height:100%;margin:0;border-radius:12px}
   .promo__track{height:100%}
   .pslide{flex:0 0 100%;height:100%;aspect-ratio:auto;transform:none;opacity:1;border-radius:0;box-shadow:none}
   .pslide.is-active{transform:none;opacity:1}
@@ -250,7 +250,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .promo__dot.is-on{background:#fff;width:24px;border-radius:6px}
 
   /* 우측 견적문의 폼 */
-  .quoteform{display:flex;flex-direction:column;height:100%;background:#fff;border:1px solid var(--gray-200);border-radius:12px;box-shadow:0 14px 38px rgba(26,35,50,.09);padding:28px 26px}
+  .quoteform{display:flex;flex-direction:column;height:100%;background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:28px 26px}
   .quoteform__title{text-align:center;font-size:19px;font-weight:800;color:var(--navy);letter-spacing:-.02em;margin-bottom:20px}
   .quoteform__body{display:flex;flex-direction:column;gap:12px;flex:1}
   .qf__row{display:flex;align-items:center;gap:12px}
@@ -264,8 +264,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .qf__agree input{width:17px;height:17px;accent-color:var(--orange);flex:0 0 auto}
   .qf__agree b{color:var(--navy);font-weight:700}
   .qf__agree a{color:var(--gray-400);text-decoration:underline}
-  .qf__submit{margin-top:10px;height:52px;border-radius:12px;background:var(--orange);color:#fff;font-size:15.5px;font-weight:800;letter-spacing:-.01em;box-shadow:0 8px 20px rgba(57,110,255,.26);transition:.2s var(--ease)}
-  .qf__submit:hover{background:var(--orange-dark);box-shadow:0 12px 26px rgba(57,110,255,.36);transform:translateY(-1px)}
+  .qf__submit{margin-top:10px;height:52px;border-radius:12px;background:var(--orange);color:#fff;font-size:15.5px;font-weight:800;letter-spacing:-.01em;transition:.2s var(--ease)}
+  .qf__submit:hover{background:var(--orange-dark)}
   .qf__call{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;height:50px;border-radius:12px;background:var(--orange-soft);color:var(--orange-dark);font-size:15px;font-weight:800;transition:.2s var(--ease)}
   .qf__call:hover{background:#DBE6FF}
   .qf__call svg{width:18px;height:18px}
