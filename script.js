@@ -343,10 +343,13 @@
     setBrandActive(); renderBest();
   });
 
-  /* 정렬 선택 */
-  var sortSel = $("#sortSel");
-  if (sortSel) sortSel.addEventListener("change", function () {
-    state.sort = sortSel.value; state.shown = STEP; renderBest();
+  /* 정렬 선택 — PC 툴바(#sortSel) + 모바일 헤더(#sortSelM) 공용·동기화 */
+  var sortSelects = document.querySelectorAll(".sortsel select");
+  sortSelects.forEach(function (sel) {
+    sel.addEventListener("change", function () {
+      state.sort = sel.value; state.shown = STEP; renderBest();
+      sortSelects.forEach(function (s) { if (s !== sel) s.value = sel.value; });
+    });
   });
 
   /* 보기 방식 토글 (2열 / 3열 / 리스트) — CSS만 전환, 재렌더 불필요 */

@@ -615,6 +615,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .header.is-open .nav a{padding:12px 0;font-size:16px}
   .section{padding:24px 0 48px}
   .section__head--row{flex-direction:column;align-items:flex-start;gap:18px}
+  /* 모바일: '전체보기'·정렬 툴바 숨기고, 정렬을 브랜드 헤더 우측으로 */
+  .cars__all{display:none}
+  .carsbar{display:none}
+  .sortsel--head{display:inline-flex}
   .slider__nav{display:none}
   /* 하단 고정 퀵메뉴(탭바) 제거 */
   body{padding-bottom:0}
@@ -886,6 +890,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .cars__sort{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:880px;margin:0 auto;padding-bottom:4px}
 .cars__cnt{display:none}                        /* '총 N대' 숨김 (PC·모바일 동일) */
 .sortsel{position:relative;display:inline-flex;align-items:center}
+.sortsel--head{display:none}                    /* 모바일 전용(브랜드 헤더 정렬) — PC는 툴바 사용 */
 .sortsel::after{content:"▾";position:absolute;right:6px;color:var(--navy);font-size:11px;pointer-events:none}
 .sortsel select{appearance:none;-webkit-appearance:none;border:none;background:none;border-radius:8px;padding:8px 22px 8px 6px;font-size:15px;font-weight:800;color:var(--navy);font-family:inherit;cursor:pointer}
 .sortsel select:focus{outline:none}

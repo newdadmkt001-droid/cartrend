@@ -118,6 +118,16 @@
             <div class="cars__head reveal">
               <h2 class="cars__title">브랜드 · 모델</h2>
               <button class="cars__all" id="brandAll">전체보기</button>
+              <!-- 모바일 전용: 정렬 드롭다운(전체보기 자리) -->
+              <label class="sortsel sortsel--head">
+                <select id="sortSelM" aria-label="정렬">
+                  <option value="recommend">추천 순</option>
+                  <option value="latest">최신 등록순</option>
+                  <option value="priceAsc">낮은 가격순</option>
+                  <option value="priceDesc">높은 가격순</option>
+                  <option value="popular">인기 순</option>
+                </select>
+              </label>
             </div>
 
             <!-- 제조사 목록 (PC: 세로 / 모바일: 가로 스크롤) -->
