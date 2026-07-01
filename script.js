@@ -196,6 +196,7 @@
 
   var state = { brand: "전체", chip: 0, kw: "", shown: 6, sort: "recommend" };
   var STEP = 6;
+  var lastListCount = 0;   // 현재 필터 결과 총 대수 (무한 스크롤 판단용)
 
   function sortList(list) {
     var has = function (c, b) { return (c.badges || []).indexOf(b) !== -1; };
@@ -249,6 +250,7 @@
       return okBrand && okChip && okKw;
     });
     list = sortList(list);
+    lastListCount = list.length;
     var countEl = $("#carsCount");
     if (countEl) countEl.textContent = "총 " + list.length + "대";
     var visible = list.slice(0, state.shown);
@@ -463,13 +465,30 @@
   }
   observeReveals();
 
-  /* ---------- Header scroll state + FAB ---------- */
+  /* ---------- Header scroll state + TOP 버튼 + 무한 스크롤 ---------- */
   var header = $("#header");
   var fab = $("#fab");
+  var goTop = $("#goTop");
+
+  // TOP 버튼 → 맨 위로
+  if (goTop) goTop.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
   function onScroll() {
     var y = window.scrollY;
     header.classList.toggle("is-scrolled", y > 8);
-    fab.classList.toggle("is-visible", y > 560);
+    if (fab) fab.classList.toggle("is-visible", y > 560);
+    if (goTop) goTop.classList.toggle("is-visible", y > 560);
+
+    // PC 무한 스크롤: 목록 하단 근처면 6대씩 추가 로드 (더보기 버튼 대체)
+    if (window.innerWidth >= 1025 && bestCards && state.shown < lastListCount) {
+      var rect = bestCards.getBoundingClientRect();
+      if (rect.bottom < window.innerHeight + 600) {
+        state.shown += STEP;
+        renderBest();
+      }
+    }
   }
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
