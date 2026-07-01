@@ -119,17 +119,17 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
    [2] Main promotion slider (peek carousel)
    ============================================================ */
 .promo{padding:6px 0 4px;background:#fff;overflow:hidden}
-.promo__viewport{position:relative;overflow:hidden;max-width:920px;margin:0 auto}
+.promo__viewport{position:relative;overflow:hidden;width:calc(100% - 48px);max-width:920px;margin:0 auto}
 .promo__dots{display:none}                     /* 배너 점: PC 전용 */
 .promo__nav.promo__nav--over{display:none}     /* 오버레이 화살표: 항상 숨김(.promo__nav보다 우선) */
 .promo__track{display:flex;gap:14px;transition:transform .5s var(--ease);will-change:transform;cursor:grab}
 .promo__track.is-grabbing{cursor:grabbing}
 .pslide{
-  flex:0 0 78%;border-radius:10px;overflow:hidden;position:relative;
+  flex:0 0 100%;border-radius:10px;overflow:hidden;position:relative;
   aspect-ratio:16/9;color:#fff;text-decoration:none;box-shadow:var(--shadow);
-  transform:scale(.93);opacity:.65;transition:transform .45s var(--ease),opacity .45s var(--ease);
+  transform:none;opacity:1;transition:transform .45s var(--ease),opacity .45s var(--ease);
 }
-.pslide.is-active{transform:scale(1);opacity:1}
+.pslide.is-active{transform:none;opacity:1}
 .pslide__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
 .pslide__shade{position:absolute;inset:0;z-index:3;background:linear-gradient(180deg,rgba(10,14,22,.45),rgba(10,14,22,.05) 38%,rgba(10,14,22,.6))}
 .pslide__top{position:relative;z-index:4;padding:24px 22px}
@@ -616,15 +616,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .section{padding:68px 0}
   .section__head--row{flex-direction:column;align-items:flex-start;gap:18px}
   .slider__nav{display:none}
-  /* mobile bottom tab bar */
-  body{padding-bottom:66px}
+  /* 하단 고정 퀵메뉴(탭바) 제거 */
+  body{padding-bottom:0}
   .fab{display:none}
-  .tabbar{
-    display:flex;position:fixed;left:0;right:0;bottom:0;z-index:95;
-    background:#fff;border-top:1px solid var(--gray-200);
-    padding:7px 4px calc(7px + env(safe-area-inset-bottom));
-    box-shadow:0 -4px 20px rgba(26,35,50,.07);
-  }
+  .tabbar{display:none}
 }
 @media (max-width:560px){
   .why-grid,.steps,.reviews{grid-template-columns:1fr}
