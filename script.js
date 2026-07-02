@@ -53,9 +53,9 @@
 
   /* ---------- [1] Main promotion slider (peek carousel) ---------- */
   var SLIDES = [
-    { kicker: "테슬라 전기 SUV 특가", title: "모델Y 충전비 절감 월 렌트", body: "suv", color: "#8FB0FF", grad: "linear-gradient(135deg,#11151F,#2A3650)", img: "main/main1.jpg" },
-    { kicker: "기아 패밀리 패키지", title: "카니발 9인승 초기비용 0원", body: "van", color: "#D6E2FF", grad: "linear-gradient(135deg,#2555DB,#396EFF)", img: "main/main2.jpg" },
-    { kicker: "수입 프리미엄 전기차", title: "BMW i4 M60 합리적인 월 렌트", body: "sport", color: "#BFF0D6", grad: "linear-gradient(135deg,#0E2A22,#14503A)", img: "main/main3.jpg" }
+    { kicker: "테슬라 전기 SUV 특가", title: "모델Y 충전비 절감 월 렌트", sub: "지금이 가장 합리적인 선택", body: "suv", color: "#8FB0FF", grad: "linear-gradient(135deg,#11151F,#2A3650)", img: "main/main1.jpg" },
+    { kicker: "기아 패밀리 패키지", title: "카니발 9인승 초기비용 0원", sub: "온 가족을 위한 프리미엄 미니밴", body: "van", color: "#D6E2FF", grad: "linear-gradient(135deg,#2555DB,#396EFF)", img: "main/main2.jpg" },
+    { kicker: "수입 프리미엄 전기차", title: "BMW i4 M60 합리적인 월 렌트", sub: "수입차도 부담 없이, 월 렌트료로", body: "sport", color: "#BFF0D6", grad: "linear-gradient(135deg,#0E2A22,#14503A)", img: "main/main3.jpg" }
   ];
 
   var heroTrack = $("#heroTrack");
@@ -65,9 +65,12 @@
         '<a class="pslide" href="#cars" style="background:' + s.grad + '">' +
           '<img class="pslide__bg" src="' + s.img + '" alt="">' +
           '<div class="pslide__shade"></div>' +
-          '<div class="pslide__top"><div class="pslide__kicker">' + s.kicker + "</div>" +
-            '<div class="pslide__title">' + s.title + "</div></div>" +
-          '<div class="pslide__foot"><span>상세 견적 보기</span><span>›</span></div>' +
+          '<div class="pslide__body">' +
+            '<span class="pslide__kicker">' + s.kicker + "</span>" +
+            '<div class="pslide__title">' + s.title + "</div>" +
+            (s.sub ? '<div class="pslide__sub">' + s.sub + "</div>" : "") +
+            '<span class="pslide__cta">상세 견적 보기 <b>›</b></span>' +
+          "</div>" +
         "</a>"
       );
     }).join("");
