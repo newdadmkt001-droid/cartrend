@@ -112,8 +112,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .msearch__bar:focus-within{border-color:var(--orange)}
 .msearch__bar input{flex:1;min-width:0;border:none;outline:none;background:none;font-size:16px;font-weight:600;color:var(--navy);padding:11px 0}
 .msearch__bar input::placeholder{color:var(--gray-400);font-weight:500}
-.msearch__btn{flex:0 0 auto;width:46px;height:46px;border-radius:8px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;transition:.2s var(--ease)}
-.msearch__btn:hover{background:var(--orange)}
+.msearch__btn{flex:0 0 auto;width:44px;height:44px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;transition:.2s var(--ease)}
+.msearch__btn:hover{background:var(--orange-dark)}
 
 /* ============================================================
    [2] Main promotion slider (peek carousel)
@@ -630,12 +630,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .section__head--row{flex-direction:column;align-items:flex-start;gap:18px}
   /* 모바일: 배너를 검색창 위로 (배너 → 검색 → 브랜드·차량) */
   main{display:flex;flex-direction:column}
-  .promo{order:-1;padding:0 0 6px}
+  .promo{order:-1;padding:0;position:relative}
   /* 배너 화면 끝까지(풀블리드) */
   .promo__viewport{width:100%;max-width:none;margin:0}
   .pslide{border-radius:0}
-  /* 모바일 검색창 잘 보이게: 영역 배경 + 검색바 그림자/테두리 강조 */
-  .msearch{background:var(--bg-alt);padding:16px 0}
+  /* 배너 아래: 흰 라운드 패널(페이저+검색)이 배너 위로 살짝 겹침 */
+  .promo__pager{margin:-22px 0 0;padding:16px 0 4px;background:#fff;border-radius:22px 22px 0 0;position:relative;z-index:2}
+  .msearch{background:#fff;padding:8px 0 12px}
   .msearch__bar{border-color:var(--gray-300,#cbd2db);box-shadow:0 4px 16px rgba(26,35,50,.10)}
   /* 모바일: '전체보기'·정렬 툴바 숨기고, 정렬을 브랜드 헤더 우측으로 */
   .cars__all{display:none}
