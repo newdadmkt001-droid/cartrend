@@ -64,7 +64,16 @@
   var QE = window.QuoteEngine;
   var POLICY = QE.loadPricingPolicy();
   function trimWon() { return (curTrim().price || 0); }   // 트림 가격(원)
-  function manWon(w) { return won(Math.round((w || 0) / 10000)); }   // 원 → 만원 표시
+  function manWon(w) { return won(Math.round((w || 0) / 10000)); }   // 원 → 만원 숫자
+  // 원 → "N억 MM만원" 표기 (1억 미만은 "MM만원")
+  function moneyKR(w) {
+    var man = Math.round((w || 0) / 10000);
+    if (man >= 10000) {
+      var eok = Math.floor(man / 10000), rest = man % 10000;
+      return rest ? (eok + "억 " + won(rest) + "만원") : (eok + "억");
+    }
+    return won(man) + "만원";
+  }
   function maintFee() { return D.maintenanceFee || 0; }
   function optGroups() { return curTrim().addOptions || []; }   // 비노출 항목도 유지(상세에서 회색·선택불가로 표시)
   function addSel(gi) { return Array.isArray(state.addsel[gi]) ? state.addsel[gi] : []; }  // 다중 선택(인덱스 배열)
@@ -119,7 +128,7 @@
     var depLabel = state.custom.deposit != null ? "직접입력" : (DEPOSIT_OPTS[state.sel.deposit != null ? state.sel.deposit : 0] || "15%");
     var spec = currentMonths() + "개월 · 연간 " + ml + " · 보증금 " + depLabel + " 기준";
     $("#paySub").textContent = spec;
-    $("#dMsrp").textContent = manWon(trimWon());
+    $("#dMsrp").textContent = moneyKR(trimWon());
     $("#payTotal").textContent = won(currentMonthly());
     var pts = $("#payTotalSide"); if (pts) pts.textContent = won(currentMonthly());   // PC 견적 패널
     var pss = $("#paySubSide"); if (pss) pss.textContent = spec;
@@ -128,9 +137,9 @@
   function renderQuote() {
     if (!$("#quoteBox")) return;
     var base = trimWon(), opt = addOptPrice(), total = base + opt;
-    $("#q-base").textContent = manWon(base) + "만원";
+    $("#q-base").textContent = moneyKR(base);
     $("#q-opt").textContent = "+ " + won(opt) + "원";        // 추가옵션은 원
-    $("#q-total").textContent = manWon(total) + "만원";
+    $("#q-total").textContent = moneyKR(total);
     $("#q-deposit").textContent = won(depositAmt()) + "원";
     $("#q-prepay").textContent = won(prepayAmt()) + "원";
     $("#q-term").textContent = currentMonths() + "개월";
@@ -155,7 +164,7 @@
         '<button class="trimcard' + (on ? " is-active" : "") + '" data-i="' + i + '">' +
           (on ? '<span class="trimcard__check">✓</span>' : "") +
           '<span class="trimcard__name">' + t.name + "</span>" +
-          '<span class="trimcard__price">' + manWon(t.price || 0) + "만원</span>" +
+          '<span class="trimcard__price">' + moneyKR(t.price || 0) + "</span>" +
         "</button>"
       );
     }).join("");
