@@ -513,10 +513,11 @@
   var fab = $("#fab");
   var goTop = $("#goTop");
 
-  // TOP 버튼 → 맨 위로
-  if (goTop) goTop.addEventListener("click", function () {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
+  // TOP 버튼 → 맨 위로 (PC 우하단 + 모바일 하단 퀵메뉴)
+  function scrollTop() { window.scrollTo({ top: 0, behavior: "smooth" }); }
+  if (goTop) goTop.addEventListener("click", scrollTop);
+  var mQuickTop = $("#mQuickTop");
+  if (mQuickTop) mQuickTop.addEventListener("click", scrollTop);
 
   function onScroll() {
     var y = window.scrollY;
