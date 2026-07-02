@@ -270,6 +270,7 @@
     });
   }
 
+  var repaintBrands = function () {};   // 게시본 반영 시 브랜드 다시 그리기 (아래에서 할당)
   if (bestTabs) {
     // 브랜드별 노출 대수 (메인 미노출 차량 제외) — PC 사이드바에 표시
     function brandCount(b) {
@@ -280,28 +281,36 @@
     }
     // 브랜드 표기·로고파일 보정 (DB 브랜드값 → 표시명/파일명)
     var BRAND_ALIAS = { "KG모빌리티": { name: "KGM", file: "kgm" } };
-    bestTabs.innerHTML = BRANDS.map(function (b) {
-      var alias = BRAND_ALIAS[b] || {};
-      var disp = alias.name || b;                       // 화면 표시 이름
-      var file = (alias.file || b).toLowerCase();        // 로고 파일명(대소문자 보정: BMW→bmw 등)
-      var mark = b === "전체"
-        ? LOGO["전체"]
-        : '<img class="brand__img" src="logo/' + encodeURIComponent(file) + '.png" alt="' + disp + '">';
-      return (
-        '<button class="brand' + (b === "전체" ? " is-active" : "") + '" data-brand="' + b + '">' +
-          '<span class="brand__logo">' + mark + "</span>" +
-          '<span class="brand__name">' + disp + "</span>" +
-          '<span class="brand__cnt">' + brandCount(b) + "</span>" +
-        "</button>"
-      );
-    }).join("");
-    // 이미지가 아직 없는 브랜드는 기본 마크(인라인 SVG)로 자동 대체
-    bestTabs.querySelectorAll(".brand__img").forEach(function (img) {
-      img.addEventListener("error", function () {
-        var b = img.getAttribute("alt");
-        img.parentElement.innerHTML = LOGO[b] || b;
+    // 현재 CARS 기준 브랜드 목록 (게시본에 새 브랜드가 있어도 자동 노출)
+    function brandsFromCars() {
+      return ["전체"].concat(CARS.map(function (c) { return c.brand; })
+        .filter(function (b, i, a) { return b && a.indexOf(b) === i; }));
+    }
+    repaintBrands = function () {
+      bestTabs.innerHTML = brandsFromCars().map(function (b) {
+        var alias = BRAND_ALIAS[b] || {};
+        var disp = alias.name || b;                       // 화면 표시 이름
+        var file = (alias.file || b).toLowerCase();        // 로고 파일명(대소문자 보정: BMW→bmw 등)
+        var mark = b === "전체"
+          ? LOGO["전체"]
+          : '<img class="brand__img" src="logo/' + encodeURIComponent(file) + '.png" alt="' + disp + '">';
+        return (
+          '<button class="brand' + (b === state.brand ? " is-active" : "") + '" data-brand="' + b + '">' +
+            '<span class="brand__logo">' + mark + "</span>" +
+            '<span class="brand__name">' + disp + "</span>" +
+            '<span class="brand__cnt">' + brandCount(b) + "</span>" +
+          "</button>"
+        );
+      }).join("");
+      // 이미지가 아직 없는 브랜드는 기본 마크(인라인 SVG)로 자동 대체
+      bestTabs.querySelectorAll(".brand__img").forEach(function (img) {
+        img.addEventListener("error", function () {
+          var b = img.getAttribute("alt");
+          img.parentElement.innerHTML = LOGO[b] || b;
+        });
       });
-    });
+    };
+    repaintBrands();
     bestTabs.addEventListener("click", function (e) {
       var btn = e.target.closest(".brand");
       if (!btn) return;
@@ -543,12 +552,13 @@
     });
   }
 
-  /* Supabase 최신 카탈로그 자동 반영 — 관리자가 등록/수정하면 손님 메인에 자동 노출 */
+  /* Supabase 최신 카탈로그 자동 반영 — 관리자가 게시하면 손님 메인에 자동 노출 */
   if (window.CARTREND_DB) {
     window.CARTREND_DB.fetchCatalog().then(function (remote) {
       if (remote && remote.length) {
         CARS.length = 0; [].push.apply(CARS, remote);
-        renderBest();
+        repaintBrands();   // 브랜드 목록·로고·대수 갱신
+        renderBest();      // 차량 목록 갱신
       }
     });
   }
