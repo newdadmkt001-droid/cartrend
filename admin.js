@@ -589,7 +589,7 @@
         '<div class="prev__row"><span>연료</span><b>' + c.fuel + "</b></div></div>" +
       '<div class="prev__sec"><b>정비 서비스</b>' +
         (d.maintenance.length ? d.maintenance.map(function (m) { return '<div class="prev__li">' + m + "</div>"; }).join("") : '<div class="prev__li" style="color:#9AA3B0">없음</div>') +
-        (fee ? '<div class="prev__row" style="margin-top:6px"><span>추가요금</span><b style="color:#E65100">월 +' + won(fee) + "원</b></div>" : "") + "</div>" +
+        (fee ? '<div class="prev__row" style="margin-top:6px"><span>추가요금</span><b style="color:#2555DB">월 +' + won(fee) + "원</b></div>" : "") + "</div>" +
       '<div class="prev__sec"><b>계약 조건</b>' +
         '<div class="prev__row"><span>매입 옵션</span><b>' + d.buyOption + "</b></div>" +
         selRow("연간 약정거리", "mileage", MILEAGE_OPTS, mileIdx) +
