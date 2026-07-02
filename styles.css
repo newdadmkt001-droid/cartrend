@@ -938,6 +938,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
    변형(엔진/인승) 선택 pills — 상세 페이지
    ============================================================ */
 .vpills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.vpills:empty{display:none}                 /* 변형 pills 없으면 빈 여백 제거 */
+.trimgrid:empty{display:none}               /* 트림 없으면 빈 여백 제거 */
+.dpick__sel:not(:has(.vpill,.trimcard)){padding-top:0;padding-bottom:0}   /* 선택요소 전무 시 섹션 여백 제거 */
 .vpill{padding:10px 16px;border-radius:999px;border:1.5px solid var(--gray-200);background:#fff;font-size:14px;font-weight:700;color:var(--gray-600);cursor:pointer;transition:.18s var(--ease)}
 .vpill:hover{border-color:var(--orange-light)}
 .vpill em{font-style:normal;color:var(--gray-400);font-weight:600}
