@@ -80,12 +80,12 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 }
 .header.is-scrolled{border-color:var(--gray-200);box-shadow:var(--shadow-sm)}
 .header__inner{display:flex;align-items:center;gap:28px;height:68px}
-.logo{display:flex;align-items:center;gap:9px;font-size:21px;font-weight:800;color:var(--navy);letter-spacing:-.03em}
+.logo{display:flex;align-items:center;gap:9px;font-size:21px;font-weight:800;color:var(--navy);letter-spacing:-.03em;flex-shrink:0}
 .logo__mark{color:var(--orange);display:flex}
 .logo{align-items:baseline}
 .logo__col{display:flex;flex-direction:column;line-height:1.02}
-.logo__tag{font-size:12px;font-weight:600;color:var(--gray-600);letter-spacing:-.02em}
-.logo__text{font-size:25px;font-weight:800;line-height:1}
+.logo__tag{font-size:12px;font-weight:600;color:var(--gray-600);letter-spacing:-.02em;white-space:nowrap}
+.logo__text{font-size:25px;font-weight:800;line-height:1;white-space:nowrap}
 .logo__text b{color:var(--navy);font-weight:800}
 .logo__img{height:34px;width:auto;display:block}
 .logo__img--footer{height:32px}
