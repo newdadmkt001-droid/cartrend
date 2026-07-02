@@ -634,9 +634,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   /* 배너 화면 끝까지(풀블리드) */
   .promo__viewport{width:100%;max-width:none;margin:0}
   .pslide{border-radius:0}
-  /* 배너 아래: 흰 라운드 패널(페이저+검색)이 배너 위로 살짝 겹침 */
-  .promo__pager{margin:-22px 0 0;padding:16px 0 4px;background:#fff;border-radius:22px 22px 0 0;position:relative;z-index:2}
-  .msearch{background:#fff;padding:8px 0 12px}
+  /* 페이저를 슬라이더(배너) 안 하단에 오버레이 (흰 알약) */
+  .promo__pager{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);margin:0;gap:6px;padding:5px 12px;background:rgba(255,255,255,.94);border-radius:999px;box-shadow:0 5px 16px rgba(0,0,0,.22);z-index:4}
+  .promo__nav{width:26px;height:26px;border:none;background:none;color:var(--navy);font-size:18px;box-shadow:none}
+  /* 검색 흰 라운드 패널이 배너 위로 살짝 겹침 */
+  .msearch{background:#fff;border-radius:22px 22px 0 0;margin-top:-16px;position:relative;z-index:3;padding:22px 0 12px}
   .msearch__bar{border-color:var(--gray-300,#cbd2db);box-shadow:0 4px 16px rgba(26,35,50,.10)}
   /* 모바일: '전체보기'·정렬 툴바 숨기고, 정렬을 브랜드 헤더 우측으로 */
   .cars__all{display:none}
