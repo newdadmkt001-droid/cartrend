@@ -634,11 +634,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   /* 배너 화면 끝까지(풀블리드) */
   .promo__viewport{width:100%;max-width:none;margin:0}
   .pslide{border-radius:0}
-  /* 페이저를 슬라이더(배너) 안 하단에 오버레이 (흰 알약 + 원형 화살표) */
-  .promo__pager{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);margin:0;gap:10px;padding:6px 12px;background:rgba(255,255,255,.92);border-radius:999px;box-shadow:0 5px 16px rgba(0,0,0,.22);z-index:4}
-  .promo__nav{width:30px;height:30px;border:1.5px solid var(--gray-200);background:#fff;color:var(--navy);border-radius:50%;font-size:16px;box-shadow:none}
-  .promo__count{color:var(--navy)}
-  .promo__count b{color:var(--navy)}
+  /* 페이저를 슬라이더(배너) 안 하단에 오버레이 (배경 없이 밝은 화살표) */
+  .promo__pager{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);margin:0;gap:12px;padding:0;background:none;box-shadow:none;z-index:4}
+  .promo__nav{width:30px;height:30px;border:1.5px solid rgba(255,255,255,.4);background:rgba(255,255,255,.1);color:rgba(255,255,255,.9);border-radius:50%;font-size:16px;box-shadow:none}
+  .promo__count{color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+  .promo__count b{color:#fff}
   /* 검색 흰 라운드 패널이 배너 위로 살짝 겹침 */
   .msearch{background:#fff;border-radius:22px 22px 0 0;margin-top:-16px;position:relative;z-index:3;padding:22px 0 12px}
   .msearch__bar{border-color:var(--gray-300,#cbd2db);box-shadow:0 4px 16px rgba(26,35,50,.10)}
