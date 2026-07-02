@@ -975,8 +975,17 @@
   });
 
 
-  history.replaceState({ mode: "list" }, "", location.pathname + location.search);
   renderList();
+  // 새로고침 시 편집 뷰 복원 (#edit-<id>) — 없으면 목록
+  (function restoreView() {
+    var m = /^#edit-(\d+)$/.exec(location.hash);
+    if (m && CARS[+m[1]]) {
+      applyEditView(+m[1]);
+      history.replaceState({ mode: "edit", id: +m[1] }, "", "#edit-" + m[1]);
+    } else {
+      history.replaceState({ mode: "list" }, "", location.pathname + location.search);
+    }
+  })();
 
   /* ---------- Supabase: 게시된 카탈로그 불러오기 + 게시(공개 반영) ---------- */
   if (window.CARTREND_DB) {
