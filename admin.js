@@ -73,6 +73,7 @@
   function renderBrandFilter() {
     $("#brandFilter").innerHTML = brandList().map(function (b) {
       var n = b === "전체" ? CARS.length : CARS.filter(function (c) { return c.brand === b; }).length;
+      if (b !== "전체" && n === 0) return "";   // 차량 0대 브랜드 칩은 숨김 (예: KGM (0))
       return '<button class="bchip' + (b === filterBrand ? " on" : "") + '" data-b="' + b + '">' + b + " (" + n + ")</button>";
     }).join("");
   }
