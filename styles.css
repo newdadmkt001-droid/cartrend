@@ -216,7 +216,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .lrow__like{display:none}                 /* 찜 하트: 모바일 숨김 */
 .ticker{display:none}                     /* 상단 티커: 모바일 숨김 */
 .gotop{display:none}                      /* TOP 버튼: 모바일 숨김(모바일은 하단 퀵메뉴 사용) */
-.pcconsult{display:none}                   /* 상담문의 플로팅: PC 전용 */
+.pcconsult,.pckakao{display:none}          /* 카톡·상담문의 플로팅: PC 전용 */
 .cars__tools{display:inline-flex;align-items:center;gap:12px}
 .viewtoggle{display:none}                 /* 보기 방식 토글: 모바일 숨김 */
 .quoteform{display:none}                   /* 견적문의 폼: PC 히어로 전용(모바일 숨김) */
@@ -242,10 +242,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .promo__track{height:100%}
   .pslide{flex:0 0 100%;height:100%;aspect-ratio:auto;transform:none;opacity:1;border-radius:0;box-shadow:none}
   .pslide.is-active{transform:none;opacity:1}
-  .pslide__body{padding:38px 36px;gap:13px}
-  .pslide__title{max-width:70%;font-size:38px;line-height:1.2}
-  .pslide__kicker{font-size:14px}
-  .pslide__sub{font-size:16px}
+  .pslide__body{padding:44px 42px;gap:16px}
+  .pslide__title{max-width:74%;font-size:52px;line-height:1.15}
+  .pslide__kicker{font-size:15px}
+  .pslide__sub{font-size:20px}
+  .pslide__cta{font-size:16px;padding:14px 26px}
   .promo__pager,.promo__nav--over{display:none}
   .promo__dots{display:flex;gap:8px;position:absolute;left:30px;bottom:22px;z-index:5}
   .promo__dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.5);transition:.18s var(--ease)}
@@ -391,20 +392,25 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   /* 스크롤 시 뜨던 '차량보기' 플로팅 버튼 제거 */
   .fab{display:none!important}
 
-  /* 하단 우측 상담문의 (항상 표시) */
-  .pcconsult{
-    display:inline-flex;position:fixed;right:26px;bottom:26px;z-index:91;
-    align-items:center;gap:8px;padding:15px 24px;border-radius:999px;
-    background:var(--orange);color:#fff;font-size:15px;font-weight:800;
-    box-shadow:0 12px 28px rgba(57,110,255,.40);transition:.2s var(--ease);
+  /* 하단 우측 카톡·상담문의 플로팅 (크게 + 위아래 플로팅) */
+  @keyframes pcfloaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .pckakao,.pcconsult{
+    display:inline-flex;position:fixed;right:28px;z-index:91;
+    align-items:center;gap:9px;padding:18px 30px;border-radius:999px;
+    font-size:17px;font-weight:800;text-decoration:none;
+    animation:pcfloaty 2.6s ease-in-out infinite;
   }
-  .pcconsult:hover{background:var(--orange-dark);transform:translateY(-2px)}
-  .pcconsult svg{width:19px;height:19px}
+  .pckakao svg,.pcconsult svg{width:22px;height:22px}
+  .pcconsult{bottom:28px;background:var(--orange);color:#fff;box-shadow:0 14px 30px rgba(57,110,255,.42)}
+  .pcconsult:hover{background:var(--orange-dark)}
+  .pckakao{bottom:96px;background:#FEE500;color:#3B1D1D;box-shadow:0 14px 30px rgba(0,0,0,.16);animation-delay:.2s}
+  .pckakao:hover{background:#FADA0A}
+  .pckakao:hover,.pcconsult:hover{animation-play-state:paused}
 
-  /* 하단 우측 TOP(맨 위로) 버튼 — 상담문의 위에 스택, 스크롤 시 표시 */
+  /* 하단 우측 TOP(맨 위로) — 카톡 위에 여백 두고 스택, 스크롤 시 표시 */
   .gotop{
-    display:flex;position:fixed;right:26px;bottom:86px;z-index:90;
-    width:52px;height:52px;border-radius:50%;flex-direction:column;gap:1px;
+    display:flex;position:fixed;right:28px;bottom:182px;z-index:90;
+    width:56px;height:56px;border-radius:50%;flex-direction:column;gap:1px;
     align-items:center;justify-content:center;background:#fff;color:var(--navy);
     border:1px solid var(--gray-200);box-shadow:0 10px 26px rgba(26,35,50,.16);
     font-size:10px;font-weight:800;letter-spacing:.04em;
@@ -413,7 +419,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   }
   .gotop.is-visible{opacity:1;transform:none;pointer-events:auto}
   .gotop:hover{color:var(--orange);border-color:var(--orange-light)}
-  .gotop svg{width:18px;height:18px}
+  .gotop svg{width:19px;height:19px}
 }
 
 /* ============================================================
