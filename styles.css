@@ -220,7 +220,26 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 @keyframes pcfloaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 .cars__tools{display:inline-flex;align-items:center;gap:12px}
 .viewtoggle{display:none}                 /* 보기 방식 토글: 모바일 숨김 */
-.quoteform{display:none}                   /* 견적문의 폼: PC 히어로 전용(모바일 숨김) */
+/* 견적문의 폼 — 공용 스타일 (표시는 breakpoint별 제어) */
+.quoteform{display:none;flex-direction:column;background:#fff;border-radius:12px}
+.quoteform__title{text-align:center;font-size:23px;font-weight:800;color:var(--navy);letter-spacing:-.02em;margin-bottom:20px}
+.quoteform__body{display:flex;flex-direction:column;gap:12px;flex:1}
+.qf__row{display:flex;align-items:center;gap:12px}
+.qf__label{flex:0 0 48px;font-size:13.5px;font-weight:700;color:var(--gray-600)}
+.qf__label b{color:var(--orange);font-weight:800;margin-left:1px}
+.qf__row input{flex:1;min-width:0;height:46px;border:1px solid var(--gray-200);border-radius:10px;padding:0 14px;font-size:14px;font-family:inherit;color:var(--navy);background:var(--bg-alt);transition:.15s var(--ease)}
+.qf__row input::placeholder{color:var(--gray-400);font-weight:500}
+.qf__row input:focus{outline:none;border-color:var(--orange);background:#fff;box-shadow:0 0 0 3px rgba(57,110,255,.13)}
+.qf__agree{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--gray-600);cursor:pointer}
+.qf__agree:first-of-type{margin-top:4px}
+.qf__agree input{width:17px;height:17px;accent-color:var(--orange);flex:0 0 auto}
+.qf__agree b{color:var(--navy);font-weight:700}
+.qf__agree a{color:var(--gray-400);text-decoration:underline}
+.qf__submit{margin-top:10px;height:52px;border-radius:12px;background:var(--orange);color:#fff;font-size:15.5px;font-weight:800;letter-spacing:-.01em;transition:.2s var(--ease)}
+.qf__submit:hover{background:var(--orange-dark)}
+.qf__call{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:2px;height:50px;border-radius:12px;background:var(--orange-soft);color:var(--orange-dark);font-size:15px;font-weight:800;transition:.2s var(--ease)}
+.qf__call:hover{background:#DBE6FF}
+.qf__call svg{width:18px;height:18px}
 .carssearch{display:none}                  /* 목록 상단 검색: PC 전용(모바일은 최상단 검색 사용) */
 
 @media (min-width:1025px){
@@ -254,26 +273,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .promo__dot:hover{background:rgba(255,255,255,.85)}
   .promo__dot.is-on{background:#fff;width:24px;border-radius:6px}
 
-  /* 우측 견적문의 폼 */
-  .quoteform{display:flex;flex-direction:column;height:100%;background:#fff;border:1px solid var(--gray-200);border-radius:12px;box-shadow:0 5px 14px rgba(26,35,50,.05),0 14px 30px rgba(26,35,50,.07);padding:28px 26px}
-  .quoteform__title{text-align:center;font-size:23px;font-weight:800;color:var(--navy);letter-spacing:-.02em;margin-bottom:20px}
-  .quoteform__body{display:flex;flex-direction:column;gap:12px;flex:1}
-  .qf__row{display:flex;align-items:center;gap:12px}
-  .qf__label{flex:0 0 48px;font-size:13.5px;font-weight:700;color:var(--gray-600)}
-  .qf__label b{color:var(--orange);font-weight:800;margin-left:1px}
-  .qf__row input{flex:1;min-width:0;height:46px;border:1px solid var(--gray-200);border-radius:10px;padding:0 14px;font-size:14px;font-family:inherit;color:var(--navy);background:var(--bg-alt);transition:.15s var(--ease)}
-  .qf__row input::placeholder{color:var(--gray-400);font-weight:500}
-  .qf__row input:focus{outline:none;border-color:var(--orange);background:#fff;box-shadow:0 0 0 3px rgba(57,110,255,.13)}
-  .qf__agree{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--gray-600);cursor:pointer}
-  .qf__agree:first-of-type{margin-top:4px}
-  .qf__agree input{width:17px;height:17px;accent-color:var(--orange);flex:0 0 auto}
-  .qf__agree b{color:var(--navy);font-weight:700}
-  .qf__agree a{color:var(--gray-400);text-decoration:underline}
-  .qf__submit{margin-top:10px;height:52px;border-radius:12px;background:var(--orange);color:#fff;font-size:15.5px;font-weight:800;letter-spacing:-.01em;transition:.2s var(--ease)}
-  .qf__submit:hover{background:var(--orange-dark)}
-  .qf__call{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:2px;height:50px;border-radius:12px;background:var(--orange-soft);color:var(--orange-dark);font-size:15px;font-weight:800;transition:.2s var(--ease)}
-  .qf__call:hover{background:#DBE6FF}
-  .qf__call svg{width:18px;height:18px}
+  /* 우측 견적문의 폼 (PC: 히어로 우측) */
+  .quoteform{display:flex;height:100%;border:1px solid var(--gray-200);box-shadow:0 5px 14px rgba(26,35,50,.05),0 14px 30px rgba(26,35,50,.07);padding:28px 26px}
 
   /* ---------- 2단 레이아웃 ---------- */
   .carspage{display:grid;grid-template-columns:248px minmax(0,1fr);gap:34px;align-items:start}
@@ -655,8 +656,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .promo__nav:hover,.promo__nav:focus,.promo__nav:active{color:#fff;background:none;border:none;outline:none}
   .promo__count{color:rgba(255,255,255,.55);text-shadow:0 1px 6px rgba(0,0,0,.5)}
   .promo__count b{color:#fff}
-  /* 검색 흰 라운드 패널이 배너 위로 살짝 겹침 */
-  .msearch{background:#fff;border-radius:22px 22px 0 0;margin-top:-16px;position:relative;z-index:3;padding:22px 0 12px}
+  /* 모바일: 견적문의 폼 노출 (배너 아래 흰 라운드 패널로 겹침) */
+  .quoteform{display:flex;border:none;box-shadow:none;border-radius:22px 22px 0 0;margin-top:-18px;position:relative;z-index:3;padding:24px 20px 14px}
+  /* 검색은 폼 뒤에 오므로 평평하게 */
+  .msearch{background:#fff;border-radius:0;margin-top:0;position:relative;z-index:2;padding:6px 0 12px}
   .msearch__bar{border-color:var(--gray-300,#cbd2db);box-shadow:0 4px 16px rgba(26,35,50,.10)}
   /* 모바일: '전체보기'·정렬 툴바 숨기고, 정렬을 브랜드 헤더 우측으로 */
   .cars__all{display:none}
