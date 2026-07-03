@@ -646,8 +646,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   /* 배너 글자 상단 정렬(위로) */
   .pslide__body{justify-content:flex-start;padding-top:26px}
   /* 페이저를 슬라이더(배너) 안 하단에 오버레이 (배경·동그라미 없이 화살표만) */
-  .promo__pager{position:absolute;left:50%;bottom:40px;transform:translateX(-50%);margin:0;gap:14px;padding:0;background:none;box-shadow:none;z-index:4}
-  .promo__nav{width:auto;height:auto;border:none;background:none;color:rgba(255,255,255,.8);border-radius:0;font-size:20px;padding:0 2px;box-shadow:none}
+  .promo__pager{position:absolute;left:50%;bottom:36px;transform:translateX(-50%);margin:0;gap:8px;padding:0;background:none;box-shadow:none;z-index:6;pointer-events:auto}
+  .promo__nav{
+    width:auto;height:auto;min-width:42px;min-height:42px;display:flex;align-items:center;justify-content:center;
+    border:none;background:none;color:rgba(255,255,255,.85);border-radius:0;font-size:22px;padding:4px 8px;box-shadow:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .promo__nav:hover,.promo__nav:focus,.promo__nav:active{color:#fff;background:none;border:none;outline:none}
   .promo__count{color:rgba(255,255,255,.55);text-shadow:0 1px 6px rgba(0,0,0,.5)}
   .promo__count b{color:#fff}
   /* 검색 흰 라운드 패널이 배너 위로 살짝 겹침 */

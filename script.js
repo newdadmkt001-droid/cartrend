@@ -4,6 +4,9 @@
 (function () {
   "use strict";
 
+  // 새로고침 시 이전 스크롤 위치 복원 방지 → 항상 맨 위에서 시작
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
   /* Car illustrations(carSVG/BODIES) & CARS data are defined in data.js (shared with detail page). */
 
   // 브랜드 목록은 차량 데이터에서 자동 생성 (관리자 추가 브랜드도 노출)
@@ -68,7 +71,6 @@
           '<div class="pslide__body">' +
             '<div class="pslide__title">' + s.title + "</div>" +
             (s.sub ? '<div class="pslide__sub">' + s.sub + "</div>" : "") +
-            '<span class="pslide__cta">상세 견적 보기 <b>›</b></span>' +
           "</div>" +
         "</a>"
       );
