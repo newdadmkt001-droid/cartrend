@@ -525,7 +525,7 @@
     var y = window.scrollY;
     header.classList.toggle("is-scrolled", y > 8);
     if (fab) fab.classList.toggle("is-visible", y > 560);
-    if (goTop) goTop.classList.toggle("is-visible", y > 560);
+    if (goTop) goTop.classList.toggle("is-visible", y > 300);
 
     // PC 무한 스크롤: 목록 하단 근처면 6대씩 추가 로드 (더보기 버튼 대체)
     if (window.innerWidth >= 1025 && bestCards && state.shown < lastListCount) {
