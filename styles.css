@@ -649,17 +649,17 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .sortsel--head{display:inline-flex}
   .slider__nav{display:none}
   /* 하단 고정 퀵메뉴 (카톡 문의 + 전화 상담) */
-  body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+  body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
   .fab{display:none}
   .tabbar{display:none}
   .mquick{
     display:flex;gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:95;
     background:#fff;border-top:1px solid var(--gray-200);
-    padding:9px 14px calc(9px + env(safe-area-inset-bottom));
+    padding:13px 14px calc(13px + env(safe-area-inset-bottom));
     box-shadow:0 -4px 20px rgba(26,35,50,.08);
   }
   .mquick__kakao,.mquick__cta{
-    flex:1;display:flex;align-items:center;justify-content:center;gap:7px;height:50px;
+    flex:1;display:flex;align-items:center;justify-content:center;gap:7px;height:54px;
     border-radius:12px;font-size:16px;font-weight:800;text-decoration:none;
   }
   .mquick__kakao{background:#FEE500;color:#3B1D1D}
