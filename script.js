@@ -377,12 +377,20 @@
     });
   });
 
-  /* 견적문의 폼 (PC 히어로) — 백엔드 미연동, 접수 확인만 */
+  /* 견적문의 폼 — 백엔드 미연동, 접수 확인만 */
   var quoteForm = document.getElementById("quoteForm");
+  // 모바일: 견적문의 버튼 클릭 시 팝업(모달)로 표시
+  function qModalClose() { document.body.classList.remove("qmodal-open"); }
+  function qModalOpen(e) { if (e) e.preventDefault(); document.body.classList.add("qmodal-open"); }
+  document.querySelectorAll(".mquick__kakao").forEach(function (b) { b.addEventListener("click", qModalOpen); });
+  var qDim = document.getElementById("qDim"); if (qDim) qDim.addEventListener("click", qModalClose);
+  var qClose = document.getElementById("qClose"); if (qClose) qClose.addEventListener("click", qModalClose);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") qModalClose(); });
   if (quoteForm) quoteForm.addEventListener("submit", function (e) {
     e.preventDefault();
     alert("상담 신청이 접수되었습니다. 빠르게 연락드리겠습니다.");
     quoteForm.reset();
+    qModalClose();
   });
 
   /* 차량 더 보기 */

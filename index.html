@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="stylesheet" as="style" crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-  <link rel="stylesheet" href="styles.css?v=20250703e" />
+  <link rel="stylesheet" href="styles.css?v=20250703f" />
 </head>
 <body class="home">
 
@@ -84,6 +84,7 @@
 
         <!-- 우측 견적문의 폼 (PC 전용) -->
         <aside class="quoteform" id="quote">
+          <button class="qf__close" id="qClose" type="button" aria-label="닫기">✕</button>
           <h3 class="quoteform__title">최저가 견적문의</h3>
           <form class="quoteform__body" id="quoteForm">
             <label class="qf__row"><span class="qf__label">이름 <b>*</b></span><input type="text" name="name" placeholder="이름을 입력하세요" required></label>
@@ -244,7 +245,10 @@
     <span>TOP</span>
   </button>
 
-  <!-- ===================== MOBILE BOTTOM QUICK MENU (카톡 문의 + 전화 상담) ===================== -->
+  <!-- 견적문의 모달 백드롭 (모바일) -->
+  <div class="qmodal-dim" id="qDim" aria-hidden="true"></div>
+
+  <!-- ===================== MOBILE BOTTOM QUICK MENU (견적문의 + 전화 상담) ===================== -->
   <nav class="mquick" aria-label="빠른 메뉴">
     <a class="mquick__kakao" href="#quote">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 2a1 1 0 00-1 1H6a2 2 0 00-2 2v15a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2h-2a1 1 0 00-1-1H9zm0 2h6v2H9V4zM7 10h10v2H7v-2zm0 4h7v2H7v-2z"/></svg>
@@ -258,6 +262,6 @@
 
   <script src="db.js"></script>
   <script src="data.js"></script>
-  <script src="script.js?v=20250703e"></script>
+  <script src="script.js?v=20250703f"></script>
 </body>
 </html>
