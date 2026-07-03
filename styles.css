@@ -665,6 +665,17 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .mquick__cta{background:var(--orange);color:#fff}
   .mquick__kakao svg{width:21px;height:21px}
   .mquick__cta svg{width:19px;height:19px}
+  /* 퀵메뉴 위 우측 TOP(맨 위로) 버튼 */
+  .gotop{
+    display:flex;position:fixed;right:16px;bottom:calc(74px + env(safe-area-inset-bottom));z-index:94;
+    width:44px;height:44px;border-radius:50%;flex-direction:column;align-items:center;justify-content:center;gap:0;
+    background:#fff;color:var(--navy);border:1px solid var(--gray-200);box-shadow:0 6px 18px rgba(26,35,50,.2);
+    font-size:9px;font-weight:800;letter-spacing:.03em;
+    opacity:0;transform:translateY(10px);pointer-events:none;
+    transition:opacity .3s var(--ease),transform .3s var(--ease);
+  }
+  .gotop.is-visible{opacity:1;transform:none;pointer-events:auto}
+  .gotop svg{width:16px;height:16px}
 }
 @media (max-width:560px){
   .why-grid,.steps,.reviews{grid-template-columns:1fr}
