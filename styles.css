@@ -256,7 +256,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
   /* 우측 견적문의 폼 */
   .quoteform{display:flex;flex-direction:column;height:100%;background:#fff;border:1px solid var(--gray-200);border-radius:12px;box-shadow:0 5px 14px rgba(26,35,50,.05),0 14px 30px rgba(26,35,50,.07);padding:28px 26px}
-  .quoteform__title{text-align:center;font-size:19px;font-weight:800;color:var(--navy);letter-spacing:-.02em;margin-bottom:20px}
+  .quoteform__title{text-align:center;font-size:23px;font-weight:800;color:var(--navy);letter-spacing:-.02em;margin-bottom:20px}
   .quoteform__body{display:flex;flex-direction:column;gap:12px;flex:1}
   .qf__row{display:flex;align-items:center;gap:12px}
   .qf__label{flex:0 0 48px;font-size:13.5px;font-weight:700;color:var(--gray-600)}
