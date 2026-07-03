@@ -217,6 +217,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ticker{display:none}                     /* 상단 티커: 모바일 숨김 */
 .gotop{display:none}                      /* TOP 버튼: 모바일 숨김(모바일은 하단 퀵메뉴 사용) */
 .pcconsult,.pckakao{display:none}          /* 카톡·상담문의 플로팅: PC 전용 */
+@keyframes pcfloaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 .cars__tools{display:inline-flex;align-items:center;gap:12px}
 .viewtoggle{display:none}                 /* 보기 방식 토글: 모바일 숨김 */
 .quoteform{display:none}                   /* 견적문의 폼: PC 히어로 전용(모바일 숨김) */
@@ -393,7 +394,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .fab{display:none!important}
 
   /* 하단 우측 카톡·상담문의 플로팅 (크게 + 위아래 플로팅) */
-  @keyframes pcfloaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
   .pckakao,.pcconsult{
     display:inline-flex;position:fixed;right:28px;z-index:91;
     align-items:center;gap:9px;padding:18px 30px;border-radius:999px;
