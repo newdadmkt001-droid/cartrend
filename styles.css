@@ -643,6 +643,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .pslide{border-radius:0}
   /* 배너 하단 검정 그라데이션(자연스럽게) + 좌측 텍스트 그라데이션 */
   .pslide__shade{background:linear-gradient(90deg,rgba(10,14,22,.72),rgba(10,14,22,.3) 55%,transparent 80%),linear-gradient(0deg,rgba(5,8,14,.9) 0%,rgba(5,8,14,.35) 20%,transparent 44%)}
+  /* 배너 글자 상단 정렬(위로) */
+  .pslide__body{justify-content:flex-start;padding-top:26px}
   /* 페이저를 슬라이더(배너) 안 하단에 오버레이 (배경·동그라미 없이 화살표만) */
   .promo__pager{position:absolute;left:50%;bottom:40px;transform:translateX(-50%);margin:0;gap:14px;padding:0;background:none;box-shadow:none;z-index:4}
   .promo__nav{width:auto;height:auto;border:none;background:none;color:rgba(255,255,255,.8);border-radius:0;font-size:20px;padding:0 2px;box-shadow:none}
