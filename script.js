@@ -66,7 +66,6 @@
           '<img class="pslide__bg" src="' + s.img + '" alt="">' +
           '<div class="pslide__shade"></div>' +
           '<div class="pslide__body">' +
-            '<span class="pslide__kicker">' + s.kicker + "</span>" +
             '<div class="pslide__title">' + s.title + "</div>" +
             (s.sub ? '<div class="pslide__sub">' + s.sub + "</div>" : "") +
             '<span class="pslide__cta">상세 견적 보기 <b>›</b></span>' +
