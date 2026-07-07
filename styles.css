@@ -428,7 +428,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
   /* 하단 우측 TOP(맨 위로) — 카톡 위에 여백 두고 스택, 스크롤 시 표시 */
   .gotop{
-    display:flex;position:fixed;right:28px;bottom:182px;z-index:90;
+    display:flex;position:fixed;right:28px;bottom:200px;z-index:90;
     width:56px;height:56px;border-radius:50%;flex-direction:column;gap:1px;
     align-items:center;justify-content:center;background:#fff;color:var(--navy);
     border:1px solid var(--gray-200);box-shadow:0 10px 26px rgba(26,35,50,.16);
