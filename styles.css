@@ -849,7 +849,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .trimcard:hover{border-color:var(--orange-light)}
 .trimcard.is-active{border-color:var(--orange);box-shadow:0 0 0 3px rgba(57,110,255,.14)}
 .trimcard__seg{font-size:13px;font-weight:600;color:var(--gray-400)}
-.trimcard__name{font-size:18px;font-weight:800;color:var(--navy)}
+.trimcard__name{font-size:18px;font-weight:800;color:var(--navy);padding-right:30px}   /* 우상단 체크(✓)와 글자 겹침 방지 */
 .trimcard__price{font-size:15px;font-weight:700;color:var(--gray-600);margin-top:4px}
 .trimcard.is-active .trimcard__price{color:var(--orange)}
 .trimcard__check{position:absolute;top:14px;right:14px;width:22px;height:22px;border-radius:50%;background:var(--orange);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
