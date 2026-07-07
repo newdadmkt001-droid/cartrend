@@ -382,7 +382,7 @@
   // 모바일: 견적문의 버튼 클릭 시 팝업(모달)로 표시
   function qModalClose() { document.body.classList.remove("qmodal-open"); }
   function qModalOpen(e) { if (e) e.preventDefault(); document.body.classList.add("qmodal-open"); }
-  document.querySelectorAll(".mquick__kakao").forEach(function (b) { b.addEventListener("click", qModalOpen); });
+  document.querySelectorAll(".mquick__kakao, .pckakao").forEach(function (b) { b.addEventListener("click", qModalOpen); });
   var qDim = document.getElementById("qDim"); if (qDim) qDim.addEventListener("click", qModalClose);
   var qClose = document.getElementById("qClose"); if (qClose) qClose.addEventListener("click", qModalClose);
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") qModalClose(); });
