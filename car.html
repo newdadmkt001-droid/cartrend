@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="stylesheet" as="style" crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-  <link rel="stylesheet" href="styles.css?v=20260707c" id="mainCss" />
+  <link rel="stylesheet" href="styles.css?v=20260707d" id="mainCss" />
   <script>
     /* 관리자 미리보기(iframe)에서 항상 최신 CSS를 불러오도록 캐시 무력화 */
     (function () {
@@ -21,16 +21,16 @@
 </head>
 <body>
 
-  <header class="header is-scrolled" id="header">
+  <header class="header" id="header">
     <div class="container header__inner">
       <a href="index.html" class="logo" aria-label="Cartrend 홈">
         <span class="logo__tag">장기렌트 전문</span>
         <span class="logo__text"><b>Car</b>trend</span>
       </a>
-      <div class="header__actions">
-        <a href="index.html" class="btn btn--ghost btn--sm">← 목록</a>
-        <a href="tel:15880000" class="btn btn--primary btn--sm">상담신청</a>
-      </div>
+
+      <nav class="nav" id="nav">
+        <a href="index.html#cars">차량보기</a>
+      </nav>
     </div>
   </header>
 
@@ -113,7 +113,7 @@
           <div class="qpanel__termhead">계약 기간 선택</div>
           <div class="termlist" id="termList"></div>
           <div class="qpanel__cta">
-            <a href="#" class="btn btn--line">💬 카톡 상담</a>
+            <a href="#quote" class="btn btn--line" data-quote>견적문의</a>
             <a href="tel:15880000" class="btn btn--primary">즉시 출고 문의</a>
           </div>
         </div>
@@ -131,11 +131,41 @@
         <span class="paybar__sub" id="paySub"></span>
       </div>
       <div class="paybar__btns">
-        <a href="#" class="btn btn--line">💬 카톡 상담</a>
+        <a href="#quote" class="btn btn--line" data-quote>견적문의</a>
         <a href="tel:15880000" class="btn btn--primary">즉시 출고 문의</a>
       </div>
     </div>
   </div>
+
+  <!-- ===================== 견적문의 팝업 (PC 우측 플로팅 + 하단 CTA 공용) ===================== -->
+  <div class="qmodal-dim" id="qDim" aria-hidden="true"></div>
+  <aside class="quoteform" id="quote">
+    <button class="qf__close" id="qClose" type="button" aria-label="닫기">✕</button>
+    <h3 class="quoteform__title">최저가 견적문의</h3>
+    <form class="quoteform__body" id="quoteForm">
+      <label class="qf__row"><span class="qf__label">이름 <b>*</b></span><input type="text" name="name" placeholder="이름을 입력하세요" required></label>
+      <label class="qf__row"><span class="qf__label">연락처 <b>*</b></span><input type="tel" name="phone" placeholder="휴대폰번호(-제외)" required></label>
+      <label class="qf__row"><span class="qf__label">차종</span><input type="text" name="car" placeholder="차종을 입력하세요"></label>
+      <label class="qf__agree"><input type="checkbox" required><span><b>(필수)</b> 개인정보 수집·이용·제공 동의 <a href="#" onclick="return false">[보기]</a></span></label>
+      <label class="qf__agree"><input type="checkbox" required><span><b>(필수)</b> 개인정보 제3자 제공 동의 <a href="#" onclick="return false">[보기]</a></span></label>
+      <button type="submit" class="qf__submit">간편 상담 신청</button>
+      <a href="tel:15880000" class="qf__call"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.5 21 3 13.5 3 4c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.2 2.2z"/></svg> 전화문의 1588-0000</a>
+    </form>
+  </aside>
+
+  <!-- ===================== 우측 하단 퀵메뉴 (PC 전용, 메인과 동일) ===================== -->
+  <a href="#quote" class="pckakao" aria-label="견적문의" data-quote>
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 2a1 1 0 00-1 1H6a2 2 0 00-2 2v15a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2h-2a1 1 0 00-1-1H9zm0 2h6v2H9V4zM7 10h10v2H7v-2zm0 4h7v2H7v-2z"/></svg>
+    <span>견적문의</span>
+  </a>
+  <a href="tel:15880000" class="pcconsult" aria-label="전화 상담">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.5 21 3 13.5 3 4c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.2 2.2z"/></svg>
+    <span>전화 상담</span>
+  </a>
+  <button class="gotop" id="goTop" aria-label="맨 위로">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V6M6 12l6-6 6 6"/></svg>
+    <span>TOP</span>
+  </button>
 
   <!-- 옵션 선택 바텀시트 -->
   <div class="sheet" id="sheet" aria-hidden="true">
@@ -158,6 +188,54 @@
       ["lib/quote-engine.js", "db.js", "data.js", "car.js"].forEach(function (s) {
         document.write('<script src="' + s + q + '"><\/script>');
       });
+    })();
+  </script>
+
+  <!-- 견적문의 팝업 + 우측하단 퀵메뉴 + TOP/헤더 스크롤 (메인과 동일 동작) -->
+  <script>
+    (function () {
+      var body = document.body;
+      var quoteForm = document.getElementById("quoteForm");
+      function qOpen(e) {
+        if (e) e.preventDefault();
+        // 현재 보고 있는 차량명을 '차종'에 자동 입력(비어 있을 때만)
+        var carInput = quoteForm && quoteForm.querySelector('[name="car"]');
+        var title = document.getElementById("dTitle");
+        if (carInput && !carInput.value && title) carInput.value = (title.textContent || "").trim();
+        body.classList.add("qmodal-open");
+      }
+      function qClose() { body.classList.remove("qmodal-open"); }
+      document.querySelectorAll(".pckakao, [data-quote]").forEach(function (b) { b.addEventListener("click", qOpen); });
+      var qDim = document.getElementById("qDim"); if (qDim) qDim.addEventListener("click", qClose);
+      var qCloseBtn = document.getElementById("qClose"); if (qCloseBtn) qCloseBtn.addEventListener("click", qClose);
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") qClose(); });
+
+      // 구글 시트 연동 (메인과 동일 엔드포인트)
+      var SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbxy8lK_TfOCYlsfNdTbVCrCBysByoHLaorAVZvNiExCwuwQaMalDjRAU6rgDpxpId4p/exec";
+      function qfVal(n) { var el = quoteForm.querySelector('[name="' + n + '"]'); return el ? el.value.trim() : ""; }
+      if (quoteForm) quoteForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var btn = quoteForm.querySelector(".qf__submit");
+        var payload = { name: qfVal("name"), phone: qfVal("phone"), car: qfVal("car"), page: location.href, ts: new Date().toISOString() };
+        if (SHEET_ENDPOINT.indexOf("http") !== 0) { alert("상담 신청이 접수되었습니다. 빠르게 연락드리겠습니다."); quoteForm.reset(); qClose(); return; }
+        if (btn) { btn.disabled = true; btn.dataset.label = btn.textContent; btn.textContent = "전송 중…"; }
+        fetch(SHEET_ENDPOINT, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) })
+          .then(function () { alert("상담 신청이 접수되었습니다. 빠르게 연락드리겠습니다."); quoteForm.reset(); qClose(); })
+          .catch(function () { alert("전송 중 오류가 발생했습니다. 잠시 후 다시 시도하거나 전화로 문의해 주세요."); })
+          .finally(function () { if (btn) { btn.disabled = false; btn.textContent = btn.dataset.label || "간편 상담 신청"; } });
+      });
+
+      // 헤더 스크롤 상태 + TOP 버튼 (메인과 동일)
+      var header = document.getElementById("header");
+      var goTop = document.getElementById("goTop");
+      if (goTop) goTop.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); });
+      function onScroll() {
+        var y = window.scrollY;
+        if (header) header.classList.toggle("is-scrolled", y > 8);
+        if (goTop) goTop.classList.toggle("is-visible", y > 300);
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
     })();
   </script>
 </body>

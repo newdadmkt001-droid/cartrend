@@ -274,15 +274,15 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .promo__dot:hover{background:rgba(255,255,255,.85)}
   .promo__dot.is-on{background:#fff;width:24px;border-radius:6px}
 
-  /* 우측 견적문의 폼 (PC: 히어로 우측) */
-  .quoteform{display:flex;height:100%;border:1px solid var(--gray-200);box-shadow:0 5px 14px rgba(26,35,50,.05),0 14px 30px rgba(26,35,50,.07);padding:28px 26px}
+  /* 우측 견적문의 폼 (PC: 홈 히어로 우측에서만 상시 노출) */
+  body.home .quoteform{display:flex;height:100%;border:1px solid var(--gray-200);box-shadow:0 5px 14px rgba(26,35,50,.05),0 14px 30px rgba(26,35,50,.07);padding:28px 26px}
 
-  /* 견적문의 팝업(모달) — PC: 우측 플로팅 '견적문의' 클릭 시 중앙 오버레이 */
+  /* 견적문의 팝업(모달) — PC: 우측 플로팅 '견적문의' 클릭 시 중앙 오버레이 (홈·상세 공통) */
   .qmodal-dim{display:none;position:fixed;inset:0;background:rgba(10,14,22,.55);z-index:190}
   body.qmodal-open{overflow:hidden}
   body.qmodal-open .qmodal-dim{display:block}
   body.qmodal-open .quoteform{
-    position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+    display:flex;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
     width:420px;max-width:calc(100vw - 48px);height:auto;max-height:88vh;overflow-y:auto;
     z-index:200;border:none;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.4);
     padding:34px 30px 28px;margin:0;
@@ -731,6 +731,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   }
   .gotop.is-visible{opacity:1;transform:none;pointer-events:auto}
   .gotop svg{width:19px;height:19px}
+  /* 상세페이지 모바일은 하단 paybar가 있어 TOP 버튼 숨김(홈만 노출) */
+  body:not(.home) .gotop{display:none!important}
 }
 @media (max-width:560px){
   .why-grid,.steps,.reviews{grid-template-columns:1fr}
