@@ -386,11 +386,38 @@
   var qDim = document.getElementById("qDim"); if (qDim) qDim.addEventListener("click", qModalClose);
   var qClose = document.getElementById("qClose"); if (qClose) qClose.addEventListener("click", qModalClose);
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") qModalClose(); });
+  /* ▼▼▼ 구글 시트 연결: 아래 URL을 본인 Apps Script 웹앱 배포 URL로 교체 ▼▼▼ */
+  var SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbxy8lK_TfOCYlsfNdTbVCrCBysByoHLaorAVZvNiExCwuwQaMalDjRAU6rgDpxpId4p/exec";
+  function qfVal(n) { var el = quoteForm.querySelector('[name="' + n + '"]'); return el ? el.value.trim() : ""; }
   if (quoteForm) quoteForm.addEventListener("submit", function (e) {
     e.preventDefault();
-    alert("상담 신청이 접수되었습니다. 빠르게 연락드리겠습니다.");
-    quoteForm.reset();
-    qModalClose();
+    var btn = quoteForm.querySelector(".qf__submit");
+    var payload = {
+      name: qfVal("name"),
+      phone: qfVal("phone"),
+      car: qfVal("car"),
+      page: location.href,
+      ts: new Date().toISOString()
+    };
+    // 엔드포인트 미설정 시 기존 동작(접수 확인만)
+    if (SHEET_ENDPOINT.indexOf("http") !== 0) {
+      alert("상담 신청이 접수되었습니다. 빠르게 연락드리겠습니다.");
+      quoteForm.reset(); qModalClose(); return;
+    }
+    if (btn) { btn.disabled = true; btn.dataset.label = btn.textContent; btn.textContent = "전송 중…"; }
+    fetch(SHEET_ENDPOINT, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    }).then(function () {
+      alert("상담 신청이 접수되었습니다. 빠르게 연락드리겠습니다.");
+      quoteForm.reset(); qModalClose();
+    }).catch(function () {
+      alert("전송 중 오류가 발생했습니다. 잠시 후 다시 시도하거나 전화로 문의해 주세요.");
+    }).finally(function () {
+      if (btn) { btn.disabled = false; btn.textContent = btn.dataset.label || "간편 상담 신청"; }
+    });
   });
 
   /* 차량 더 보기 */
