@@ -247,8 +247,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .carssearch{display:none}                  /* 목록 상단 검색: PC 전용(모바일은 최상단 검색 사용) */
 
 @media (min-width:1025px){
-  /* 홈 전체 가로 폭 확대 (PC 전용) */
-  body.home{--maxw:1440px}
+  /* 홈·상세 전체 가로 폭 확대 (PC 전용) — 헤더 폭 통일 */
+  body.home,body.detailpg{--maxw:1440px}
 
   /* ---------- 상단 혜택 티커 ---------- */
   .ticker{display:block;overflow:hidden;background:var(--navy);color:#fff;height:40px;line-height:40px;white-space:nowrap}
