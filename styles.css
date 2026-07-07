@@ -296,7 +296,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
   /* ---------- 2단 레이아웃 ---------- */
   .carspage{display:grid;grid-template-columns:248px minmax(0,1fr);gap:34px;align-items:start}
-  .carsaside{display:flex;flex-direction:column;gap:16px}   /* sticky 해제: 길어도 스크롤하면 전부 보이게 */
+  .carsaside{
+    display:flex;flex-direction:column;gap:16px;
+    position:sticky;top:84px;align-self:start;                 /* 스크롤 시 헤더(68px) 아래 고정 */
+    max-height:calc(100vh - 100px);overflow-y:auto;            /* 내용이 화면보다 길면 이 영역만 스크롤 */
+    scrollbar-width:none;                                       /* 스크롤바 숨김(Firefox) */
+  }
+  .carsaside::-webkit-scrollbar{display:none}                   /* 스크롤바 숨김(Chrome/Safari) */
   .carsmain{display:block;min-width:0}
 
   /* 사이드 상단 프로모 카드 */
