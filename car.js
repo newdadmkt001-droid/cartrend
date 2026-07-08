@@ -522,44 +522,64 @@
     var liab = pick(LIAB_OPTS, "liab", D.liability || "1억원");
     var ded = pick(DED_OPTS, "ded", D.deductible || "50만원");
 
+    var isEV = effFuel() === "전기";
+
     var s1 = '<div class="estsec"><div class="estsec__t"><i></i>1. 대여차량</div><table class="esttbl">' +
       '<tr><th>제조사</th><td>' + (car.brand || "-") + '</td></tr>' +
       '<tr><th>차량모델</th><td><b>' + model + '</b> · ' + ((seats || 5)) + '인승</td></tr>' +
-      '<tr><th>추가 옵션</th><td>' + (opts.length ? opts.join(", ") : "없음") + '</td></tr>' +
-      '<tr><th>차량 가격</th><td class="num">' + won(base) + '원</td></tr>' +
-      (opt ? '<tr><th>추가옵션 합계</th><td class="num">+ ' + won(opt) + '원</td></tr>' : '') +
+      '<tr><th>옵션</th><td class="num">' + (opts.length ? opts.join(", ") + '  ·  + ' + won(opt) + '원' : '없음  ·  0원') + '</td></tr>' +
+      '<tr><th>색상</th><td class="num">기본  ·  0원</td></tr>' +
+      '<tr><th>기타</th><td class="num">없음  ·  0원</td></tr>' +
+      '<tr><th>차량 가격</th><td class="num">' + won(base + opt) + '원</td></tr>' +
       '<tr><th>개별소비세 감면</th><td class="num">- ' + won(taxCut) + '원</td></tr>' +
-      '<tr><th>공급가액</th><td class="num"><b class="est-hl">' + won(supply) + '원</b></td></tr>' +
+      '<tr><th>차량가격 (공급가)</th><td class="num"><b class="est-hl">' + won(supply) + '원</b></td></tr>' +
       '<tr><th>차량 인도지역</th><td>' + region + '</td></tr>' +
-      '</table></div>';
+      '</table><div class="estnote" style="margin-top:6px">※ ' + effFuel() + '</div></div>';
 
     var s2 = '<div class="estsec"><div class="estsec__t"><i></i>2. 보험 보상범위</div><div class="estgrid">' +
       '<div class="estgrid__c"><span>대인배상</span><b>무한 (대인 I·II)</b></div>' +
       '<div class="estgrid__c"><span>대물배상</span><b>' + liab + '</b></div>' +
       '<div class="estgrid__c"><span>자기신체사고</span><b>1억원</b></div>' +
       '<div class="estgrid__c"><span>자차 면책금</span><b>' + ded + '</b></div>' +
-      '<div class="estgrid__c"><span>무보험차상해</span><b>2억원</b></div>' +
+      '<div class="estgrid__c"><span>무보험차상해</span><b>1인당 최고 2억원</b></div>' +
       '<div class="estgrid__c"><span>운전자 연령</span><b>' + age + '</b></div>' +
       '<div class="estgrid__c"><span>긴급출동</span><b>가입</b></div>' +
       '<div class="estgrid__c"><span>대차 서비스</span><b>사고 시 제공</b></div>' +
       '</div></div>';
 
-    var s3 = '<div class="estsec"><div class="estsec__t"><i></i>3. 대여조건 및 대여요금 <span style="font-size:11px;font-weight:600;color:#7b8694">· 부가세 포함</span></div><table class="esttbl">' +
+    var s3 = '<div class="estsec"><div class="estsec__t"><i></i>3. 대여조건 및 대여요금 <span style="font-size:11px;font-weight:600;color:#7b8694">· 부가세 · 보험료 포함</span></div><table class="esttbl">' +
       '<tr><th>대여 상품명</th><td>신차 장기렌트 (정비 서비스 포함)</td></tr>' +
       '<tr><th>대여 기간</th><td>' + n + '개월</td></tr>' +
-      '<tr><th>연간 약정거리</th><td>' + mileage + ' 이하</td></tr>' +
+      '<tr><th>연간 약정운행거리</th><td>' + mileage + ' 이하</td></tr>' +
       '<tr><th>보증금</th><td class="num">' + won(dep) + '원 (' + depLabelNow() + ')</td></tr>' +
       '<tr><th>선납금</th><td class="num">' + won(pre) + '원 (' + preLabelNow() + ')</td></tr>' +
       '<tr><th>월 대여료</th><td class="num"><b class="est-hl" style="font-size:15px">' + won(monthly) + '원</b></td></tr>' +
-      '<tr><th>인수(매입) 예상가</th><td class="num">' + won(buyout) + '원 (' + buyPct + '%)</td></tr>' +
-      '</table></div>';
+      '<tr><th>매입옵션 가격</th><td class="num">' + won(buyout) + '원 (' + buyPct + '%)</td></tr>' +
+      '</table><div class="estnote" style="margin-top:9px">' +
+      '· 전면 / 측후면 썬팅 포함, 2채널 블랙박스 포함<br>' +
+      '· 약정운행거리를 줄이면 대여요금이 인하되고, 늘리면 인상됩니다.<br>' +
+      '· 초기납입금(보증금 · 선납금)은 고객 신용도에 따라 심사 과정에서 조정될 수 있습니다.<br>' +
+      '· 보증금은 계약기간 만료 후 환불해 드립니다. (보증금 증액 시 월 대여료가 인하됩니다.)<br>' +
+      '· 선납금은 매월 일정 금액씩 소멸되는 돈입니다.<br>' +
+      '· 계약기간 만료 시 대여 차량을 위의 매입옵션 가격에 매입하실 수 있습니다.' +
+      '</div></div>';
 
-    var s4 = '<div class="estsec"><div class="estsec__t"><i></i>안내 사항</div><div class="estnote">' +
-      '· 보험료 · 자동차세 · 정비 서비스가 월 렌트료에 모두 포함됩니다.<br>' +
-      '· 초기비용 0원으로 신차 즉시 출고가 가능합니다.<br>' +
-      '· 약정운행거리 · 보증금 · 선납금을 조정하면 월 렌트료가 변동됩니다. (보증금 증액 시 월 렌트료 인하)<br>' +
-      '· 보증금은 계약기간 만료 후 환불해 드립니다.<br>' +
-      '· 계약 만료 시 반납 · 인수(매입) · 재계약 중 자유롭게 선택할 수 있습니다.<br>' +
+    var s4 = '<div class="estsec"><div class="estsec__t"><i></i>4. 중도해지 위약금 및 초과운행대여료</div><table class="esttbl">' +
+      '<tr><th>중도해지 위약금</th><td>15.0% · 잔여기간 대여료 기준</td></tr>' +
+      '<tr><th>초과운행 대여료</th><td>초과 1km당 115원 (부가세 별도)</td></tr>' +
+      '</table><div class="estnote" style="margin-top:6px">· 약정 운행거리 초과분은 대여 종료 시 부과되며, 매입옵션 행사 시 면제됩니다.</div></div>';
+
+    var s5 = '<div class="estsec"><div class="estsec__t"><i></i>5. 차량관리 서비스 제공 범위</div><div class="estnote">' +
+      '· <b>공통</b> — 교통사고 발생 시 사고처리 업무 대행, 사고대차 서비스 제공' + (isEV ? '' : ' (일반 내연기관 차량으로 제공)') + '<br>' +
+      '· <b>정비 서비스</b> — 각종 내구성 부품 / 소모품 점검 · 교환 · 수리 (제조사 차량 취급설명서 기준)<br>' +
+      '· <b>정비 대차</b> — 4시간 이상 정비공장 입고 시 대차 제공<br>' +
+      '· 등록 · 자동차세 납부 · 정기검사 등을 Cartrend에서 처리 (고객 비용 부담 없음)' +
+      '</div></div>';
+
+    var s6 = '<div class="estsec"><div class="estsec__t"><i></i>6. 기타 대여 조건</div><div class="estnote">' +
+      '· 제조사의 상품성 개선 · 연식 변경 또는 정부 정책(안전사양 의무장착, 배기가스 저감, 세율 조정 등)으로 차량가격이 변동될 경우 상기 견적금액은 변동될 수 있습니다.<br>' +
+      '· 대여차량 유지관리 내역을 정보 제공합니다. (FMS · Fleet Management System)<br>' +
+      '· 대여기간 만료 시 반납 · 연장이용(할인요금 적용) · 매입옵션 행사 중 선택할 수 있습니다.<br>' +
       '· 본 견적은 참고용이며 최종 금액은 신용 심사 · 차량 재고 · 제조사 정책에 따라 변동될 수 있습니다.' +
       '</div></div>';
 
@@ -569,7 +589,7 @@
       '</div>';
     var foot = '<div class="estdoc__foot"><span><b>Cartrend</b> 신차 장기렌트</span><span>대표문의 <b>1588-0000</b> · 전국 무료 탁송</span></div>';
 
-    return head + s1 + s2 + s3 + s4 + foot;
+    return head + s1 + s2 + s3 + s4 + s5 + s6 + foot;
   }
 
   function openEstimate() {
