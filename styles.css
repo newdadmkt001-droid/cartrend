@@ -1163,7 +1163,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .esttbl th,.esttbl td{border:1px solid #e3e7ee;padding:8px 11px;text-align:left;vertical-align:middle}
 .esttbl th{background:#f5f7fa;font-weight:700;color:#48505e;width:126px;white-space:nowrap}
 .esttbl td{color:#1a2332;font-weight:500}
-.esttbl td.num{text-align:right;font-variant-numeric:tabular-nums}
+.esttbl td.num{text-align:left;font-variant-numeric:tabular-nums}
 .esttbl td b{font-weight:800}
 .est-hl{color:var(--orange);font-weight:800}
 .estgrid{display:grid;grid-template-columns:1fr 1fr;border:1px solid #e3e7ee;border-radius:8px;overflow:hidden}
