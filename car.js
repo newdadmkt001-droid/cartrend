@@ -357,7 +357,9 @@
   }
   // 관리자에서 지정한 기본 보증금/선납금 적용
   function initDefaults() {
-    var di = DEPOSIT_OPTS.indexOf(D.deposit); state.sel.deposit = di >= 0 ? di : DEPOSIT_OPTS.indexOf("15%");   // 관리자 지정 보증금(없으면 15%) — 고객 변경 가능
+    var depDef = (typeof defaultDepForBrand === "function") ? defaultDepForBrand(car && car.brand) : "15%";   // 국산 15% · 외제 20%
+    var di = DEPOSIT_OPTS.indexOf(D.deposit); if (di < 0) di = DEPOSIT_OPTS.indexOf(depDef);
+    state.sel.deposit = di >= 0 ? di : 0;   // 관리자 지정 보증금(없으면 제조사별 기본) — 고객 변경 가능
     var pi = PREPAY_OPTS.indexOf(D.prepay); if (pi >= 0) state.sel.prepay = pi;
     var mi = MILEAGE_OPTS.indexOf(D.mileage); if (mi >= 0) state.sel.mileage = mi; else if (D.mileage) state.custom.mileage = D.mileage;
     var ai = AGE_OPTS.indexOf(D.driverAge); if (ai >= 0) state.sel.age = ai;
@@ -483,4 +485,105 @@
   }
   dragScroll($("#trimList"));
   dragScroll($("#variantList"));
+
+  /* ---------- 견적서 ---------- */
+  function selectedOptionList() {
+    var out = [];
+    optGroups().forEach(function (g, gi) {
+      addSel(gi).forEach(function (i) {
+        var it = g.items[i];
+        if (it && !it.hidden) out.push(it.name + (it.price ? " (+" + won(it.price) + "원)" : ""));
+      });
+    });
+    return out;
+  }
+  function depLabelNow() { return state.custom.deposit != null ? "직접입력" : (DEPOSIT_OPTS[state.sel.deposit != null ? state.sel.deposit : 0] || "15%"); }
+  function preLabelNow() { return state.custom.prepay != null ? "직접입력" : (PREPAY_OPTS[state.sel.prepay != null ? state.sel.prepay : 0] || "0%"); }
+  function pick(arr, key, fb) { return state.custom[key] != null ? state.custom[key] : (arr[state.sel[key] != null ? state.sel[key] : 0] || fb); }
+  function dateStr(off) { var d = new Date(); if (off) d.setDate(d.getDate() + off); return d.getFullYear() + "년 " + (d.getMonth() + 1) + "월 " + d.getDate() + "일"; }
+  function pad2(n) { return (n < 10 ? "0" : "") + n; }
+  function estNo() { var d = new Date(); return "CT-" + d.getFullYear() + pad2(d.getMonth() + 1) + pad2(d.getDate()) + "-" + pad2(d.getHours()) + pad2(d.getMinutes()); }
+
+  function buildEstimate() {
+    var base = trimWon(), opt = addOptPrice();
+    var taxCut = QE.calcTaxReduction(base);
+    var supply = Math.max(0, base + opt - taxCut);          // 개소세 감면 반영 공급가
+    var n = currentMonths(), monthly = currentMonthly();
+    var dep = depositAmt(), pre = prepayAmt();
+    var db = QE.calcDepositBase(base, curTrim().makerDC || 0);
+    var buyout = Math.round(db * QE.residualRate(n, POLICY) / 1000) * 1000;   // 인수(매입) 예상가
+    var buyPct = base ? Math.round(buyout / base * 1000) / 10 : 0;
+    var seats = (curTrim().seats != null && curTrim().seats !== "") ? curTrim().seats : D.seats;
+    var opts = selectedOptionList();
+    var model = car.name + (effFuel() ? " " + effFuel() : "") + (effSub() ? " " + effSub() : "") + (curTrim().name ? " " + curTrim().name : "");
+    var region = pick(REGION_OPTS, "region", D.region || "서울");
+    var mileage = state.custom.mileage != null ? state.custom.mileage : (MILEAGE_OPTS[state.sel.mileage != null ? state.sel.mileage : 0] || D.mileage || "10,000km");
+    var age = pick(AGE_OPTS, "age", D.driverAge || "만 26세 이상");
+    var liab = pick(LIAB_OPTS, "liab", D.liability || "1억원");
+    var ded = pick(DED_OPTS, "ded", D.deductible || "50만원");
+
+    var s1 = '<div class="estsec"><div class="estsec__t"><i></i>1. 대여차량</div><table class="esttbl">' +
+      '<tr><th>제조사</th><td>' + (car.brand || "-") + '</td></tr>' +
+      '<tr><th>차량모델</th><td><b>' + model + '</b> · ' + ((seats || 5)) + '인승</td></tr>' +
+      '<tr><th>추가 옵션</th><td>' + (opts.length ? opts.join(", ") : "없음") + '</td></tr>' +
+      '<tr><th>차량 가격</th><td class="num">' + won(base) + '원</td></tr>' +
+      (opt ? '<tr><th>추가옵션 합계</th><td class="num">+ ' + won(opt) + '원</td></tr>' : '') +
+      '<tr><th>개별소비세 감면</th><td class="num">- ' + won(taxCut) + '원</td></tr>' +
+      '<tr><th>공급가액</th><td class="num"><b class="est-hl">' + won(supply) + '원</b></td></tr>' +
+      '<tr><th>차량 인도지역</th><td>' + region + '</td></tr>' +
+      '</table></div>';
+
+    var s2 = '<div class="estsec"><div class="estsec__t"><i></i>2. 보험 보상범위</div><div class="estgrid">' +
+      '<div class="estgrid__c"><span>대인배상</span><b>무한 (대인 I·II)</b></div>' +
+      '<div class="estgrid__c"><span>대물배상</span><b>' + liab + '</b></div>' +
+      '<div class="estgrid__c"><span>자기신체사고</span><b>1억원</b></div>' +
+      '<div class="estgrid__c"><span>자차 면책금</span><b>' + ded + '</b></div>' +
+      '<div class="estgrid__c"><span>무보험차상해</span><b>2억원</b></div>' +
+      '<div class="estgrid__c"><span>운전자 연령</span><b>' + age + '</b></div>' +
+      '<div class="estgrid__c"><span>긴급출동</span><b>가입</b></div>' +
+      '<div class="estgrid__c"><span>대차 서비스</span><b>사고 시 제공</b></div>' +
+      '</div></div>';
+
+    var s3 = '<div class="estsec"><div class="estsec__t"><i></i>3. 대여조건 및 대여요금 <span style="font-size:11px;font-weight:600;color:#7b8694">· 부가세 포함</span></div><table class="esttbl">' +
+      '<tr><th>대여 상품명</th><td>신차 장기렌트 (정비 서비스 포함)</td></tr>' +
+      '<tr><th>대여 기간</th><td>' + n + '개월</td></tr>' +
+      '<tr><th>연간 약정거리</th><td>' + mileage + ' 이하</td></tr>' +
+      '<tr><th>보증금</th><td class="num">' + won(dep) + '원 (' + depLabelNow() + ')</td></tr>' +
+      '<tr><th>선납금</th><td class="num">' + won(pre) + '원 (' + preLabelNow() + ')</td></tr>' +
+      '<tr><th>월 대여료</th><td class="num"><b class="est-hl" style="font-size:15px">' + won(monthly) + '원</b></td></tr>' +
+      '<tr><th>인수(매입) 예상가</th><td class="num">' + won(buyout) + '원 (' + buyPct + '%)</td></tr>' +
+      '</table></div>';
+
+    var s4 = '<div class="estsec"><div class="estsec__t"><i></i>안내 사항</div><div class="estnote">' +
+      '· 보험료 · 자동차세 · 정비 서비스가 월 렌트료에 모두 포함됩니다.<br>' +
+      '· 초기비용 0원으로 신차 즉시 출고가 가능합니다.<br>' +
+      '· 약정운행거리 · 보증금 · 선납금을 조정하면 월 렌트료가 변동됩니다. (보증금 증액 시 월 렌트료 인하)<br>' +
+      '· 보증금은 계약기간 만료 후 환불해 드립니다.<br>' +
+      '· 계약 만료 시 반납 · 인수(매입) · 재계약 중 자유롭게 선택할 수 있습니다.<br>' +
+      '· 본 견적은 참고용이며 최종 금액은 신용 심사 · 차량 재고 · 제조사 정책에 따라 변동될 수 있습니다.' +
+      '</div></div>';
+
+    var head = '<div class="estdoc__head">' +
+      '<div class="estdoc__brand"><b>Car</b>trend 신차 장기렌트<span>장기렌트 견적서 · Estimate</span></div>' +
+      '<div class="estdoc__meta">작성일 : ' + dateStr(0) + '<br>유효기간 : ' + dateStr(9) + '<br>견적번호 : ' + estNo() + '</div>' +
+      '</div>';
+    var foot = '<div class="estdoc__foot"><span><b>Cartrend</b> 신차 장기렌트</span><span>대표문의 <b>1588-0000</b> · 전국 무료 탁송</span></div>';
+
+    return head + s1 + s2 + s3 + s4 + foot;
+  }
+
+  function openEstimate() {
+    var box = $("#estimateBody"); if (box) box.innerHTML = buildEstimate();
+    var m = $("#estimateModal"); if (m) { m.classList.add("open"); m.setAttribute("aria-hidden", "false"); }
+    document.body.style.overflow = "hidden";
+  }
+  function closeEstimate() {
+    var m = $("#estimateModal"); if (m) { m.classList.remove("open"); m.setAttribute("aria-hidden", "true"); }
+    document.body.style.overflow = "";
+  }
+  ["#estBtnSide", "#estBtnBar"].forEach(function (sel) { var b = $(sel); if (b) b.addEventListener("click", openEstimate); });
+  var _ec = $("#estClose"); if (_ec) _ec.addEventListener("click", closeEstimate);
+  var _ed = $("#estDim"); if (_ed) _ed.addEventListener("click", closeEstimate);
+  var _ep = $("#estPrint"); if (_ep) _ep.addEventListener("click", function () { window.print(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeEstimate(); });
 })();

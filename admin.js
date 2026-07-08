@@ -383,7 +383,7 @@
       maintenanceFee: 0,
       buyOption: buyEl ? buyEl.value : "있음",
       mileage: val("sel-mile") || "10,000km",
-      deposit: val("sel-dep") || "15%",   // 기본 15% (변경 가능)
+      deposit: val("sel-dep") || defaultDepForBrand(val("c-brand")),   // 기본: 국산 15%·외제 20% (변경 가능)
       prepay: val("sel-pre") || "0%",
       driverAge: val("sel-age") || "만 26세 이상",
       liability: val("sel-liab") || "1억원",
@@ -438,7 +438,7 @@
     if (selMile && mileOpts.indexOf(selMile) === -1 && selMile !== "직접입력") mileOpts.push(selMile);
     mileOpts.push("직접입력");
     selGroup("mileGroup", "sel-mile", mileOpts, selMile);
-    var selDep = isNew ? defaultDepForBrand(c.brand) : (d.deposit || "15%");   // 저장된 보증금 표시(신규는 제조사별 기본: 외제 20%·국산 15%)
+    var selDep = isNew ? defaultDepForBrand(c.brand) : (d.deposit || defaultDepForBrand(c.brand));   // 저장된 보증금 표시(없으면 제조사별 기본: 외제 20%·국산 15%)
     var depOpts = DEPOSIT_OPTS.slice();
     if (selDep && depOpts.indexOf(selDep) === -1 && selDep !== "직접입력") depOpts.push(selDep);
     depOpts.push("직접입력");

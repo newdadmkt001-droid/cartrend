@@ -62,6 +62,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .btn--ghost:hover{background:var(--gray-100)}
 .btn--line{background:#fff;color:var(--navy);border:1.5px solid var(--gray-200)}
 .btn--line:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
+.btn--dark{background:#15181f;color:#fff;border:1.5px solid #15181f}
+.btn--dark:hover{background:#000;border-color:#000;color:#fff;transform:translateY(-2px);box-shadow:0 12px 24px rgba(0,0,0,.25)}
 /* 견적문의 CTA 버튼(사이드·하단 paybar) — 카톡 노란색 통일 */
 .btn[data-quote]{background:#FEE500;color:#3B1D1D;border-color:#FEE500}
 .btn[data-quote]:hover{background:#FADA0A;border-color:#FADA0A;color:#3B1D1D;transform:translateY(-2px)}
@@ -1134,3 +1136,58 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .quote__row--pay{background:var(--orange-soft)}
 .quote__row--pay>span{color:var(--orange-dark);font-weight:800}
 .quote__row--pay>b{color:var(--orange-dark);font-size:20px}
+
+/* ============================================================
+   견적서 모달
+   ============================================================ */
+.estwrap{position:fixed;inset:0;z-index:200;display:none}
+.estwrap.open{display:block}
+.estwrap__dim{position:absolute;inset:0;background:rgba(16,20,28,.55);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+.estwrap__panel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(760px,94vw);max-height:92vh;display:flex;flex-direction:column;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.estwrap__bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:#15181f;color:#fff;flex-shrink:0}
+.estwrap__ttl{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.estwrap__acts{display:flex;gap:8px;align-items:center}
+.estbtn{background:#2b303b;color:#fff;border:0;border-radius:8px;padding:9px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s}
+.estbtn:hover{background:#3a4150}
+.estbtn--x{width:36px;padding:9px 0;font-size:15px}
+.estdoc{overflow:auto;padding:26px 28px 34px;color:#1a2332;-webkit-overflow-scrolling:touch}
+.estdoc__head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding-bottom:16px;border-bottom:2px solid #15181f;margin-bottom:20px}
+.estdoc__brand{font-size:22px;font-weight:800;letter-spacing:-.03em;color:#15181f;line-height:1.1}
+.estdoc__brand b{color:var(--orange);font-weight:800}
+.estdoc__brand span{display:block;font-size:12.5px;font-weight:600;color:#7b8694;margin-top:5px;letter-spacing:-.01em}
+.estdoc__meta{text-align:right;font-size:12px;color:#5a6472;line-height:1.75;white-space:nowrap}
+.estsec{margin-bottom:20px}
+.estsec__t{font-size:14px;font-weight:800;color:#15181f;letter-spacing:-.02em;margin:0 0 9px;display:flex;align-items:center;gap:7px}
+.estsec__t i{width:4px;height:14px;background:var(--orange);border-radius:2px;display:inline-block}
+.esttbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.esttbl th,.esttbl td{border:1px solid #e3e7ee;padding:8px 11px;text-align:left;vertical-align:middle}
+.esttbl th{background:#f5f7fa;font-weight:700;color:#48505e;width:126px;white-space:nowrap}
+.esttbl td{color:#1a2332;font-weight:500}
+.esttbl td.num{text-align:right;font-variant-numeric:tabular-nums}
+.esttbl td b{font-weight:800}
+.est-hl{color:var(--orange);font-weight:800}
+.estgrid{display:grid;grid-template-columns:1fr 1fr;border:1px solid #e3e7ee;border-radius:8px;overflow:hidden}
+.estgrid__c{display:flex;justify-content:space-between;gap:10px;padding:9px 12px;font-size:12.5px;border-bottom:1px solid #eef1f5}
+.estgrid__c:nth-child(odd){border-right:1px solid #eef1f5}
+.estgrid__c span{color:#7b8694;font-weight:600}
+.estgrid__c b{font-weight:700;color:#1a2332}
+.estnote{font-size:11.5px;color:#6a7482;line-height:1.85}
+.estdoc__foot{margin-top:22px;padding-top:14px;border-top:1px solid #e3e7ee;font-size:11.5px;color:#7b8694;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.estdoc__foot b{color:#48505e;font-weight:700}
+@media (max-width:560px){
+  .estgrid{grid-template-columns:1fr}
+  .estgrid__c:nth-child(odd){border-right:0}
+  .estdoc{padding:20px 16px 28px}
+  .estdoc__head{flex-direction:column}
+  .estdoc__meta{text-align:left}
+}
+@media print{
+  body>*{display:none !important}
+  .estwrap,.estwrap.open{display:block !important;position:static !important;inset:auto}
+  .estwrap__dim,.estwrap__bar{display:none !important}
+  .estwrap__panel{position:static !important;transform:none !important;width:100% !important;max-height:none !important;box-shadow:none;border-radius:0}
+  .estdoc{overflow:visible !important;padding:0 !important}
+}
+/* 모바일 하단 바: 견적서 버튼은 한 줄 전체 차지 */
+.paybar__btns{flex-wrap:wrap}
+.paybar__btns #estBtnBar{flex:1 0 100%}
