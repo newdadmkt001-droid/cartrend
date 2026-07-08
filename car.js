@@ -582,6 +582,7 @@
     document.body.style.overflow = "";
   }
   ["#estBtnSide", "#estBtnBar"].forEach(function (sel) { var b = $(sel); if (b) b.addEventListener("click", openEstimate); });
+  var _eq = $("#estQuote"); if (_eq) _eq.addEventListener("click", closeEstimate);   // 견적문의 클릭 시 견적서 닫고 문의폼 노출
   var _ec = $("#estClose"); if (_ec) _ec.addEventListener("click", closeEstimate);
   var _ed = $("#estDim"); if (_ed) _ed.addEventListener("click", closeEstimate);
   var _ep = $("#estPrint"); if (_ep) _ep.addEventListener("click", function () { window.print(); });
