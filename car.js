@@ -585,7 +585,7 @@
 
     var head = '<div class="estdoc__head">' +
       '<div class="estdoc__brand"><b>Car</b>trend 신차 장기렌트<span>장기렌트 견적서 · Estimate</span></div>' +
-      '<div class="estdoc__meta">작성일 : ' + dateStr(0) + '<br>유효기간 : ' + dateStr(9) + '<br>견적번호 : ' + estNo() + '</div>' +
+      '<div class="estdoc__meta">작성일 : ' + dateStr(0) + '<br>유효기간 : ' + dateStr(9) + '</div>' +
       '</div>';
     var foot = '<div class="estdoc__foot"><span><b>Cartrend</b> 신차 장기렌트</span><span>대표문의 <b>1588-0000</b> · 전국 무료 탁송</span></div>';
 
