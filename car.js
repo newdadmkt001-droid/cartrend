@@ -83,6 +83,15 @@
     optGroups().forEach(function (g, gi) { addSel(gi).forEach(function (i) { if (g.items[i] && !g.items[i].hidden) sum += (g.items[i].price || 0); }); });
     return sum;
   }
+  function isColorGroup(g) { return !!g && (g.title === "외장 색상" || g.title === "내장 색상"); }   // 색상 그룹은 단일 선택 + 견적서 색상 칸에 표기
+  function addOptPriceBy(colorOnly) {   // colorOnly=true → 색상 그룹만, false → 나머지 옵션만
+    var sum = 0;
+    optGroups().forEach(function (g, gi) {
+      if (isColorGroup(g) !== !!colorOnly) return;
+      addSel(gi).forEach(function (i) { if (g.items[i] && !g.items[i].hidden) sum += (g.items[i].price || 0); });
+    });
+    return sum;
+  }
   function effSub() { return curType().name || ""; }
   // 계약기간(개월) 목록 — 엔진 표준 기간 (높은 개월이 위로)
   function termMonthsList() { return QE.PERIODS.slice(); }
@@ -416,7 +425,9 @@
     var opt = e.target.closest(".aopt"); if (!opt || opt.classList.contains("aopt--off")) return;   // 비노출 옵션은 선택 불가
     var gi = +opt.getAttribute("data-gi"), i = +opt.getAttribute("data-i");
     var arr = Array.isArray(state.addsel[gi]) ? state.addsel[gi].slice() : [];
-    var pos = arr.indexOf(i); if (pos === -1) arr.push(i); else arr.splice(pos, 1);   // 토글(다중)
+    var pos = arr.indexOf(i);
+    if (isColorGroup(optGroups()[gi])) { arr = (pos === -1) ? [i] : []; }   // 색상: 단일 선택(중복 불가, 다시 누르면 해제)
+    else if (pos === -1) arr.push(i); else arr.splice(pos, 1);   // 그 외 옵션: 토글(다중)
     state.addsel[gi] = arr;
     renderAddOpt(); renderTerms(); renderHero();
   });
@@ -429,7 +440,8 @@
       var gi = +b.getAttribute("data-gi"), i = +b.getAttribute("data-i");
       var arr = Array.isArray(state.addsel[gi]) ? state.addsel[gi].slice() : [];
       var pos = arr.indexOf(i);
-      if (pos === -1) arr.push(i); else arr.splice(pos, 1);   // 토글(다중 선택)
+      if (isColorGroup(optGroups()[gi])) { arr = (pos === -1) ? [i] : []; }   // 색상: 단일 선택(중복 불가)
+      else if (pos === -1) arr.push(i); else arr.splice(pos, 1);   // 그 외 옵션: 토글(다중 선택)
       state.addsel[gi] = arr;
       renderAddOpt(); renderTerms(); renderHero(); openSheet("addopt");
       return;
@@ -490,6 +502,18 @@
   function selectedOptionList() {
     var out = [];
     optGroups().forEach(function (g, gi) {
+      if (isColorGroup(g)) return;   // 색상은 색상 칸에서 별도 표기
+      addSel(gi).forEach(function (i) {
+        var it = g.items[i];
+        if (it && !it.hidden) out.push(it.name + (it.price ? " (+" + won(it.price) + "원)" : ""));
+      });
+    });
+    return out;
+  }
+  function selectedColorList() {
+    var out = [];
+    optGroups().forEach(function (g, gi) {
+      if (!isColorGroup(g)) return;
       addSel(gi).forEach(function (i) {
         var it = g.items[i];
         if (it && !it.hidden) out.push(it.name + (it.price ? " (+" + won(it.price) + "원)" : ""));
@@ -515,6 +539,8 @@
     var buyPct = base ? Math.round(buyout / base * 1000) / 10 : 0;
     var seats = (curTrim().seats != null && curTrim().seats !== "") ? curTrim().seats : D.seats;
     var opts = selectedOptionList();
+    var colors = selectedColorList();
+    var optOnly = addOptPriceBy(false), colorOnly = addOptPriceBy(true);
     var model = car.name + (effFuel() ? " " + effFuel() : "") + (effSub() ? " " + effSub() : "") + (curTrim().name ? " " + curTrim().name : "");
     var region = pick(REGION_OPTS, "region", D.region || "서울");
     var mileage = state.custom.mileage != null ? state.custom.mileage : (MILEAGE_OPTS[state.sel.mileage != null ? state.sel.mileage : 0] || D.mileage || "10,000km");
@@ -527,8 +553,8 @@
     var s1 = '<div class="estsec"><div class="estsec__t"><i></i>1. 대여차량</div><table class="esttbl">' +
       '<tr><th>제조사</th><td>' + (car.brand || "-") + '</td></tr>' +
       '<tr><th>차량모델</th><td><b>' + model + '</b> · ' + ((seats || 5)) + '인승</td></tr>' +
-      '<tr><th>옵션</th><td class="num">' + (opts.length ? opts.join(", ") + '  ·  + ' + won(opt) + '원' : '없음  ·  0원') + '</td></tr>' +
-      '<tr><th>색상</th><td class="num">기본  ·  0원</td></tr>' +
+      '<tr><th>옵션</th><td class="num">' + (opts.length ? opts.join(", ") + '  ·  + ' + won(optOnly) + '원' : '없음  ·  0원') + '</td></tr>' +
+      '<tr><th>색상</th><td class="num">' + (colors.length ? colors.join(", ") + '  ·  ' + (colorOnly ? '+ ' + won(colorOnly) + '원' : '0원') : '기본  ·  0원') + '</td></tr>' +
       '<tr><th>기타</th><td class="num">없음  ·  0원</td></tr>' +
       '<tr><th>차량 가격</th><td class="num">' + won(base + opt) + '원</td></tr>' +
       '<tr><th>개별소비세 감면</th><td class="num">- ' + won(taxCut) + '원</td></tr>' +

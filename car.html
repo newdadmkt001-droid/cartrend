@@ -213,7 +213,7 @@
     // 스크립트에 버전(BUILD)을 붙여 캐시 무효화. 배포로 코드가 바뀌면 BUILD만 올리면 방문자도 최신 코드 로드.
     // 미리보기(preview=1)에서는 admin이 넘긴 n을 써서 매 렌더마다 항상 최신.
     (function () {
-      var BUILD = "20260709-1";   // ← 코드 변경 배포 시 이 값을 바꾸면 방문자 캐시가 갱신됨
+      var BUILD = "20260709-2";   // ← 코드 변경 배포 시 이 값을 바꾸면 방문자 캐시가 갱신됨
       var p = new URLSearchParams(location.search);
       var v = (p.get("preview") === "1") ? (p.get("n") || BUILD) : BUILD;
       var q = "?v=" + encodeURIComponent(v);
