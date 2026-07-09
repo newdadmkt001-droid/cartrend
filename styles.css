@@ -392,7 +392,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     border:1px solid var(--gray-200);border-radius:8px;background:#fff;overflow:hidden;
     transition:transform .22s var(--ease),box-shadow .22s var(--ease),border-color .22s var(--ease);
   }
-  .carsmain .lrow:hover{background:#fff;transform:translateY(-4px);border-color:transparent;box-shadow:var(--shadow)}
+  .carsmain .lrow:hover{background:#fff;transform:none;border-color:var(--gray-200);box-shadow:none}
+  .carsmain .lrow:hover .lrow__thumb svg{transform:none}
   .carsmain .lrow__thumb{
     flex:none;width:100%;height:auto;aspect-ratio:16/10;border-radius:0;
     background:radial-gradient(120% 92% at 50% 22%,#fbfbfc 0%,#eceef2 100%);
@@ -408,17 +409,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .carsmain .lrow__metarow .lrow__meta{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .carsmain .lrow__metarow .lrow__price{margin:0;font-size:19px;white-space:nowrap}
   .carsmain .lrow__side{position:absolute;top:12px;left:12px;align-self:auto;padding-top:0;z-index:2}
-
-  /* 찜(하트) 버튼 */
-  .carsmain .lrow__like{
-    display:flex;position:absolute;top:11px;right:12px;z-index:3;width:34px;height:34px;border-radius:50%;
-    align-items:center;justify-content:center;background:rgba(255,255,255,.92);
-    box-shadow:0 2px 8px rgba(26,35,50,.12);color:var(--gray-400);transition:.18s var(--ease);
-  }
-  .carsmain .lrow__like svg{width:19px;height:19px}
-  .carsmain .lrow__like:hover{color:var(--orange);transform:scale(1.08)}
-  .carsmain .lrow__like.is-liked{color:var(--orange)}
-  .carsmain .lrow__like.is-liked svg{fill:var(--orange)}
 
   /* 스크롤 시 뜨던 '차량보기' 플로팅 버튼 제거 */
   .fab{display:none!important}
